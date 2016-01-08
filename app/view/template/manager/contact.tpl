@@ -153,7 +153,7 @@
 					<div class="col md-visible md-6"></div>
 				<? } ?>
 
-				<div class="col xs-12 sm-8 md-6 acm-submit">
+				<div class="col xs-12 sm-8 md-6 acm-submit padding-top">
 					<button data-loading="{{Saving...}}">{{Save Contact}}</button>
 				</div>
 			</div>

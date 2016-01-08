@@ -1,0 +1,113 @@
+.amp-manager {
+	.am-search {
+		h3 {
+			font-weight: bold;
+			margin-bottom: .4em;
+		}
+
+		.help {
+			font-size: .9em;
+			margin-bottom: .2em;
+		}
+
+		input {
+			padding: .6em;
+		}
+	}
+
+	.am-results {
+		margin-top: 1em;
+		border: 1px solid @color-dark;
+		border-radius: 3px;
+
+		.no-results {
+			padding: .5em;
+			display: none;
+		}
+
+		.am-record-list {
+			.am-record {
+				padding: .5em;
+
+				&:hover {
+					background: @selectable-hover;
+				}
+
+				.on-selected {
+					display: none;
+				}
+
+				&.is-selected {
+					.on-selected {
+						display: inline-block;
+					}
+				}
+
+				.am-checked {
+					width: 3em;
+					color: green;
+				}
+
+				.spacing {
+					width: 3em;
+				}
+
+				&.is-selected {
+					background: @selectable-active;
+				}
+
+				.am-remove-record {
+					font-size: .9em;
+					position: absolute;
+					top: .5em;
+					right: 1em;
+				}
+
+				.am-record-info {
+					.am-field {
+						font-size: .8em;
+					}
+				}
+
+				& + .am-record {
+					border-top: 1px solid @color-light;
+				}
+
+				.form-buttons {
+					margin-top: 1em;
+
+					a {
+						font-size: .8em;
+						color: @color-font-dark;
+					}
+
+					.cancel-form {
+						display: none;
+					}
+				}
+
+				&.editing {
+					.am-record-form {
+						display: block;
+					}
+
+					.form-buttons {
+						.cancel-form {
+							display: inline-block;
+						}
+
+						.edit-form {
+							display: none;
+						}
+					}
+				}
+			}
+
+			&.empty {
+				& + .no-results {
+					display: block;
+				}
+			}
+		}
+	}
+}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
@@ -163,9 +163,10 @@ $js_autoload = array(
 	'listview'          => 'app/view/js/jquery/plugin/listings.js',
 	'ampFilter'         => 'app/view/js/jquery/plugin/listings.js',
 	'ampUpload'         => 'app/view/js/jquery/plugin/ampUpload.js',
+	'ampManager'        => 'app/view/js/jquery/plugin/ampManager.js',
 	'ampFileManager'    => 'app/view/js/jquery/plugin/ampFileManager.js',
 	'ampContactManager' => 'app/view/js/jquery/plugin/ampContactManager.js',
-	'ampPageBreak'        => 'app/view/js/jquery/plugin/ampPageBreak.js',
+	'ampPageBreak'      => 'app/view/js/jquery/plugin/ampPageBreak.js',
 	'ac_template'       => 'app/view/js/jquery/plugin/ac_template.js',
 	'amplo_slider'      => 'app/view/js/jquery/plugin/amplo_slider.js',
 	'flexselect'        => 'app/view/js/jquery/plugin/flexselect.js',

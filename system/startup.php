@@ -163,6 +163,7 @@ if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
 //Simulate POST request for post_redirect()
 if (isset($_SESSION['__post_data__'])) {
 	$_POST                     = $_SESSION['__post_data__'];
+	$_REQUEST                  = $_POST + $_REQUEST;
 	$_SERVER['REQUEST_METHOD'] = 'POST';
 	unset($_SESSION['__post_data__']);
 }

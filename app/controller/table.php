@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 abstract class App_Controller_Table extends Controller
 {
 	/* Example:
@@ -50,7 +50,7 @@ abstract class App_Controller_Table extends Controller
 		set_page_info('title', _l("%s Listings", $this->model['title']));
 
 		//Breadcrumbs
-		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Home"), site_url(IS_ADMIN ? 'admin' : ''));
 		breadcrumb(_l("%s List", $this->model['title']), site_url($this->model['path']));
 
 		$options += array(
@@ -73,14 +73,37 @@ abstract class App_Controller_Table extends Controller
 		output($this->render($options['template'], $options));
 	}
 
+	public function get_records($options = array())
+	{
+		$sort   = (array)_request('sort', !empty($options['sort_default']) ? $options['sort_default'] : null);
+		$filter = (array)_request('filter', !empty($options['filter_default']) ? $options['filter_default'] : null);
+
+		$filter['customer_id'] = customer_info('customer_id');
+
+		$options = array(
+			'index' => $this->model['value'],
+			'start' => (int)_request('start', 0),
+			'limit' => (int)_request('limit', 10),
+		);
+
+		list($records, $total) = $this->instance->getRecords($sort, $filter, $options, true);
+
+		$data = array(
+			'records' => $records,
+			'total'   => $total,
+		);
+
+		output_json($data);
+	}
+
 	public function listing($options = array())
 	{
 		$sort   = (array)_request('sort', !empty($options['sort_default']) ? $options['sort_default'] : null);
-		$filter = (array)_get('filter', !empty($options['filter_default']) ? $options['filter_default'] : null);
+		$filter = (array)_request('filter', !empty($options['filter_default']) ? $options['filter_default'] : null);
 		$options += array(
 			'index'    => $this->model['value'],
-			'page'     => _get('page'),
-			'limit'    => _get('limit', option('admin_list_limit', 20)),
+			'page'     => _request('page'),
+			'limit'    => _request('limit', IS_ADMIN ? option('admin_list_limit', 20) : option('site_list_limit', 20)),
 			'columns'  => array(),
 			'actions'  => array(),
 			'callback' => null,
@@ -171,7 +194,7 @@ abstract class App_Controller_Table extends Controller
 		$record_id = _get($this->model['value'], null);
 
 		//Breadcrumbs
-		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Home"), site_url(IS_ADMIN ? 'admin' : ''));
 		breadcrumb(_l("%s Listing", $this->model['title']), site_url($this->model['path']));
 		breadcrumb($record_id ? _l("Update") : _l("New"), site_url($this->model['path'] . '/form', $this->model['value'] . '=' . $record_id));
 
@@ -194,8 +217,11 @@ abstract class App_Controller_Table extends Controller
 	public function save()
 	{
 		if ($record_id = $this->instance->save(_request($this->model['value']), $_POST)) {
-			message('success', _l("The record has been updated."));
-			message('data', array($this->model['value'] => $record_id));
+			message('success', _l("The %s has been updated.", $this->model['title'] ? $this->model['title'] : 'record'));
+			message('data', array(
+				$this->model['value'] => $record_id,
+				'record'              => $this->instance->getRecord($record_id)
+			));
 			$_GET[$this->model['value']] = $record_id;
 		} else {
 			message('error', $this->instance->fetchError());
