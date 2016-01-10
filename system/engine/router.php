@@ -193,7 +193,7 @@ class Router
 			$amplo_version = option('AMPLO_VERSION');
 
 			if (!$amplo_version) {
-				redirect('admin/settings/restore-defaults');
+				//redirect('admin/settings/restore-defaults');
 			} elseif (AMPLO_AUTO_UPDATE && $amplo_version !== AMPLO_VERSION) {
 				if ($this->System_Update->updateSystem(AMPLO_VERSION)) {
 					message('notify', _l("The database version %s was out of date and has been updated to version %s", $amplo_version, AMPLO_VERSION));
