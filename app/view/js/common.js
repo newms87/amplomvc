@@ -1900,7 +1900,7 @@ $(document)
 			return false;
 		}
 
-		if (($onClick = $n.closest('.on-click')).length) {
+		if (($onClick = $n.closest('[data-amp-toggle], .on-click')).length) {
 			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
 				$onClick.ampToggle({
 					content: $onClick.attr('data-amp-toggle') || $onClick,
