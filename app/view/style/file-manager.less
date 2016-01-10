@@ -55,12 +55,11 @@
 
 			.remove-file {
 				position: absolute;
-				top: .3em;
+				bottom: .3em;
 				right: .3em;
 				display: block;
 				font-size: 1.2em;
 				line-height: .9em;
-				opacity: 0;
 			}
 
 			.progress-bar {
@@ -108,8 +107,8 @@
 
 			.on-selected {
 				position: absolute;
-				bottom: 1em;
-				right: 1em;
+				bottom: .3em;
+				left: .3em;
 				display: none;
 
 				.fa {
@@ -119,10 +118,6 @@
 
 			&:hover {
 				background: @selectable-hover;
-
-				.remove-file {
-					opacity: 1;
-				}
 			}
 
 			&.selected {
