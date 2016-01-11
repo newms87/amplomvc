@@ -19,6 +19,9 @@ $.ampExtend($.ampContactManager = function() {}, {
 			syncFields:     null,
 			onChange:       null,
 			onEdit:         null,
+			onOpenEditor:   null,
+			onResults:      null,
+			onSync:         null,
 			url:            $ac.site_url + 'manager/contact',
 			listingUrl:     $ac.site_url + 'manager/contact/listing',
 			loadListings:   true,
@@ -53,19 +56,32 @@ $.ampExtend($.ampContactManager = function() {}, {
 		return this;
 	},
 
-	sync: function($fields, contact){
+	sync: function($fields, contact) {
 		var $acm = this;
 		var o = $acm.getOptions();
 
 		for (var f in contact) {
-			var $field = $fields.filter('[data-name=' + f + ']');
 			var value = value = contact[f];
 
-			if ($field.is('[data-type=select]')) {
-				value = o.contactForm.find('[name=' + f + '] option[value=' + value + ']').html();
+			if (typeof value === 'string' && value.match(/^\{.*\}$/)) {
+				value = contact[f] = $.parseJSON(value);
 			}
 
-			$field.html(value);
+			if (typeof value === 'object') {
+				for (var v in value) {
+					$field = $fields.filter('[data-name="' + f + '[' + v + ']"]');
+
+					$field.html($field.is('[data-type=select]') ? v = o.contactForm.find('[name="' + f + '[' + v + ']"] option[value=' + value[v] + ']').html() : value[v]);
+				}
+			} else {
+				var $field = $fields.filter('[data-name=' + f + ']');
+
+				$field.html($field.is('[data-type=select]') ? o.contactForm.find('[name=' + f + '] option[value=' + value + ']').html() : value);
+			}
+		}
+
+		if (o.onSync) {
+			o.onSync.call($acm, $fields, contact);
 		}
 
 		return this;
@@ -157,6 +173,37 @@ $.ampExtend($.ampContactManager = function() {}, {
 		return this;
 	},
 
+	openEditor: function($contact) {
+		var $acm = this;
+		var o = $acm.getOptions();
+
+		$acm.find('.acm-contact').removeClass('editing');
+
+		var $form = $contact.addClass('editing').find('.acm-edit-contact-form');
+
+		if (!$form.children().length) {
+			$form.append(o.contactForm.clone())
+
+			var contact = $contact.data('contact');
+
+			for (var f in contact) {
+				if (f === 'address') {
+					for (var a in contact[f]) {
+						$form.find('[name="address[' + a + ']"]').val(contact[f][a]);
+					}
+				} else {
+					$form.find('[name=' + f + ']').val(contact[f]);
+				}
+			}
+		}
+
+		if (o.onOpenEditor) {
+			o.onOpenEditor.call($acm, $contact);
+		}
+
+		return this;
+	},
+
 	get: function(listing) {
 		var $acm = this;
 		var o = $acm.getOptions();
@@ -201,6 +248,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 			}
 		}
 
+		if (o.onResults) {
+			o.onResults.call($acm, $contactList, contacts, total);
+		}
+
 		return this;
 	},
 
@@ -234,29 +285,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 		})
 
 		$acm.find('.edit-contact').click(function() {
-			var $acm = $(this).closest('.amp-contact-manager');
-			var o = $acm.getOptions();
-
-			$acm.find('.acm-contact').removeClass('editing');
-
-			var $contact = $(this).closest('.acm-contact').addClass('editing');
-			var $form = $contact.find('.acm-edit-contact-form');
-
-			if (!$form.children().length) {
-				$form.append(o.contactForm.clone())
-
-				var contact = $contact.data('contact');
-
-				for (var f in contact) {
-					if (f === 'address') {
-						for (var a in contact[f]) {
-							$form.find('[name="address[' + a + ']"]').val(contact[f][a]);
-						}
-					} else {
-						$form.find('[name=' + f + ']').val(contact[f]);
-					}
-				}
-			}
+			$(this).closest('.amp-contact-manager').ampContactManager('openEditor', $(this).closest('.acm-contact'));
 		})
 
 		$acm.find('.cancel-contact').click(function() {
