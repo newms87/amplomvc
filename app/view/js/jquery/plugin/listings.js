@@ -151,7 +151,9 @@ $.ampExtend('ampFilter', {
 	},
 
 	reset: function () {
-		$.ampFilter.toggle.call($(this).closest('.amp-filter').find('.field [name]').val('').change(), false);
+		var $af = $(this).closest('.amp-filter');
+		$.ampFilter.toggle.call($af.find('.field [name]').val('').change(), false);
+		$af.ampFilter('filter');
 	},
 
 	toggle: function (enabled) {
