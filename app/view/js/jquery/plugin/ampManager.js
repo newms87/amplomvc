@@ -90,13 +90,16 @@ $.ampExtend($.ampManager = function() {}, {
 
 	select: function($record) {
 		var $am = this;
-		var o = $am.getOptions(), is_changed = false;
+		var o = $am.getOptions(), is_changed = false, selected = null;
 
 		if (typeof $record !== 'object') {
 			$record = $am.find('[data-am-record-id=' + $record + ']');
 		}
 
-		if (o.selectMultiple) {
+		if (!$record.length) {
+			is_changed = $am.find('.am-record.is-selected').length;
+			$am.find('.am-record').removeClass('is-selected');
+		} else if (o.selectMultiple) {
 			$record.toggleClass('is-selected');
 
 			selected = []

@@ -89,13 +89,16 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 	select: function($contact) {
 		var $acm = this;
-		var o = $acm.getOptions(), is_changed = false;
+		var o = $acm.getOptions(), is_changed = false, selected = null;
 
 		if (typeof $contact !== 'object') {
 			$contact = $acm.find('.acm-contact[data-contact-id=' + $contact + ']');
 		}
 
-		if (o.selectMultiple) {
+		if (!$contact.length) {
+			is_changed = $acm.find('.acm-contact.is-selected').length;
+			$acm.find('.acm-contact').removeClass('is-selected');
+		} else if (o.selectMultiple) {
 			$contact.toggleClass('is-selected');
 
 			selected = []
@@ -282,6 +285,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 			if (!$form.children().length) {
 				$form.append(o.contactForm.clone())
 			}
+		})
+
+		$acm.find('.am-deselect').click(function() {
+			$(this).closest('.amp-contact-manager').ampContactManager('select', '');
 		})
 
 		$acm.find('.edit-contact').click(function() {

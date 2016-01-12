@@ -16,11 +16,11 @@
 				<div data-action="<?= site_url('manager/contact/listing'); ?>" class="row left amp-nested-form acm-search-form">
 					<div class="help">{{Search for an existing contact by company, name, email or phone}}</div>
 
-					<div class="col left xs-11 form-input">
+					<div class="col left xs-9 sm-10 md-11 form-input">
 						<input type="text" name="filter[keywords]" value="" placeholder="{{Enter any contact info to search}}"/>
 					</div>
 
-					<div class="col right xs-1 form-submit">
+					<div class="col right xs-3 sm-2 md-1 form-submit">
 						<button class="submit-search">
 							<i class="fa fa-search color-main-dark"></i>
 						</button>
@@ -41,7 +41,7 @@
 
 					<div class="row left acm-contact-list">
 						<div class="acm-contact row left" data-row="__ac_template__" data-template-root="true">
-							<div class="acm-fields row left">
+							<div class="acm-fields nowrap row left">
 								<div class="acm-checked col auto"><i class="on-selected fa fa-check"></i></div>
 
 								<label for="contact-cb-__ac_template__" class="acm-contact-info col auto left">
@@ -98,6 +98,12 @@
 					<div class="no-results">{{There are no contacts matching your search.}}</div>
 
 					<div data-action="<?= site_url('manager/contact/save'); ?>" class="row left acm-new-contact-form form amp-nested-form"></div>
+				</div>
+
+				<div class="row am-footer left">
+					<div class="col left xs-3">
+						<a class="am-deselect"><i class="fa fa-minus"></i> {{Deselect}}</a>
+					</div>
 				</div>
 			</div>
 
