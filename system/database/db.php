@@ -297,7 +297,7 @@ class DB
 	 * @return mixed - will return an indexed array or false on failure
 	 *
 	 */
-	public function queryColumn($sql, $index_key = null)
+	public function queryColumn($sql, $column_key = null, $index_key = null)
 	{
 		$resource = $this->query($sql);
 
@@ -305,11 +305,15 @@ class DB
 			return array();
 		}
 
-		if ($index_key === true) {
-			$index_key = key($resource->row);
+		if (!$column_key) {
+			$column_key = key($resource->row);
 		}
 
-		return array_column($resource->rows, key($resource->row), $index_key);
+		if ($index_key === true) {
+			$index_key = $column_key;
+		}
+
+		return array_column($resource->rows, $column_key, $index_key);
 	}
 
 	/**

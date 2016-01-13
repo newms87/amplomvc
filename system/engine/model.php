@@ -160,9 +160,9 @@ abstract class Model
 		return $this->db->queryRows($sql, $index);
 	}
 
-	protected function queryColumn($sql, $index_key = null)
+	protected function queryColumn($sql, $column_key = null, $index_key = null)
 	{
-		return $this->db->queryColumn($sql, $index_key);
+		return $this->db->queryColumn($sql, $column_key, $index_key);
 	}
 
 	/**
