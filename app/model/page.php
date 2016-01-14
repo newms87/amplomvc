@@ -181,7 +181,7 @@ class App_Model_Page extends App_Model_Table
 
 	public function getPage($name, $published = true)
 	{
-		$page = is_numeric($name) ? $this->getRecord($name) : $this->findRecord(array('name' => $name));
+		$page = is_numeric($name) ? $this->getRecord($name) : $this->findRecord(array('name' => $name), '*');
 
 		if (!$page) {
 			if ($file = theme_dir('template/page/' . $name . '/content.tpl')) {
