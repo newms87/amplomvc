@@ -331,8 +331,8 @@ function amplo_routing_hook($router)
 		}
 
 		if (is_logged() && !option('show_terms_agreement') && option('confirm_customer_email', true)) {
-			if (customer_meta('confirmed_email') !== customer_info('email') && empty($_SESSION['message']['success']['confirm-email'])) {
-				message('success', array('confirm-email' => _l("Please confirm your email in the message we sent to <b>%s</b>. <a href=\"%s\">Resend Email</a>", customer_info('email'), site_url('account/resend-confirmation'))));
+			if (customer_meta('confirmed_email') !== customer_info('email') && empty($_SESSION['message']['confirm-email'])) {
+				message('confirm-email', _l("Please confirm your email in the message we sent to <b>%s</b>. <a href=\"%s\">Resend Email</a>", customer_info('email'), site_url('account/resend-confirmation')), 'confirm');
 			}
 		}
 

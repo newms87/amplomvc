@@ -104,10 +104,10 @@ function check_condition($condition)
 	return $registry->get('condition')->is($condition);
 }
 
-function message($type, $message = null)
+function message($type, $message = null, $key = null)
 {
 	global $registry;
-	$registry->get('message')->add($type, $message);
+	$registry->get('message')->add($type, $message, $key);
 }
 
 function render_message($type = null, $close = true)
