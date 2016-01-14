@@ -44,6 +44,14 @@ a {
 	&:hover, &:active {
 		color: @color-secondary;
 	}
+
+	&.underline {
+		text-decoration: underline;
+
+		&:hover, &:active {
+			text-decoration: none;
+		}
+	}
 }
 
 h1 {
@@ -72,6 +80,7 @@ h6 {
 
 input, select, textarea {
 	max-width: 100%;
+	box-sizing: border-box;
 }
 
 [data-row="__ac_template__"] {
@@ -187,7 +196,7 @@ input, select, textarea {
 	&.notify {
 		background: @color-notify;
 	}
-	
+
 	.close {
 		position: absolute;
 		top: .25em;
@@ -972,6 +981,12 @@ textarea {
 					}
 				}
 			}
+		}
+	}
+
+	.terms-agreement {
+		.label {
+			font-size: .9em;
 		}
 	}
 

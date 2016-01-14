@@ -60,6 +60,7 @@ $.ampExtend($.ampManager = function() {}, {
 		var o = $am.getOptions();
 
 		if (!record) {
+			$fields.html('');
 			record = o.defaults;
 		}
 

@@ -60,23 +60,27 @@ $.ampExtend($.ampContactManager = function() {}, {
 		var $acm = this;
 		var o = $acm.getOptions();
 
-		for (var f in contact) {
-			var value = value = contact[f];
+		if (!contact) {
+			$fields.html('');
+		} else {
+			for (var f in contact) {
+				var value = value = contact[f];
 
-			if (typeof value === 'string' && value.match(/^\{.*\}$/)) {
-				value = contact[f] = $.parseJSON(value);
-			}
-
-			if (typeof value === 'object') {
-				for (var v in value) {
-					$field = $fields.filter('[data-name="' + f + '[' + v + ']"]');
-
-					$field.html($field.is('[data-type=select]') ? v = o.contactForm.find('[name="' + f + '[' + v + ']"] option[value=' + value[v] + ']').html() : value[v]);
+				if (typeof value === 'string' && value.match(/^\{.*\}$/)) {
+					value = contact[f] = $.parseJSON(value);
 				}
-			} else {
-				var $field = $fields.filter('[data-name=' + f + ']');
 
-				$field.html($field.is('[data-type=select]') ? o.contactForm.find('[name=' + f + '] option[value=' + value + ']').html() : value);
+				if (typeof value === 'object') {
+					for (var v in value) {
+						$field = $fields.filter('[data-name="' + f + '[' + v + ']"]');
+
+						$field.html($field.is('[data-type=select]') ? v = o.contactForm.find('[name="' + f + '[' + v + ']"] option[value=' + value[v] + ']').html() : value[v]);
+					}
+				} else {
+					var $field = $fields.filter('[data-name=' + f + ']');
+
+					$field.html($field.is('[data-type=select]') ? o.contactForm.find('[name=' + f + '] option[value=' + value + ']').html() : value);
+				}
 			}
 		}
 
