@@ -2,6 +2,22 @@
 
 body {
 	font: @font-size @font-stack;
+	height: 100vh;
+}
+
+#container {
+	position: relative;
+	min-height: 100%;
+	//padding-bottom should try and match footer height
+	padding-bottom: 5.4em;
+	box-sizing: border-box;
+}
+
+footer.site-footer {
+	background: @color-main;
+	color: white;
+	position: absolute;
+	bottom: 0;
 }
 
 input[type='text'], input[type='password'] {
@@ -475,39 +491,17 @@ form {
 }
 
 /*** Container Content ***/
-#container {
-	height: auto;
-	min-height: 100%;
-	position: relative;
-}
-
 .content {
 	position: relative;
-	padding: 10px 30px 0 30px;
-	min-width: 900px;
-	padding-bottom: 128px;
 }
 
-#footer {
-	background: #FFFFFF url('@{theme-img}footer.png') repeat-x;
-	height: 90px;
-	padding-top: 38px;
-	text-align: center;
-	font-size: 12px;
-	color: #333;
-	position: relative;
-	clear: both;
-}
+.breadcrumb {
+	padding: .5em;
 
-#footer a {
-	color: #333;
-	text-decoration: underline;
-}
-
-.breadcrumb, .breadcrumb a {
-	font-size: 12px;
-	color: #666;
-	margin-bottom: 15px;
+	a {
+		font-size: 12px;
+		color: #666;
+	}
 }
 
 .datetimepicker {
@@ -823,10 +817,8 @@ form {
 
 	& > .heading {
 		position: relative;
-		padding: .5em;
-		border: 1px solid @color-gray-light;
+		padding: .5em 1.5em;
 		background: @color-gray-light;
-		border-radius: 7px 7px 0 0;
 
 		h1 {
 			margin: 0;
@@ -866,10 +858,7 @@ form {
 	}
 
 	& > .section, & > section {
-		padding: .7em;
-		border: 1px solid @color-gray-light;
-		border-top: none;
-		min-height: 300px;
+		padding: 1.5em;
 	}
 
 	.batch-action, .batch_actions {
@@ -2071,33 +2060,15 @@ td.mail_info label {
 	border-radius: 8px;
 }
 
-#admin-login {
-	width: 300px;
-	min-width: 0;
-	min-height: 300px;
-	margin-top: 40px;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-
+.admin-login {
 	header.top-row {
-		background: #DDDDDD;
-		border-radius: 8px;
-		padding: 5px 15px;
+		margin-bottom: 1.5em;
 		font-size: 2em;
+		font-weight: 600;
 	}
 
-	.wrap {
-		min-width: 0;
+	input {
 		width: 100%;
-	}
-
-	.content-row {
-		.form {
-			input {
-				width: 90%;
-			}
-		}
 	}
 }
 
@@ -2867,7 +2838,7 @@ td.log_remove .message {
 						min-width: 17em;
 						padding: .7em;
 						margin: -.7em -.7em 0 0;
-						box-shadow: 0 0 5px rgba(0,0,0,.5);
+						box-shadow: 0 0 5px rgba(0, 0, 0, .5);
 						z-index: 10;
 						-webkit-transition: all 1s;
 						transition: all 1s;

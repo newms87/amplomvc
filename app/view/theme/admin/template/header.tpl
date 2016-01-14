@@ -7,7 +7,7 @@
 
 <body class="<?= page_info('body_class'); ?>">
 <div id="container">
-	<div id="header" class="header-row row">
+	<header id="header" class="main-header header-row row">
 		<div class="row header-content">
 			<div class="branding col xs-12 md-8 left middle">
 				<div class="admin-logo col xs-12 left top">
@@ -53,7 +53,7 @@
 				<?= render_message(); ?>
 			<? } ?>
 		</section>
-	</div>
+	</header>
 
 	<? if (is_logged()) { ?>
 		<div id="menu">
@@ -62,4 +62,15 @@
 		</div>
 	<? } ?>
 
-	<div class="content">
+	<main class="main content">
+
+		<script type="text/javascript">
+			$(document).ready(function () {
+				_ffix();
+				window.addEventListener('resize', _ffix, true);
+			});
+
+			function _ffix() {
+				$('#container').css('padding-bottom', $('footer.site-footer').outerHeight());
+			}
+		</script>

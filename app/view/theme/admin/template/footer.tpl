@@ -1,5 +1,9 @@
 </div><!-- /content -->
+<footer class="row site-footer">
+	<div class="wrap">
+		{{Copyright &copy; 2014-<?= date('Y'); ?> Newman, LLC.}}
+	</div>
+</footer>
 </div><!-- /container -->
-<div id="footer"><?= _l("Copyright &copy; 2014-%s Newman, LLC.", date('Y')); ?></div>
 </body>
 </html>

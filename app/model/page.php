@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Page extends App_Model_Table
 {
 	protected $table = 'page', $primary_key = 'page_id';
@@ -179,14 +179,25 @@ class App_Model_Page extends App_Model_Table
 		return parent::remove($page_id);
 	}
 
-	public function getPage($page, $published = true)
+	public function getPage($name, $published = true)
 	{
-		if (is_numeric($page)) {
-			$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE page_id = " . (int)$page);
-		} else {
-			$page = $this->queryRow("SELECT * FROM {$this->t['page']} WHERE name = '" . $this->escape($page) . "'");
-		}
+		$page = is_numeric($name) ? $this->getRecord($name) : $this->findRecord(array('name' => $name));
 
+		if (!$page) {
+			if ($file = theme_dir('template/page/' . $name . '/content.tpl')) {
+				$page = array(
+					'type'         => 'page',
+					'name'         => $name,
+					'content_file' => $file,
+					'style_file'   => theme_dir('template/page/' . $name . '/style.less'),
+				);
+
+				if ($page_id = $this->syncPageFromFile($page)) {
+					$page = $this->getRecord($page_id);
+				}
+			}
+		}
+		
 		if ($page) {
 			$this->pageDetails($page);
 
@@ -470,7 +481,7 @@ class App_Model_Page extends App_Model_Table
 				'cache'    => $cache,
 			);
 
-			$this->save(null, $page);
+			return $this->save(null, $page);
 		}
 	}
 
