@@ -185,19 +185,19 @@ class App_Model_Page extends App_Model_Table
 
 		if (!$page) {
 			if ($file = theme_dir('template/page/' . $name . '/content.tpl')) {
-				$page = array(
+				$new_page = array(
 					'type'         => 'page',
 					'name'         => $name,
 					'content_file' => $file,
 					'style_file'   => theme_dir('template/page/' . $name . '/style.less'),
 				);
 
-				if ($page_id = $this->syncPageFromFile($page)) {
+				if ($page_id = $this->syncPageFromFile($new_page)) {
 					$page = $this->getRecord($page_id);
 				}
 			}
 		}
-		
+
 		if ($page) {
 			$this->pageDetails($page);
 
