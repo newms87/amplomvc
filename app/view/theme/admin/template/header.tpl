@@ -9,7 +9,7 @@
 <div id="container">
 	<header id="header" class="main-header header-row row">
 		<div class="row header-content">
-			<div class="branding col xs-12 md-8 left middle">
+			<div class="branding col xs-6 md-8 left middle">
 				<div class="admin-logo col xs-12 left top">
 					<a href="<?= site_url('admin'); ?>">
 						<? if ($logo = option('admin_logo', DIR_THEMES . 'amplo/image/amplo-logo.png')) { ?>
@@ -32,7 +32,7 @@
 
 
 			<? if (is_logged()) { ?>
-				<div class="header-right col xs-12 md-4 xs-center md-right">
+				<div class="header-right col xs-6 md-4 xs-center md-right">
 					<div class="header-secure">
 						<i class="fa fa-lock"></i>
 						{{Logged in as}}

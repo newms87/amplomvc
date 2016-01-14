@@ -333,7 +333,13 @@ form {
 
 	.admin-logo {
 		a {
+			width: 100%;
 			display: inline-block;
+
+			img {
+				max-width: 100%;
+				height: auto;
+			}
 		}
 	}
 
@@ -405,6 +411,8 @@ form {
 	}
 
 	& > .children {
+		z-index: 2500;
+
 		& > .link-menu {
 			background: @color-dark;
 
@@ -437,7 +445,6 @@ form {
 	display: inline-block;
 	vertical-align: middle;
 	position: relative;
-	z-index: 2000;
 
 	&.nav-admin {
 		width: 75%;
@@ -821,12 +828,11 @@ form {
 		background: @color-gray-light;
 
 		h1 {
+			.col;
+			width: 40%;
 			margin: 0;
-			.ws-hack;
 			color: @color-main;
-			display: inline-block;
-			vertical-align: middle;
-			width: 50%;
+			text-align: left;
 
 			img {
 				max-width: 24px;
@@ -840,11 +846,10 @@ form {
 		}
 
 		.buttons {
-			display: inline-block;
-			vertical-align: middle;
-			text-align: right;
-			width: 50%;
+			.col;
+			width: 60%;
 			margin: 0;
+			text-align: right;
 
 			.button {
 				margin-left: .3em;
