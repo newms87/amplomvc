@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_File extends App_Model_Table
 {
 	protected $table = 'file', $primary_key = 'file_id';
@@ -192,6 +192,95 @@ class App_Model_File extends App_Model_Table
 			'url'       => URL_DOWNLOAD . $path,
 			'type'      => $type,
 			'mime_type' => $file['type'],
+			'title'     => $options['title'] ? $options['title'] : pathinfo($path, PATHINFO_FILENAME),
+		);
+
+		return $this->save(null, $data);
+	}
+
+	public function zip($files, $options = array())
+	{
+		$options += array(
+			'title'     => '',
+			'name'      => 'archive',
+			'category'  => '',
+			'path'      => null,
+			'folder_id' => null,
+		);
+
+		if (!isset($options['path'])) {
+			if ($customer_id = customer_info('customer_id')) {
+				$options['path'] = 'customer/' . $customer_id . '/';
+			} else {
+				$options['path'] .= 'upload/' . date('Y/m/d') . '/';
+			}
+		}
+
+		$path = ltrim(rtrim($options['path'], '/') . '/' . preg_replace("/\\.zip$/", '', $options['name']), '/') . '.zip';
+
+		if (!_is_writable(dirname(DIR_SITE . 'system/temp/' . $path))) {
+			$this->error['temp_dir'] = _l("The system temp directory was not writable");
+		} elseif (!_is_writable(dirname(DIR_DOWNLOAD . $path))) {
+			$this->error['dir'] = _l("The directory %s was not writable. Please change the permissions for this directory in the download path.", dirname($path));
+		}
+
+		if ($this->error) {
+			return false;
+		}
+
+		$zip = new ZipArchive;
+
+		//Write to temp directory in case download directory is on external server
+		touch(DIR_SITE . 'system/temp/' . $path);
+
+		$code = $zip->open(DIR_SITE . 'system/temp/' . $path, ZipArchive::OVERWRITE);
+
+		if ($code !== true) {
+			$this->error['open'] = _l("Zip Error (%s): There was a problem creating the zip archive. Please try again.", $code);
+
+			return false;
+		}
+
+		foreach ($files as $f => $url) {
+			$file = str_replace(URL_DOWNLOAD, DIR_DOWNLOAD, $url);
+
+			if (is_file($file)) {
+				$entry_name = slug(basename($file), '-');
+
+				if (!$zip->addFromString($entry_name, file_get_contents($file))) {
+					if (!$zip->addFile($file, $entry_name)) {
+						$this->error['file-' . $f] = _l("Failed to add %s to archive", $url);
+					}
+				}
+			}
+		}
+
+		$zip->close();
+
+		$zip_contents = file_get_contents(DIR_SITE . 'system/temp/' . $path);
+
+		if (!strlen($zip_contents)) {
+			$this->error['filesize'] = _l("There was a problem creating the archive. The requested files to archive may have been corrupted.");
+
+			return false;
+		} else {
+			$path = get_unique_file($path, DIR_DOWNLOAD);
+
+			if (file_put_contents(DIR_DOWNLOAD . $path, $zip_contents) === false) {
+				$this->error['rename'] = _l("Unable to move the archive to the download directory.");
+
+				return false;
+			}
+		}
+
+		$data = array(
+			'name'      => $options['name'],
+			'category'  => $options['category'],
+			'folder_id' => $options['folder_id'],
+			'path'      => DIR_DOWNLOAD . $path,
+			'url'       => URL_DOWNLOAD . $path,
+			'type'      => 'zip',
+			'mime_type' => 'application/zip',
 			'title'     => $options['title'] ? $options['title'] : pathinfo($path, PATHINFO_FILENAME),
 		);
 

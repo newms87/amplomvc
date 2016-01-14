@@ -107,6 +107,24 @@ class App_Controller_Manager_File extends Controller
 		output(json_encode($this->message->fetch()));
 	}
 
+	public function zip()
+	{
+		$files = _request('files');
+
+		if ($file_id = $this->Model_File->zip($files, $_REQUEST)) {
+			message('success', _l("Zip archive created."));
+			message('data', $this->Model_File->getRecord($file_id));
+		} else {
+			message('error', $this->Model_File->fetchError());
+		}
+
+		if ($this->is_ajax) {
+			output_message();
+		} else {
+			redirect('file');
+		}
+	}
+
 	public function remove()
 	{
 		if ($this->Model_File->remove(_request('file_id'))) {

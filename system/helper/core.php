@@ -897,6 +897,22 @@ function get_files($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO, $fil
 	return $files;
 }
 
+function get_unique_file($file, $dir = '')
+{
+	if (!is_file($dir . $file)) {
+		return $file;
+	}
+
+	$pathinfo = pathinfo($file);
+	$count    = 1;
+
+	do {
+		$file = $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-' . $count++ . '.' . $pathinfo['extension'];
+	} while (is_file($dir . $file));
+
+	return $file;
+}
+
 /**
  * Parses PHPDoc comments for Directives in the form: Directive: String information
  *
