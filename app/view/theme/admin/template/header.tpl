@@ -63,14 +63,3 @@
 	<? } ?>
 
 	<main class="main content">
-
-		<script type="text/javascript">
-			$(document).ready(function () {
-				_ffix();
-				window.addEventListener('resize', _ffix, true);
-			});
-
-			function _ffix() {
-				$('#container').css('padding-bottom', $('footer.site-footer').outerHeight());
-			}
-		</script>
