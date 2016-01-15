@@ -1,13 +1,11 @@
 <?= $is_ajax ? '' : call('header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 
-<? if ($style) { ?>
-	<style id="page-style">
-		<?= $style; ?>
-	</style>
-<? } ?>
-
 <section id="page-<?= $name; ?>" class="page page-<?= $name; ?> page-<?= $page_id; ?> content">
+	<? if ($style) { ?>
+		<style scoped><?= $style; ?></style>
+	<? } ?>
+
 	<? if (!empty($meta['show_title']) || !empty($meta['show_breadcrumbs'])) { ?>
 		<header class="row top-row page-header">
 			<div class="wrap">

@@ -242,17 +242,26 @@
 		z-index: 1;
 	}
 
-	.amp-modal-content {
+	.amp-modal-content-box {
 		position: relative;
 		z-index: 2;
-		max-width: 30em;
-		width: 90%;
+		max-width: 95vw;
+		max-height: 95vh;
+		line-height: 0;
 		display: inline-block;
 		vertical-align: middle;
 		background: white;
 		text-align: left;
 		box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+	}
 
+	.amp-modal-content {
+		line-height: 1em;
+
+		& > iframe {
+			display: block;
+		}
+		
 		ul {
 			list-style: disc inside;
 
