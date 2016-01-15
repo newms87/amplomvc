@@ -9,7 +9,7 @@
 <? option('track_statcounter') ? include_once(theme_dir('template/common/statcounter.tpl')) : ''; ?>
 
 <section id="container">
-	<header class="main-header row top-row">
+	<header class="site-header row top-row">
 		<? if (!empty($terms_page) && is_logged()) { ?>
 			<div class="terms-agreement">
 				{{Our Terms &amp; Conditions have been updated! To review and accept
@@ -147,7 +147,7 @@
 				$('body').toggleClass('scroll-top', $(document).scrollTop() <= 0);
 			}
 
-			_cfix.$h = $('header.main-header'), _cfix.$m = $('main.main');
+			_cfix.$h = $('header.site-header'), _cfix.$m = $('main.main');
 
 			_cfix();
 		</script>
