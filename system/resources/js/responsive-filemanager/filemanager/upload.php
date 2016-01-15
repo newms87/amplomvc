@@ -1,10 +1,14 @@
 <?php
 include('config/config.php');
 if ($_SESSION['RF']["verify"] != "RESPONSIVEfilemanager") {
-	die('forbiden');
+	die('forbidden');
 }
 include('include/utils.php');
 
+$_POST += array(
+	'path'       => '',
+	'path_thumb' => '',
+);
 
 $storeFolder      = $_POST['path'];
 $storeFolderThumb = $_POST['path_thumb'];
