@@ -50,9 +50,20 @@
 									</a>
 
 									<div class="view-setting-box on-active">
-										<a class="cancel-view button">
-											<b class="fa fa-close"></b>
-										</a>
+										<div class="row view-setting-header">
+											<div class="col xs-9 left">
+												<h3>
+													<i class="fa fa-cog col auto"></i>
+
+													<div class="col auto text padding-horizontal left">{{View Settings}}</div>
+												</h3>
+											</div>
+											<div class="col xs-3 right">
+												<a class="cancel-view button">
+													<b class="fa fa-close"></b>
+												</a>
+											</div>
+										</div>
 
 										<div class="view-setting-list row left">
 											<div class="view-setting setting-buttons">
