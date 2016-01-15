@@ -41,7 +41,7 @@
 		</div>
 	<? } ?>
 
-	<header class="main-header row top-row">
+	<header class="site-header row top-row">
 		<? if ($show_admin_bar) { ?>
 			<?= block('widget/admin_bar'); ?>
 		<? } ?>

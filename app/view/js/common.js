@@ -144,7 +144,7 @@ $.fn.scrollTo = function(target, options) {
 	}
 
 	var $this = this;
-	var $header = $('header.main-header');
+	var $header = $('header.site-header');
 
 	options = $.extend({}, {
 		offset:   $header.css('position') === 'fixed' ? -$header.outerHeight() : 0,

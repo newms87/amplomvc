@@ -7,7 +7,7 @@
 
 <body class="<?= page_info('body_class'); ?>">
 <div id="container">
-	<header id="header" class="main-header header-row row">
+	<header id="header" class="site-header header-row row">
 		<div class="row header-content">
 			<div class="branding col xs-6 md-8 left middle">
 				<div class="admin-logo col xs-12 left top">
