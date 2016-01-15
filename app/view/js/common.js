@@ -485,16 +485,21 @@ $.ampExtend($.ampToggle = function() {}, {
 
 //ampYouTube
 $.ampExtend($.ampYouTube = function() {}, {
+	players: null,
+
 	init: function(o) {
 		o = $.extend({}, {
 			width:      null,
 			height:     null,
 			ratio:      .6,
-			playlistID: '',
-			videoID:    '',
+			playlistId: '',
+			videoId:    '',
 			paused:     true,
 			onChange:   null,
-			onReady:    null
+			onReady:    null,
+			apiUrl:     'https://www.googleapis.com/youtube/v3/',
+			apiKey:     null,
+			inModal:    true
 		}, o);
 
 		var tag = document.createElement('script');
@@ -507,6 +512,17 @@ $.ampExtend($.ampYouTube = function() {}, {
 
 		this.width(o.width);
 		this.height(o.height);
+
+		o.id = this.attr('id');
+
+		if (o.inModal) {
+			o.modal = this.ampModal({
+				onClose: function(){
+					$.ampYouTube.getInstance(this.find('iframe').attr('id')).ampYouTube('pause')
+				}
+			}).ampModal('getBox');
+		}
+
 		this.setOptions(o);
 
 		if (!$.ampYouTube.players) {
@@ -518,13 +534,38 @@ $.ampExtend($.ampYouTube = function() {}, {
 		return this;
 	},
 
+	getInstance: function(id){
+		return $.ampYouTube.players.filter('#' + id)
+	},
+
+	playlistItems: function(callback, params) {
+		var o = this.getOptions();
+
+		if (!callback) {
+			$.error("You must provide a callback function.");
+		} else {
+			params = $.extend({}, {
+				playlistId: o.playlistId,
+				part:       'id,snippet'
+			}, params);
+
+			params.key = o.apiKey;
+
+			$.get(o.apiUrl + 'playlistItems', params, null).always(function(response, a, b) {
+				callback(response.responseJSON || response);
+			})
+		}
+
+		return this;
+	},
+
 	initPlayer: function() {
 		var o = this.getOptions();
 
 		var player = new YT.Player(this.attr('id'), {
 			width:   o.width,
 			height:  o.height,
-			videoId: o.videoID,
+			videoId: o.videoId,
 			events:  {
 				onReady:       $.ampYouTube.onReady,
 				onStateChange: $.ampYouTube.onChange
@@ -533,23 +574,35 @@ $.ampExtend($.ampYouTube = function() {}, {
 
 		player.ampO = o;
 
-		this.data('player', player);
+		o.player = player;
 	},
 
-	play: function() {
-		var player = $(this).data('player');
-		player.ampO.playing = true;
-		player.playVideo();
+	play: function(id) {
+		var o = this.getOptions();
+
+		if (o.inModal) {
+			o.modal.ampModal('open')
+		}
+
+		if (id) {
+			o.player.loadVideoById(id)
+		}
+
+		o.player.ampO.playing = true;
+		o.player.playVideo();
 	},
 
 	pause: function() {
-		var player = $(this).data('player');
-		player.ampO.playing = false;
-		player.pauseVideo();
+		var o = this.getOptions();
+
+		o.player.ampO.playing = false;
+		o.player.pauseVideo();
 	},
 
 	playIndex: function(i) {
-		this.data('player').playVideoAt(i);
+		var o = this.getOptions();
+
+		o.player.playVideoAt(i);
 	},
 
 	onReady: function(e) {
@@ -632,6 +685,7 @@ $.ampExtend($.ampModal = function() {}, {
 		return $(o.content).use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
 			var $e = $(e),
 				$box = $('<div />').addClass('amp-modal').addClass(o.class).setOptions(o),
+				$contentBox = $('<div />').addClass('amp-modal-content-box'),
 				$content = $('<div />').addClass('amp-modal-content'),
 				$title = $('<div/>').addClass('amp-modal-title');
 
@@ -683,7 +737,7 @@ $.ampExtend($.ampModal = function() {}, {
 
 			$box
 				.append($('<div/>').addClass('align-middle'))
-				.append($content)
+				.append($contentBox.append($content))
 
 			if (o.shadow) {
 				var $shadow = $('<div/>').addClass('shadow-box').appendTo($box);
@@ -719,6 +773,10 @@ $.ampExtend($.ampModal = function() {}, {
 		}
 
 		return $this;
+	},
+
+	getBox: function() {
+		return this.closest('.amp-modal');
 	}
 });
 

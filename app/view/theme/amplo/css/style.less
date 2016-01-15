@@ -1490,43 +1490,67 @@ section.page {
 }
 
 .faq-page {
-	.content-box {
-		.faq-item {
-			display: none;
-			margin-bottom: 1em;
+	header {
+		border-bottom: solid 2px @color-light;
+		padding-bottom: 1em;
+		margin-bottom: 2em;
 
+		P + p {
+			margin-top: 1em;
+		}
+
+		h2 {
+			font: 2.25em RobotoBlack;
+			margin-bottom: .4em;
+		}
+
+		.contact-info {
+			margin: 1.5em auto;
+
+			a {
+				color: @color-font-dark;
+
+				&:hover {
+					color: lighten(@color-font-dark, 20%);
+				}
+			}
+		}
+	}
+
+	.faq-item {
+		display: none;
+		margin-bottom: 1em;
+
+		.question {
+			cursor: pointer;
+			margin-bottom: .5em;
+			font-size: 1.1em;
+			color: @color-gray;
+		}
+
+		.answer {
+			.height-animate;
+			font-size: .9em;
+			color: @color-font-light;
+		}
+
+		&.show {
+			display: block;
+		}
+
+		&:hover {
 			.question {
-				cursor: pointer;
-				margin-bottom: .5em;
-				font-weight: bold;
-				font-size: 1.1em;
-				color: @color-gray;
+				color: @color-main;
+			}
+		}
+
+		&.active {
+			.question {
+				color: @color-main;
 			}
 
 			.answer {
-				.height-animate;
-				font-size: .9em;
-				color: @color-font-light;
-			}
-
-			&.show {
-				display: block;
-			}
-
-			&:hover {
-				.question {
-					color: @color-main;
-				}
-			}
-
-			&.active {
-				.question {
-					color: @color-main;
-				}
-
-				.answer {
-					max-height: 10em;
-				}
+				max-height: 10em;
 			}
 		}
 	}

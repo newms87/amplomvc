@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Controller_Page extends Controller
 {
 	public function index()
@@ -27,9 +27,6 @@ class App_Controller_Page extends Controller
 		//Page Head
 		set_page_info('title', $page['title']);
 
-		//TODO: Put the page style into a cached file. (load in page header!)
-		$page['style'] = $this->Model_Page->compileStyle($page_id, $page['style']);
-
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url());
 		breadcrumb($page['title'], $this->url->here());
@@ -38,6 +35,7 @@ class App_Controller_Page extends Controller
 		set_option('config_layout_id', $page['layout_id']);
 
 		$page['content_file'] = _mod($page['content_file']);
+		$page['style']        = $this->Model_Page->compileStyle($page_id, $page['style']);
 
 		$template = 'page_template/' . (!empty($page['template']) ? $page['template'] : 'default');
 
