@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_ViewListing extends App_Model_Table
 {
 	protected $table = 'view_listing', $primary_key = 'view_listing_id';
@@ -134,7 +134,10 @@ class App_Model_ViewListing extends App_Model_Table
 		if (!$table) {
 			$this->error['table'] = _l("The view listing with ID (%s) did not exist.", (int)$view_listing_id);
 
-			return false;
+			return array(
+				0 => array(),
+				1 => 0,
+			);
 		}
 
 		$orig_table  = $this->table;
