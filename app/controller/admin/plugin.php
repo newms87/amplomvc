@@ -17,7 +17,7 @@ class App_Controller_Admin_Plugin extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Plugins"), site_url('admin/plugin'));
+		breadcrumb(_l("Plugin List"), site_url('admin/plugin'));
 
 		//Render
 		output($this->render('plugin/list'));
@@ -126,10 +126,11 @@ class App_Controller_Admin_Plugin extends Controller
 		}
 		$plugin_name = $_GET['name'];
 
-		set_page_info('title', _l("Plugins"));
+		set_page_info('title', _l("Plugin List"));
 
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("Plugins"), site_url('admin/plugin'));
+		breadcrumb(_l("Plugin List"), site_url('admin/plugin'));
+		breadcrumb(_l("Edit"), site_url('admin/plugin/form'));
 
 		$data = $_POST;
 
@@ -225,6 +226,11 @@ class App_Controller_Admin_Plugin extends Controller
 
 	public function find()
 	{
+		set_page_info('title', _l("Plugin Search"));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Plugin List"), site_url('admin/plugin'));
+		breadcrumb(_l("Plugin Search"), site_url('admin/plugin'));
+
 		$data = $_POST;
 
 		$defaults = array(

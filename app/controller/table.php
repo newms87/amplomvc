@@ -195,7 +195,7 @@ abstract class App_Controller_Table extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url(IS_ADMIN ? 'admin' : ''));
-		breadcrumb(_l("%s Listing", $this->model['title']), site_url($this->model['path']));
+		breadcrumb(_l("%s List", $this->model['title']), site_url($this->model['path']));
 		breadcrumb($record_id ? _l("Update") : _l("New"), site_url($this->model['path'] . '/form', $this->model['value'] . '=' . $record_id));
 
 		//The Data

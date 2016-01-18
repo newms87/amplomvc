@@ -3,19 +3,13 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section admin-client-invoice">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<div class="box invoice-form">
 		<div class="heading">
-			<h1>
-				<img src="<?= image(theme_dir(Tracescope::$scope . '/icon.png'), 18, 18); ?>"/>
-				<?= _l("Generate Invoice for "); ?>
-				<div class="client-id">
-					<input id="customer-autocomplete" type="text" name="client" data-autocomplete value="<?= $customer['username']; ?>"/>
-				</div>
-			</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<form id="generate-invoice" action="<?= site_url('admin/invoice/create'); ?>" method="post">
 					<button><?= _l("Generate Invoice"); ?></button>
 					<input type="hidden" name="customer_id" value="<?= $customer['customer_id']; ?>"/>
@@ -26,6 +20,14 @@
 			</div>
 		</div>
 		<div class="client-orders">
+			<h1>
+				<img src="<?= image(theme_dir(Tracescope::$scope . '/icon.png'), 18, 18); ?>"/>
+				<?= _l("Generate Invoice for "); ?>
+				<div class="client-id">
+					<input id="customer-autocomplete" type="text" name="client" data-autocomplete value="<?= $customer['username']; ?>"/>
+				</div>
+			</h1>
+
 			<?=
 			block('widget/views', null, array(
 				'path'  => 'admin/order/listing',

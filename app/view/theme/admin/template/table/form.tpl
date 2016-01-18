@@ -1,19 +1,14 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <section class="section table-form-tpl">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<form action="<?= site_url($model['path'] . '/save', $model['value'] . '=' . $record[$model['value']]); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save table-form-form">
 		<div class="row heading left">
-			<h1>
-				<i class="fa fa-cog"></i>
-				{{<?= $model['title']; ?>}}
-			</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<button>{{Save}}</button>
-
-				<a href="<?= site_url($model['path']); ?>" class="button cancel">{{Cancel}}</a>
 			</div>
 		</div>
 

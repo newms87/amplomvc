@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Controller_Admin_Category extends App_Controller_Table
 {
 	protected $model = array(
@@ -63,7 +63,7 @@ class App_Controller_Admin_Category extends App_Controller_Table
 			),
 			'template' => 'category/form',
 			'data'     => array(
-				'data_parents' => array('' => '(None)') + $this->instance->getRecords(array('name' => 'ASC'), array('!category_id' => _request('category_id')), array('cache' => true)),
+				'parents' => array('' => '(None)') + $this->instance->getRecords(array('name' => 'ASC'), array('!category_id' => _request('category_id')), array('cache' => true)),
 			),
 		);
 

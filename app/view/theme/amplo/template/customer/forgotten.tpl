@@ -5,7 +5,9 @@
 <section class="login-page forgotten content">
 	<header class="row top-row">
 		<div class="wrap">
-			<?= $is_ajax ? '' : breadcrumbs(); ?>
+			<div class="breadcrumbs">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
 			<h1>{{Request a New Password}}</h1>
 		</div>

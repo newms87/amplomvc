@@ -1,9 +1,10 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section plugin-settings">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Find A Plugin}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 		</div>
 
 		<div class="section">

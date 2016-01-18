@@ -1,7 +1,10 @@
 <?= $is_ajax ? '' : call('header'); ?>
 <?= area('left'); ?><?= area('right'); ?>
 <div class="content">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
+	<div class="breadcrumbs">
+		<?= $is_ajax ? '' : breadcrumbs(); ?>
+	</div>
+
 	<?= area('top'); ?>
 
 	<h1><?= $page_title; ?></h1>

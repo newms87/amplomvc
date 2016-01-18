@@ -1,17 +1,19 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{System Logs}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
+		</div>
 
+		<div class="section row">
 			<? if (user_can('w', 'admin/logs/batch_action')) { ?>
-				<div class="batch_actions">
+				<div class="batch-action row right padding-bottom">
 					<?= block('widget/batch_action', null, $batch_action); ?>
 				</div>
 			<? } ?>
-		</div>
-		<div class="section">
+
 			<?= block('widget/views', null, array(
 				'path'  => 'admin/logs/listing',
 				'group' => 'System Logs',

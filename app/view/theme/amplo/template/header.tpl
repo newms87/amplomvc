@@ -31,7 +31,7 @@
 
 				<script>
 					if (screen_width > 1024) {
-						$(window).scroll(function () {
+						$(window).scroll(function() {
 							$('.banner-bar-row').toggleClass('hide', $(window).scrollTop() > 20);
 						}).scroll();
 					}
@@ -132,24 +132,21 @@
 	</header>
 
 	<main class="main">
-
 		<script type="text/javascript">
-			$(document).ready(function () {
-				_ffix();
-				window.addEventListener('resize', _ffix, true);
-			}).on('scroll', _cfix);
+			setTimeout(_ffix,0);
+			window.addEventListener('resize', _ffix, true);
 
 			function _ffix() {
-				$('main.main').css('padding-bottom', $('footer.site-footer').outerHeight());
-			}
-			function _cfix() {
-				_cfix.$m.css('padding-top', (_cfix.h = Math.max(_cfix.$h.outerHeight(), _cfix.h || 0)) + parseInt(_cfix.$h.css('top')));
-				$('body').toggleClass('scroll-top', $(document).scrollTop() <= 0);
+				$('#container').css({
+					paddingTop:    $('header.site-header').outerHeight(),
+					paddingBottom: $('footer.site-footer').outerHeight()
+				});
 			}
 
-			_cfix.$h = $('header.site-header'), _cfix.$m = $('main.main');
+			setTimeout(_isScrollTop,0);
+			$(document).on('scroll', _isScrollTop);
 
-			_cfix();
+			function _isScrollTop() {$('body').toggleClass('scroll-top', $(document).scrollTop() <= 0)}
 		</script>
 
 		<? if (show_area('above')) { ?>

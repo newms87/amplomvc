@@ -1,18 +1,14 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section user-account">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<form action="<?= $user_id === user_info('user_id') ? site_url('admin/user/save-my-account') : site_url('admin/user/save', 'user_id=' . $user_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
-			<h1>
-				<img src="<?= theme_url('image/user.png'); ?>" alt=""/>
-				{{User}}
-			</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<button>{{Save}}</button>
-				<a href="<?= site_url('admin/user'); ?>" class="button cancel">{{Cancel}}</a>
 			</div>
 		</div>
 
@@ -131,7 +127,7 @@
 </div>
 
 <script type="text/javascript">
-	$('.change-password').click(function () {
+	$('.change-password').click(function() {
 		$('tr.password').toggleClass('edit');
 
 		if ($('tr.password').hasClass('edit')) {
@@ -141,18 +137,18 @@
 		}
 	});
 
-	$('.meta-key').keyup(function () {
+	$('.meta-key').keyup(function() {
 		var $this = $(this);
 		$this.closest('.meta-row').find('.meta-value').attr('name', 'meta[' + $this.html() + ']');
 	});
 
-	$('#tab-meta .remove').click(function () {
+	$('#tab-meta .remove').click(function() {
 		$(this).closest('.meta-row').remove();
 	});
 
 	$("#tab-meta .meta-table").ac_template('meta-table');
 
-	$('.add-meta').click(function () {
+	$('.add-meta').click(function() {
 		$.ac_template('meta-table', 'add');
 	});
 

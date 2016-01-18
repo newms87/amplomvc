@@ -5,7 +5,9 @@
 <section id="customer-login" class="login-page content">
 	<header class="login-top row">
 		<div class="wrap">
-			<?= $is_ajax ? '' : breadcrumbs(); ?>
+			<div class="breadcrumbs">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
 			<h1>{{Customer Account}}</h1>
 		</div>

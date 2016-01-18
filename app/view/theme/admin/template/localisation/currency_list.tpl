@@ -1,6 +1,5 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -9,6 +8,10 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
+			<div class="breadcrumbs">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
+
 			<h1><img src="<?= theme_url('image/payment.png'); ?>" alt=""/> {{Currency}}</h1>
 
 			<div class="buttons">

@@ -9,7 +9,7 @@
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
 
-class App_Controller_Admin_Localisation_Zone extends App_Controller_Table
+class App_Controller_Admin_Localisation_Currency extends App_Controller_Table
 {
 	protected $model = array(
 		'title' => 'Currency',

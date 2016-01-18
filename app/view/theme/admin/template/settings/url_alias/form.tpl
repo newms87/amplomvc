@@ -1,16 +1,13 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<form action="<?= site_url('admin/settings/url-alias/save', 'url_alias_id=' . $url_alias_id); ?>" class="box form ctrl-save" method="post" enctype="multipart/form-data">
 		<div class="heading">
-			<h1>
-				<?= img(theme_dir('settings/alias.png')); ?>
-				{{URL Aliases}}
-			</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
-				<button data-loading="{{Saving...}}">{{Save}}</button>
-				<a href="<?= site_url('admin/settings/url-alias'); ?>" class="button cancel">{{Cancel}}</a>
+			<div class="buttons col xs-12 md-6 md-right">
+				<button>{{Save}}</button>
 			</div>
 		</div>
 

@@ -1,17 +1,15 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div id="admin-permissions" class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<form action="<?= site_url('admin/settings/role/save', 'user_role_id=' . $user_role_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 
 		<div class="heading">
-			<h1>
-				<img src="<?= theme_url('image/user-group.png'); ?>" alt=""/> {{User Group}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<button>{{Save}}</button>
-				<a href="<?= site_url('admin/settings/role'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 

@@ -1,15 +1,14 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> {{Cron Jobs}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
+				<button>{{Save}}</button>
 				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button">{{Run Cron}}</a>
-				<a onclick="$('#form').submit();" class="button">{{Save}}</a>
-				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 		<div class="section">

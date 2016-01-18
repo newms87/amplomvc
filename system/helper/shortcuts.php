@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
@@ -68,25 +68,35 @@ function has_links($group)
 	return $registry->get('document')->hasLinks($group);
 }
 
-function breadcrumb($name, $url, $separator = '', $position = null)
-{
-	global $registry;
-	$registry->get('breadcrumb')->add($name, $url, $separator, $position);
-}
+$_breadcrumbs = array();
 
-function get_breadcrumb($offset = 0)
+function breadcrumb($label, $href, $position = null, $class = '')
 {
-	global $registry;
+	global $_breadcrumbs;
 
-	return $registry->get('breadcrumb')->get($offset);
+	$crumb = array(
+		'label' => $label,
+		'href'  => $href,
+		'class' => trim($class . ' breadcrumb'),
+	);
+
+	if ($position !== null && !empty($_breadcrumbs)) {
+		array_splice($_breadcrumbs, $position, 0, array($crumb));
+	} else {
+		$_breadcrumbs[] = $crumb;
+	}
 }
 
 function breadcrumbs()
 {
-	global $registry;
+	global $_breadcrumbs;
 
 	if (IS_ADMIN ? option('admin_show_breadcrumbs', true) : option('show_breadcrumbs', true)) {
-		return $registry->get('breadcrumb')->render();
+		foreach ($_breadcrumbs as $key => &$crumb) {
+			$crumb['html'] = "<a href=\"$crumb[href]\" class=\"$crumb[class]\"><span>" . _strip_tags($crumb['label']) . "</span></a>";
+		}
+
+		return implode('', array_column($_breadcrumbs, 'html'));
 	}
 }
 
