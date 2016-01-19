@@ -1,6 +1,6 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
-<section class="section">
-	<div class="dashboard-header">
+<section class="section box">
+	<div class="dashboard-header heading">
 		<div class="breadcrumbs col xs-12 md-6 left">
 			<?= $is_ajax ? '' : breadcrumbs(); ?>
 		</div>

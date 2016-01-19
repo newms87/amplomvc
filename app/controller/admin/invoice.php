@@ -292,7 +292,15 @@ class App_Controller_Admin_Invoice extends Controller
 
 	public function generate()
 	{
+		//Page Head
+		set_page_info('title', _l("Invoice Preview"));
+
 		$invoice_id = _get('invoice_id');
+
+		//Breadcrumbs
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Invoice"), site_url('admin/invoice'));
+		breadcrumb(_l("Preview"), site_url('admin/invoice/generate', 'invoice_id=' . $invoice_id));
 
 		if (!$invoice_id) {
 			message('notify', _l("Cannot generate an invoice without the invoice ID"));
