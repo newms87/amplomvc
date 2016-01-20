@@ -80,4 +80,9 @@ class Request
 	{
 		return current(array_slice($_SESSION['page_requests'], $offset, 1));
 	}
+
+	public function prev()
+	{
+		return $this->getPrevPageRequest();
+	}
 }
