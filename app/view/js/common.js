@@ -517,7 +517,7 @@ $.ampExtend($.ampYouTube = function() {}, {
 
 		if (o.inModal) {
 			o.modal = this.ampModal({
-				onClose: function(){
+				onClose: function() {
 					$.ampYouTube.getInstance(this.find('iframe').attr('id')).ampYouTube('pause')
 				}
 			}).ampModal('getBox');
@@ -534,7 +534,7 @@ $.ampExtend($.ampYouTube = function() {}, {
 		return this;
 	},
 
-	getInstance: function(id){
+	getInstance: function(id) {
 		return $.ampYouTube.players.filter('#' + id)
 	},
 
@@ -2017,13 +2017,16 @@ $(document)
 
 			$form.submit_ajax_form({
 				callback: function(response) {
+
 					//Redirect from new form to edit form
 					if (response.data) {
 						for (var id in response.data) {
-							var regx = new RegExp(id + '=\\d+');
+							if (typeof response.data[id] !== 'object') {
+								var regx = new RegExp(id + '=\\d+');
 
-							if ($reloadOnNew && !location.href.match(regx)) {
-								location = location.href.replace(/#.*/, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
+								if ($reloadOnNew && !location.href.match(regx)) {
+									return location = location.href.replace(/#.*/, '').replace(regx, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
+								}
 							}
 						}
 					}

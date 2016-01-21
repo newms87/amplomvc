@@ -15,7 +15,7 @@
 		<div class="row left section">
 			<div class="col left top">
 				<? foreach ($columns as $c => $column) { ?>
-					<? if (isset($record[$c]) && $column['type'] !== 'pk-int') { ?>
+					<? if (isset($record[$c]) && $column['type'] !== 'pk-int' && $column['type'] !== 'pk') { ?>
 						<?
 						$column['#id']    = 'column-' . $c;
 						$column['select'] = $record[$c];
