@@ -1,34 +1,35 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Plugins}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
-				<a href="<?= site_url('admin/plugin/find'); ?>" class="button">{{Find A Plugin}}</a>
+			<div class="buttons col xs-12 md-6 md-right">
+				<? if (user_can('w', 'admin/plugin/find')) { ?>
+					<a href="<?= site_url('admin/plugin/find'); ?>" class="button">{{Find A Plugin}}</a>
+				<? } ?>
 			</div>
 		</div>
-		<div class="section">
-			<div id="listing">
-				<?= block('widget/views', null, array(
-					'path'  => 'admin/plugin/listing',
-					'group' => 'Plugins',
-				)); ?>
-			</div>
+		<div class="section row">
+			<?= block('widget/views', null, array(
+				'path'  => 'admin/plugin/listing',
+				'group' => 'Plugins',
+			)); ?>
 		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
-	$(document).click(function (e) {
+	$(document).click(function(e) {
 		var $target = $(e.target);
 
 		if ($target.is('.action-uninstall')) {
 			$.ampConfirm({
 				title:     '{{Uninstall Plugin?}}',
 				text:      '{{Are you sure you want to uninstall this plugin?}}',
-				onConfirm: function () {
+				onConfirm: function() {
 					$.ampConfirm({
 						title:    "{{Keep Data?}}",
 						text:     "{{Do you want to keep the data associated with this plugin?}}",
@@ -40,7 +41,7 @@
 								label: 'Remove Data',
 							}
 						},
-						onAction: function ($modal, action) {
+						onAction: function($modal, action) {
 							location = $target.attr('href') + (action === 'confirm' ? '&keep_data=1' : '');
 						}
 					});

@@ -1,13 +1,15 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Settings}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
-				<a href="<?= site_url('admin'); ?>" class="button">{{Admin Home}}</a>
-				<a href="<?= site_url('admin/settings/clear-cache'); ?>" class="button">{{Clear Cache}}</a>
+			<div class="buttons col xs-12 md-6 md-right">
+				<? if (user_can('w', 'admin/settings/clear-cache')) { ?>
+					<a href="<?= site_url('admin/settings/clear-cache'); ?>" class="button">{{Clear Cache}}</a>
+				<? } ?>
 			</div>
 		</div>
 		<div class="section">

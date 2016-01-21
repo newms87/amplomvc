@@ -10,7 +10,9 @@
 		<header class="row top-row page-header">
 			<div class="wrap">
 				<? if (!empty($meta['show_breadcrumbs'])) { ?>
-					<?= $is_ajax ? '' : breadcrumbs(); ?>
+					<div class="breadcrumbs">
+						<?= $is_ajax ? '' : breadcrumbs(); ?>
+					</div>
 				<? } ?>
 
 				<? if (!empty($meta['show_title'])) { ?>

@@ -1,17 +1,18 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Dashboards}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<a href="<?= site_url('admin/dashboard/form'); ?>" class="button">{{Add Dashboard}}</a>
 			</div>
 		</div>
-		<div class="section">
+
+		<div class="section row">
 			<div class="dashboards">
 				<? foreach ($dashboards as $dashboard) { ?>
 					<div class="dashboard">

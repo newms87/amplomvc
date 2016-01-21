@@ -1,15 +1,14 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<form action="<?= site_url('admin/user/reset', 'code=' . $code); ?>" method="post" enctype="multipart/form-data" class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/user.png'); ?>" alt=""/> {{Reset Your Password}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<button data-loading="{{Please Wait...}}">{{Reset Password}}</button>
-				<a href="<?= site_url('admin/user/login'); ?>" class="button">{{Cancel}}</a>
 			</div>
 		</div>
 

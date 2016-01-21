@@ -1,32 +1,28 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <section class="section admin-page-form">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<form id="page-form" action="<?= site_url($model['path'] . '/save', 'page_id=' . $page_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="row heading left">
-			<h1>
-				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{<?= $model['title']; ?>}}
-				<div class="page-url">
-					<span class="prefix-url"><?= site_url($type . '/'); ?></span>
-					<input type="text" name="name" value="<?= $name; ?>"/>
-				</div>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-				<a class="page-view" href="<?= site_url($type . '/' . $name); ?>" target="_blank">{{View}}</a>
-			</h1>
-
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<button>{{Save}}</button>
 
 				<? if ($status < App_model_Page::STATUS_PUBLISHED) { ?>
 					<button onclick="$('[name=status]').val(<?= App_Model_Page::STATUS_PUBLISHED; ?>)">{{Publish}}</button>
 				<? } ?>
-
-				<a href="<?= site_url($model['path']); ?>" class="button cancel">{{Cancel}}</a>
 			</div>
 		</div>
 
 		<div class="row left section">
+			<div class="page-url">
+				<span class="prefix-url"><?= site_url($type . '/'); ?></span>
+				<input type="text" name="name" value="<?= $name; ?>"/>
+			</div>
+
+			<a class="page-view" href="<?= site_url($type . '/' . $name); ?>" target="_blank">{{View}}</a>
 
 			<div id="tabs" class="htabs">
 				<a href="#tab-content">{{Content}}</a>

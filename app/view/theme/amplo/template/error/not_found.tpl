@@ -5,8 +5,11 @@
 <section id="not-found-page" class="content">
 	<header class="top-row row">
 		<div class="wrap">
-			<?= $is_ajax ? '' : breadcrumbs(); ?>
-			<h1><?= !empty($page_title) ? $page_title : _l("Page Not Found"); ?></h1>
+			<div class="breadcrumbs">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
+
+			<h1><?= !empty($page_title) ? $page_title : "{{Page Not Found}}"; ?></h1>
 		</div>
 	</header>
 

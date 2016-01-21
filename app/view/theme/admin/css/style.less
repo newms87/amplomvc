@@ -502,12 +502,76 @@ form {
 	position: relative;
 }
 
-.breadcrumb {
-	padding: .5em;
+@breadcrumb-size: 1.3em;
+@breadcrumb-color: lighten(@color-main, 65%);
 
-	a {
-		font-size: 12px;
-		color: #666;
+.breadcrumb-arrow {
+	content: " ";
+	display: block;
+	width: 0;
+	height: 0;
+	border-top: @breadcrumb-size solid transparent;
+	border-bottom: @breadcrumb-size solid transparent;
+	border-left: @breadcrumb-size/1.5 solid @breadcrumb-color;
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	margin-top: -@breadcrumb-size;
+}
+
+.breadcrumbs {
+	line-height: @breadcrumb-size+.1em;
+
+	& > a {
+		.col;
+		.col.auto;
+		.no-ws-hack;
+		background: @breadcrumb-color;
+		padding: .5em 0;
+		text-decoration: none;
+
+		& > span {
+			position: relative;
+			padding-right: 1em;
+			z-index: 3;
+		}
+
+		& + a, & + h2 {
+			padding-left: 2em;
+		}
+
+		&:first-child {
+			padding-left: 1em;
+		}
+
+		&:last-child {
+			background: none;
+
+			&:after, &:before {
+				display: none;
+			}
+		}
+
+		&:after {
+			.breadcrumb-arrow;
+			z-index: 2;
+		}
+
+		&:before {
+			.breadcrumb-arrow;
+			margin-left: 1px;
+			border-left-color: @color-main;
+			z-index: 1;
+		}
+
+		&:hover, &:active {
+			background: @color-secondary;
+			color: white;
+
+			&:after {
+				border-left-color: @color-secondary;
+			}
+		}
 	}
 }
 
@@ -820,11 +884,8 @@ form {
 }
 
 .box {
-	margin-bottom: 15px;
-
 	& > .heading {
 		position: relative;
-		padding: .5em 1.5em;
 		background: @color-gray-light;
 
 		h1 {
@@ -833,6 +894,7 @@ form {
 			margin: 0;
 			color: @color-main;
 			text-align: left;
+			padding: .5em 0;
 
 			img {
 				max-width: 24px;
@@ -846,10 +908,7 @@ form {
 		}
 
 		.buttons {
-			.col;
-			width: 60%;
-			margin: 0;
-			text-align: right;
+			padding: .3em 1em;
 
 			.button {
 				margin-left: .3em;
@@ -866,19 +925,7 @@ form {
 		padding: 1.5em;
 	}
 
-	.batch-action, .batch_actions {
-		display: inline-block;
-		vertical-align: middle;
-		margin: 0;
-		float: right;
-
-		& + .buttons {
-			float: right;
-			width: auto;
-			clear: none;
-			margin-right: 1em;
-		}
-
+	.batch-action {
 		.action_value {
 			position: relative;
 			display: none;
@@ -888,7 +935,6 @@ form {
 			}
 		}
 	}
-
 }
 
 //Button

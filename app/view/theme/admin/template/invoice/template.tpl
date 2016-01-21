@@ -1,7 +1,7 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="invoice-page row">
-	<div class="invoice-actions col xs-12">
+	<div class="invoice-actions row padding-vertical">
 		<a href="<?= site_url('admin/invoice/form', 'customer_id=' . $customer['customer_id']); ?>" class="button back">Back</a>
 		<button id="download">Download</button>
 	</div>
@@ -142,7 +142,7 @@
 </div>
 
 <script type="text/javascript">
-	$('#download').click(function () {
+	$('#download').click(function() {
 		window.print();
 	});
 </script>

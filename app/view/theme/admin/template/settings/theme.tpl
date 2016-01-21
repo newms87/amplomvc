@@ -1,15 +1,14 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div id="theme-settings" class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<form action="<?= site_url('admin/settings/theme/save'); ?>" method="post" class="box">
 		<div class="heading">
-			<h1>
-				<img class="icon" src="<?= theme_url('image/settings/theme.png'); ?>" alt=""/> {{Theme Settings}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
-				<button class="button">{{Save}}</button>
-				<a href="<?= site_url('admin/settings'); ?>" class="button">{{Cancel}}</a>
+			<div class="buttons col xs-12 md-6 md-right">
+				<button>{{Save}}</button>
 			</div>
 		</div>
 

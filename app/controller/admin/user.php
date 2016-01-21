@@ -18,7 +18,7 @@ class App_Controller_Admin_User extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("User"), site_url('admin/user'));
+		breadcrumb(_l("User List"), site_url('admin/user'));
 
 		//Batch Actions
 		$actions = array(
@@ -124,8 +124,8 @@ class App_Controller_Admin_User extends Controller
 
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("User"), site_url('admin/user'));
-		breadcrumb($user_id ? _l("Update") : _l("New"), site_url('admin/user/form', 'user_id=' . $user_id));
+		breadcrumb(_l("User List"), site_url('admin/user'));
+		breadcrumb($user_id ? _l("Update User") : _l("New User"), site_url('admin/user/form', 'user_id=' . $user_id));
 
 		//The Data
 		$user = $_POST;

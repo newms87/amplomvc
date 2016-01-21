@@ -16,6 +16,9 @@ class App_Controller_Admin_Dev extends Controller
 		//Page Head
 		set_page_info('title', _l("Development Console"));
 
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Development Console"), site_url('admin/dev'));
+
 		$data['url_sync']            = site_url("admin/dev/sync");
 		$data['url_site_management'] = site_url("admin/dev/site_management");
 		$data['url_backup_restore']  = site_url("admin/dev/backup_restore");
@@ -29,6 +32,10 @@ class App_Controller_Admin_Dev extends Controller
 	public function sync()
 	{
 		set_page_info('title', _l("Synchronize Sites"));
+		$this->document->addStyle(theme_url('style/dev.css'));
+
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Development Console"), site_url('admin/dev'));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -74,14 +81,16 @@ class App_Controller_Admin_Dev extends Controller
 
 		$data['return'] = site_url('admin');
 
-		$this->content();
-
 		output($this->render('dev/sync', $data));
 	}
 
 	public function site_management()
 	{
 		set_page_info('title', _l("Site Management"));
+		$this->document->addStyle(theme_url('style/dev.css'));
+
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Development Console"), site_url('admin/dev'));
 
 		$dev_sites = $this->config->loadGroup('dev_sites');
 
@@ -128,8 +137,6 @@ class App_Controller_Admin_Dev extends Controller
 
 		$data['return'] = site_url('admin');
 
-		$this->content();
-
 		output($this->render('dev/site_management', $data));
 	}
 
@@ -137,6 +144,10 @@ class App_Controller_Admin_Dev extends Controller
 	{
 		//Page Head
 		set_page_info('title', _l("Backup & Restore"));
+		$this->document->addStyle(theme_url('style/dev.css'));
+
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Development Console"), site_url('admin/dev'));
 
 		//Handle POST
 		if (IS_POST) {
@@ -202,17 +213,11 @@ class App_Controller_Admin_Dev extends Controller
 		$data['data_backup_files'] = $this->dev->getBackupFiles();
 		$data['data_tables']       = $this->db->getTables();
 
-		$this->content();
-
 		output($this->render('dev/backup_restore', $data));
 	}
 
 	public function content()
 	{
-		$this->document->addStyle(theme_url('style/dev.css'));
-
-		breadcrumb(_l("Home"), site_url('admin'), '', 0);
-		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
 	}
 
 	public function request_table_data()
@@ -263,9 +268,9 @@ class App_Controller_Admin_Dev extends Controller
 		set_page_info('title', _l("Database Administration"));
 		$this->document->addStyle(theme_url('style/dev.css'));
 
-		breadcrumb(_l("Home"), site_url('admin'), '', 0);
-		breadcrumb(_l("Development Console"), site_url('admin/dev'), '', 1);
-		breadcrumb(_l("Database Administration"), site_url('dev/db-admin'));
+		breadcrumb(_l("Home"), site_url('admin'));
+		breadcrumb(_l("Development Console"), site_url('admin/dev'));
+		breadcrumb(_l("Database Administration"), site_url('admin/dev/db-admin'));
 
 		$data = array();
 

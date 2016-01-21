@@ -3,21 +3,15 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section admin-client-invoice">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<div class="box invoice-form">
 		<div class="heading">
-			<h1>
-				<img src="<?= image(theme_dir(Tracescope::$scope . '/icon.png'), 18, 18); ?>"/>
-				<?= _l("Generate Invoice for "); ?>
-				<div class="client-id">
-					<input id="customer-autocomplete" type="text" name="client" data-autocomplete value="<?= $customer['username']; ?>"/>
-				</div>
-			</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
+			<div class="buttons col xs-12 md-6 md-right">
 				<form id="generate-invoice" action="<?= site_url('admin/invoice/create'); ?>" method="post">
-					<button><?= _l("Generate Invoice"); ?></button>
+					<button>{{Generate Invoice}}</button>
 					<input type="hidden" name="customer_id" value="<?= $customer['customer_id']; ?>"/>
 					<input type="hidden" name="meta_type" value="ts_order"/>
 
@@ -26,6 +20,14 @@
 			</div>
 		</div>
 		<div class="client-orders">
+			<div class="row padding-top padding-left left">
+				<div class="label col auto">{{Generate Invoice for}}</div>
+
+				<div class="client-id col auto padding-left">
+					<input id="customer-autocomplete" type="text" name="client" data-autocomplete value="<?= $customer['username']; ?>"/>
+				</div>
+			</div>
+
 			<?=
 			block('widget/views', null, array(
 				'path'  => 'admin/order/listing',
@@ -47,14 +49,14 @@
 
 	$('#customer-autocomplete').autocomplete({
 		delay:  500,
-		source: function (request, response) {
+		source: function(request, response) {
 			filter = {username: request.term};
 			var $this = $('#customer-autocomplete');
 
 			load_count++;
 			$this.addClass('loading');
 
-			$.get($ac.site_url + 'admin/client/autocomplete', {filter: filter}, function (e) {
+			$.get($ac.site_url + 'admin/client/autocomplete', {filter: filter}, function(e) {
 				if (load_count-- <= 1) {
 					$this.removeClass('loading');
 				}
@@ -85,7 +87,7 @@
 	filter_customer_id(<?= (int)$customer['customer_id']; ?>)
 	<? } ?>
 
-	$('#generate-invoice').submit(function () {
+	$('#generate-invoice').submit(function() {
 		$(this).find('.batch').append($('[name="batch[]"]:checked').clone());
 	});
 </script>

@@ -1,8 +1,11 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
+			<div class="breadcrumbs">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
+
 			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Send Email}}</h1>
 
 			<div class="buttons">

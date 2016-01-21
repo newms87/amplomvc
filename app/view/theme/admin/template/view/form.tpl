@@ -1,17 +1,14 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <section class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<form id="client-form" action="<?= $save; ?>" method="post" class="box ctrl-save <?= $is_ajax ? 'ajax-form' : ''; ?>">
 		<div class="heading">
-			<h1>
-				<img src="<?= theme_url('image/setting.png'); ?>" alt=""/> <?= _l("%s View", $name); ?>
-			</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
-				<button data-loading="{{Saving...}}">{{Save}}</button>
-				<a href="<?= site_url('admin/view'); ?>" class="button cancel">{{Cancel}}</a>
+			<div class="buttons col xs-12 md-6 md-right">
+				<button>{{Save}}</button>
 			</div>
 		</div>
 

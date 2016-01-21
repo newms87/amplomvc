@@ -1,20 +1,18 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<form action="<?= site_url('admin/api_user/save', 'api_user_id=' . $record_id); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save">
 		<div class="heading">
-			<h1>
-				<img src="<?= theme_url('image/user.png'); ?>" alt=""/>
-				{{API User}}
-			</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
-				<button data-loading="{{Saving...}}">{{Save}}</button>
-				<a href="<?= site_url('admin/api_user'); ?>" class="button cancel">{{Cancel}}</a>
+			<div class="buttons col xs-12 md-6 md-right">
 				<? if ($record_id) { ?>
+					<button>{{Save}}</button>
 					<a href="<?= site_url('admin/api_user/remove', 'api_user_id=' . $record_id); ?>" class="button remove" data-confirm="{{Confirm Delete}}" data-confirm-modal="{{Are you sure you want to delete this API User?}}">{{Delete}}</a>
+				<? } else { ?>
+					<button>{{Create}}</button>
 				<? } ?>
 			</div>
 		</div>

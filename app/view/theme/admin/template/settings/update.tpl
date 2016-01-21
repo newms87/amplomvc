@@ -1,13 +1,9 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1>
-				<img src="<?= theme_url('image/settings/system-update.png'); ?>" alt=""/> {{System Update}}</h1>
-
-			<div class="buttons">
-				<a href="<?= $cancel; ?>" class="button">{{Cancel}}</a>
+			<div class="breadcrumbs col xs-12 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
 			</div>
 		</div>
 		<div class="section">
@@ -48,7 +44,6 @@
 		</div>
 	</div>
 </div>
-
 
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>

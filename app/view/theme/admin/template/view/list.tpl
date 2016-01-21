@@ -1,15 +1,19 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/setting.png'); ?>" alt=""/> {{Views}}</h1>
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
+			</div>
 
-			<div class="buttons">
-				<a class="button" href="<?= site_url('admin/view/form'); ?>">{{Create View}}</a>
+			<div class="buttons col xs-12 md-6 md-right">
+				<? if (user_can('w', 'admin/view/form')) { ?>
+					<a class="button" href="<?= site_url('admin/view/form'); ?>">{{Create View}}</a>
+				<? } ?>
 			</div>
 		</div>
-		<div class="section">
+
+		<div class="section row">
 			<?= block('widget/views', null, array(
 				'group'        => 'views',
 				'path'         => 'admin/view/listing',

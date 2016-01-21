@@ -1,14 +1,21 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= theme_url('image/error.png'); ?>" alt=""/> {{Permission Denied!}}</h1>
-		</div>
-		<div class="section">
-			<div
-				style="border: 1px solid #DDDDDD; background: #F7F7F7; text-align: center; padding: 15px;">{{You do not have permission to access this page, please refer to your system administrator.}}
+			<div class="breadcrumbs col xs-12 md-6 left">
+				<?= $is_ajax ? '' : breadcrumbs(); ?>
 			</div>
+		</div>
+
+		<div class="section row">
+			<div class="page-title row padding-bottom">
+				<h1>
+					<i class="fa fa-exclamation-circle""></i>
+					<div class="col auto">{{Access Not Allowed!}}</div>
+				</h1>
+			</div>
+
+			<div class="messages error row">{{You do not have permission to access this page, please see the system administrator to request access.}}</div>
 		</div>
 	</div>
 </div>

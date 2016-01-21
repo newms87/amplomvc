@@ -25,14 +25,6 @@
 					</a>
 				<? } ?>
 			</div>
-
-			<? /*
-			<div class="social-links col xs-12 lg-3">
-				<a class="link amp-sprite si-facebook-gray" target="_blank" href="https://www.facebook.com/RoofScope"></a>
-				<a class="link amp-sprite si-twitter-gray" target="_blank" href="https://twitter.com/roofscope"></a>
-				<a class="link amp-sprite si-googleplus-gray" target="_blank" href="https://plus.google.com/102164966680405341849/about?hl=en&partnerid=gplp0"></a>
-			</div>
-         */ ?>
 		</div>
 	</div>
 
@@ -54,5 +46,8 @@
 	</div>
 </footer>
 </section><!-- /#container -->
+<script>
+
+</script>
 </body>
 </html>

@@ -1,10 +1,12 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div id="add_block" class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
-
 	<div class="box">
 		<form id="form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 			<div class="heading">
+				<div class="breadcrumbs">
+					<?= $is_ajax ? '' : breadcrumbs(); ?>
+				</div>
+
 				<h1><img src="<?= theme_url('image/module.png'); ?>" alt=""/> {{New Block}}</h1>
 
 				<div class="buttons">

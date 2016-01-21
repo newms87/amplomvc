@@ -140,6 +140,7 @@ input, select, textarea {
 	min-height: 100%;
 	width: 100%;
 	overflow: hidden;
+	padding: 5em 0 6.5em 0;
 }
 
 #maintenance-mode {
@@ -388,7 +389,7 @@ table.list {
  *  III. Header          *
  *************************/
 
-header.site-header.row {
+header.site-header {
 	position: fixed;
 	top: 0;
 	z-index: 100;
@@ -419,13 +420,7 @@ header.site-header.row {
 body.scroll-top {
 	#container {
 		header.site-header {
-			position: relative;
 			box-shadow: none;
-		}
-
-		main.main {
-			height: 100%;
-			padding-top: 0 !important;
 		}
 	}
 }

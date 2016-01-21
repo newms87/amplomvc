@@ -1,17 +1,14 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 <div class="section">
-	<?= $is_ajax ? '' : breadcrumbs(); ?>
 	<form action="<?= site_url('admin/navigation/save', 'navigation_group_id=' . $navigation_group_id); ?>" method="post" enctype="multipart/form-data" class="ctrl-save">
 		<div class="box">
 			<div class="heading">
-				<h1>
-					<?= img(theme_url('image/setting.png')); ?>
-					{{Navigation}}
-				</h1>
+				<div class="breadcrumbs col xs-12 md-6 left">
+					<?= $is_ajax ? '' : breadcrumbs(); ?>
+				</div>
 
-				<div class="buttons">
-					<button data-loading="{{Saving...}}">{{Save}}</button>
-					<a href="<?= site_url('admin/navigation'); ?>" class="button cancel">{{Cancel}}</a>
+				<div class="buttons col xs-12 md-6 md-right">
+					<button>{{Save}}</button>
 				</div>
 			</div>
 			<div class="section">
