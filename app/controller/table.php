@@ -282,7 +282,7 @@ abstract class App_Controller_Table extends Controller
 		$action = _request('action');
 		$value  = _request('value');
 
-		if ($options['callback']) {
+		if (!empty($options['callback'])) {
 			$options['callback']($batch, $action, $value);
 		} else {
 			foreach ($batch as $record_id) {

@@ -180,10 +180,6 @@ class Plugin extends Library
 
 		$plugin = $this->Model_Plugin->getRecord($plugin_id, 'version');
 
-		if (method_exists($instance, 'upgrade')) {
-			$instance->upgrade($plugin['version']);
-		}
-
 		$directives = get_comment_directives(DIR_PLUGIN . $name . '/setup.php');
 
 		$version = !empty($directives['version']) ? $directives['version'] : '1.0';
@@ -204,6 +200,10 @@ class Plugin extends Library
 			} else {
 				$this->changes[$file] = $file;
 			}
+		}
+
+		if (method_exists($instance, 'upgrade')) {
+			$instance->upgrade($plugin['version']);
 		}
 
 		return $plugin['version'] === $version ? true : $version;
