@@ -69,15 +69,7 @@ class App_Controller_Account extends Controller
 		$customer['data_zones'] = $this->Model_Localisation_Zone->getRecords(null, $filter, array('cache' => true));
 
 		//Render
-		$content = $this->render('account/details', $customer);
-
-		if ($this->is_ajax) {
-			output($content);
-		} else {
-			$data['content'] = $content;
-
-			output($this->render('account/account', $data));
-		}
+		output($this->render('account/details', $customer));
 	}
 
 	public function save()
