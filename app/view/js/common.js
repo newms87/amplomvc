@@ -672,7 +672,9 @@ $.ampExtend($.ampModal = function() {}, {
 			onAction:    null,
 			onOpen:      null,
 			onClose:     null,
-			show:        false
+			show:        false,
+			width:       null,
+			height:      null
 		}, o);
 
 		o.content = o.content === null ? this : o.content;
@@ -690,6 +692,9 @@ $.ampExtend($.ampModal = function() {}, {
 				$title = $('<div/>').addClass('amp-modal-title');
 
 			o.context.append($box);
+
+			!o.width || $contentBox.css('width', o.width);
+			!o.height || $contentBox.css('height', o.height);
 
 			$content
 				.append(o.title ? $title.html(o.title) : '')
