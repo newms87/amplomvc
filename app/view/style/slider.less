@@ -1,16 +1,25 @@
-.amplo-slider {
-  .control {
-    cursor: pointer;
-    .no-select;
-  }
+.amp-slider {
+	.amp-control {
+		cursor: pointer;
+		.no-select;
+	}
 
-  .viewport {
-    .slider {
-      position: relative;
-      left: 0;
-      top: 0;
-      -webkit-transition: left .5s, top .5s;
-      transition: left .5s, top .5s;
-    }
-  }
+	.amp-viewport {
+		overflow: hidden;
+
+		.amp-slide-list {
+			position: relative;
+			left: 0;
+			top: 0;
+			white-space: nowrap;
+			-webkit-transition: left .5s, top .5s;
+			transition: left .5s, top .5s;
+
+			& > * {
+				display: inline-block;
+				vertical-align: middle;
+				.ws-hack;
+			}
+		}
+	}
 }
