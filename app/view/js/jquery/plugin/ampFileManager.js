@@ -16,8 +16,8 @@ $.ampExtend($.ampFileManager = function() {}, {
 				selectFile:      false,
 				xhr:             $.ampFileManager.xhr,
 				path:            null,
-				thumb_width:     $ac.fm_thumb_width || 130,
-				thumb_height:    $ac.fm_thumb_height || 100,
+				thumb_width:     $ac.fm_thumb_width || '12em',
+				thumb_height:    $ac.fm_thumb_height || '12em',
 				category:        '',
 				accept:          $input.attr('accept') || [],
 				selectable:      true,
@@ -62,8 +62,6 @@ $.ampExtend($.ampFileManager = function() {}, {
 					$afm.append(response).ampFileManager('initTemplate');
 				})
 			}
-
-
 		});
 	},
 
@@ -128,7 +126,7 @@ $.ampExtend($.ampFileManager = function() {}, {
 
 		var $file = o.fileList.ac_template('afm-file', 'add');
 
-		$file.find('.thumbnail').css({
+		$file.css({
 			width:  o.thumb_width,
 			height: o.thumb_height
 		});
@@ -148,7 +146,7 @@ $.ampExtend($.ampFileManager = function() {}, {
 		}
 
 		if (file.type !== 'image') {
-			$file.find('.thumb-img').html($('<i/>').addClass('fa ' + (o.fileIcons[file.type] || 'fa-file')));
+			$afm.ampFileManager('setThumbnail', $file, $('<i/>').addClass('fa ' + (o.fileIcons[file.type] || 'fa-file')));
 		}
 
 		if (file) {
@@ -158,6 +156,13 @@ $.ampExtend($.ampFileManager = function() {}, {
 		$afm.ampFileManager('refresh');
 
 		return $file;
+	},
+
+	setThumbnail: function ($file, $thumb) {
+		var $box = $file.find('.thumbnail');
+		$box.find('.fa, img').remove();
+		$box.append($thumb);
+		return this;
 	},
 
 	openFolder: function($folder) {
@@ -207,7 +212,7 @@ $.ampExtend($.ampFileManager = function() {}, {
 		}
 
 		if (file.url) {
-			$file.find('.thumbnail .thumb-img').html($('<img />').attr('src', file.url))
+			$afm.ampFileManager('setThumbnail', $file, $('<img />').attr('src', file.url));
 		}
 
 		$file.attr('data-file-name', file.name);

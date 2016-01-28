@@ -26,12 +26,10 @@
 					<label for="amp-fm-file-__ac_template__" class="amp-fm-file" data-row="__ac_template__" data-file-id="__ac_template__">
 						<div class="thumbnail">
 							<div class="align-middle"></div>
-							<div class="thumb-img col middle">
-								<?= img(theme_dir('image/image-upload.png'), array(
-									'width'  => $thumb_width,
-									'height' => $thumb_height,
-								)); ?>
-							</div>
+							<?= img(theme_dir('image/image-upload.png'), array(
+								'width'  => $thumb_width,
+								'height' => $thumb_height,
+							)); ?>
 						</div>
 
 						<div class="title" data-name="title"></div>
