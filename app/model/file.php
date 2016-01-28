@@ -29,8 +29,10 @@ class App_Model_File extends App_Model_Table
 
 		$file['size'] = filesize($file['path']);
 
-		$file['user_id']     = user_info('user_id');
-		$file['customer_id'] = customer_info('customer_id');
+		$file += array(
+			'user_id'     => user_info('user_id'),
+			'customer_id' => customer_info('customer_id'),
+		);
 
 		$file['date_modified'] = $this->date->format(filemtime($file['path']));
 		$file['date_updated']  = $this->date->now();
@@ -59,6 +61,26 @@ class App_Model_File extends App_Model_Table
 		}
 
 		return false;
+	}
+
+	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
+	{
+		$results = parent::getRecords($sort, $filter, $options, $total);
+
+		$total ? $records = &$results[0] : $records = &$results;
+
+		$customer_id = (int)customer_info('customer_id');
+		$user_id     = (int)user_info('user_id');
+
+		foreach ($records as &$record) {
+			$record['user_id'] = empty($record['user_id']) ? false : $record['user_id'];
+			$record['customer_id'] = empty($record['customer_id']) ? false : $record['customer_id'];
+
+			$record['is_owner'] = $customer_id === $record['customer_id'] || $user_id === $record['user_id'];
+		}
+		unset($record);
+
+		return $results;
 	}
 
 	public function createFolder($name, $folder = array())

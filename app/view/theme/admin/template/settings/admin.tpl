@@ -208,7 +208,7 @@
 
 	$('.imageinput').ac_imageinput();
 
-	$('#tabs a').tabs();
+	$('#tabs a').ampTabs();
 
 
 </script>

@@ -33,7 +33,7 @@
 </div>
 
 <script type="text/javascript">
-	$('#tabs a').tabs();
+	$('#tabs a').ampTabs();
 
 
 </script>

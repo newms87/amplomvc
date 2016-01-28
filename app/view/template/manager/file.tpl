@@ -8,6 +8,15 @@
 		<input type="file" multiple class="amp-fm-input"/>
 
 		<div class="amp-fm-drop">
+			<div class="amp-fm-loading">
+				<div class="align-middle"></div>
+				<?= img(theme_dir('image/spinner-lg.svg')); ?>
+			</div>
+
+			<div class="amp-fm-breadcrumb-list row left">
+				<div class="amp-fm-breadcrumb col auto" data-row="__ac_template__" data-file-id=""></div>
+			</div>
+
 			<div class="amp-fm-folder-view row left">
 				<div class="upload-file-icon on-empty row">
 					<b class="amp-sprite si-upload-icon"></b>
@@ -25,7 +34,7 @@
 							</div>
 						</div>
 
-						<div class="name"></div>
+						<div class="title" data-name="title"></div>
 
 						<div class="controls not-uploading">
 						</div>

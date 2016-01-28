@@ -872,7 +872,7 @@
 
 	$ga_domains.ac_template('domain-list');
 
-	$('#tabs a').tabs();
+	$('#tabs a').ampTabs();
 
 
 </script>

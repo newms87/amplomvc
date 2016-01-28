@@ -152,7 +152,7 @@
 		$.ac_template('meta-table', 'add');
 	});
 
-	$('.user-tabs a').tabs();
+	$('.user-tabs a').ampTabs();
 
 
 </script>

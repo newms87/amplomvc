@@ -49,10 +49,10 @@
 		var pstab = $.ac_template('instances_tab_list', 'add');
 		$.ac_template('instances_list', 'add');
 
-		pstab.closest('.vtabs').children('a').tabs();
+		pstab.closest('.vtabs').children('a').ampTabs();
 		pstab.click();
 	});
 
 	//Tabs
-	$('#instances_tab_list a').tabs();
+	$('#instances_tab_list a').ampTabs();
 </script>

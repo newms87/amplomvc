@@ -351,7 +351,7 @@
 
 	$.ac_datepicker();
 
-	$('#tabs a').tabs();
+	$('#tabs a').ampTabs();
 
 	$('.image-input').ac_imageinput({
 		width: 'auto'

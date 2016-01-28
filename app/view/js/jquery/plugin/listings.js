@@ -25,7 +25,7 @@ $.ampExtend('ampListing', {
 
 		var $view_config = $listing.find('.view-config');
 
-		$view_config.find('.view-tabs a').tabs({pushState: false});
+		$view_config.find('.view-tabs a').ampTabs({pushState: false});
 		$view_config.find('.save-view-cols').click(update_list_widget);
 		$view_config.find('.save-settings').click(save_list_widget_settings);
 

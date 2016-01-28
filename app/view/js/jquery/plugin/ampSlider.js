@@ -101,7 +101,7 @@ $.ampExtend($.ampSlider = function() {}, {
 	slideTo: function(i) {
 		var o = this.getOptions();
 
-		if (i >= o.slides.length) {
+		if (i >= o.slides.length || i < 0) {
 			i = 0;
 		}
 

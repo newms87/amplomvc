@@ -395,6 +395,7 @@ $.ampExtend($.ampToggle = function() {}, {
 			dormantContentClass: 'is-dormant',
 			start:               'dormant',
 			acceptParent:        '',
+			blurOnModal:         false,
 			onShow:              null,
 			onHide:              null
 		}, o);
@@ -440,7 +441,7 @@ $.ampExtend($.ampToggle = function() {}, {
 	_blur: function(e) {
 		var $t = $(e.target), o = $.ampToggle.active.getOptions();
 
-		if ($t.closest(o.content).length) {
+		if ($t.closest(o.content).length || ($t.closest('.amp-modal').length && !o.blurOnModal)) {
 			!o.content.is('.amp-toggle') || ($.ampToggle.skipToggle = true);
 		} else if (!$t.closest(o.toggle).length && !$t.closest(o.acceptParent).length) {
 			$.ampToggle.active.ampToggle('setDormant');
@@ -1157,50 +1158,55 @@ $.fn.overflown = function(dir, tolerance) {
 	});
 }
 
-$.fn.tabs = function(opts) {
-	var $tabs = this;
+$.ampExtend($.ampTabs = function() {}, {
+	init: function(o) {
+		o = $.extend({}, {
+			onShow:    null,
+			toggle:    false,
+			pushState: true,
+			show:      this.filter('[href=' + location.hash + ']')
+		}, o);
 
-	opts = $.extend({}, {
-		callback:  null,
-		toggle:    false,
-		pushState: true
-	}, opts);
+		o.tabs = this;
 
-	$tabs.o = opts;
+		o.tabs.click($.ampTabs.show);
 
-	$tabs.changeOptions = function(o) {
-		$.extend($tabs.o, o);
-	}
+		o.tabs.setOptions(o);
 
-	$tabs.setOptions = function(o) {
-		$tabs.o = o;
-	}
-
-	$tabs.click(function() {
-		var $this = $(this);
-		var title = $this.attr('data-title'), is_url = !$this.attr('href').match(/^[#.]/);
-		var $content = is_url ? $($this.attr('data-replace') || 'main.main') : $($this.attr('href'));
-
-		if (is_url) {
-			return;
-		} else {
-			if (typeof $tabs.o.toggle === 'function' ? $tabs.o.toggle.call($tabs, $this) : $tabs.o.toggle) {
-				$this.toggleClass('active');
-				$content.toggleClass('hidden', $this.hasClass('active'));
-			} else {
-				$tabs.removeClass('active');
-
-				$tabs.each(function(i, e) {
-					$($(e).attr('href')).addClass('hidden');
-				});
-
-				$this.addClass('active');
-				$content.removeClass('hidden');
-			}
+		if (o.show !== false) {
+			o.show.length ? o.show.ampTabs('show') : o.tabs.first().ampTabs('show')
 		}
 
+		return this;
+	},
 
-		if ($tabs.o.pushState) {
+	show: function() {
+		var $this = $(this);
+		var o = $this.getOptions();
+
+		//Follow link if it is a URL
+		if (!$this.attr('href').match(/^[#.]/)) {
+			return;
+		}
+
+		var title = $this.attr('data-title');
+		var $content = $($this.attr('href'));
+
+		if (typeof o.toggle === 'function' ? o.toggle.call(o.tabs, $this) : o.toggle) {
+			$this.toggleClass('active');
+			$content.toggleClass('hidden', $this.hasClass('active'));
+		} else {
+			o.tabs.removeClass('active');
+
+			o.tabs.each(function(i, e) {
+				$($(e).attr('href')).addClass('hidden');
+			});
+
+			$this.addClass('active');
+			$content.removeClass('hidden');
+		}
+
+		if (o.pushState) {
 			var id = $content.attr('id');
 			var url = location.href.replace(/#.*/, '') + (id ? '#' + id : '');
 
@@ -1213,22 +1219,13 @@ $.fn.tabs = function(opts) {
 			document.title = title;
 		}
 
-		if (typeof $tabs.o.callback === 'function') {
-			$tabs.o.callback.call($this, $content);
+		if (typeof o.onShow === 'function') {
+			o.onShow.call($this, $content);
 		}
 
 		return false;
-	});
-
-	if (window.location.hash) {
-		$t = $tabs.filter('[href=' + window.location.hash + ']');
-		$t.length ? $t.click() : $tabs.first().click();
-	} else {
-		$tabs.first().click();
 	}
-
-	return this;
-};
+});
 
 $.fn.show_msg = function(type, msg, o) {
 	var $context = $(this);

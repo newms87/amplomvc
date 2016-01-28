@@ -97,11 +97,11 @@
 		var ptab = $.ac_template('profile_tab_list', 'add');
 		$.ac_template('profile_list', 'add');
 
-		$('#profile_tab_list a').tabs();
+		$('#profile_tab_list a').ampTabs();
 
 		ptab.click();
 	});
 
 	//Tabs
-	$('#profile_tab_list a').tabs();
+	$('#profile_tab_list a').ampTabs();
 </script>
