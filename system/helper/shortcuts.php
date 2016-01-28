@@ -1159,8 +1159,9 @@ function output_api($status, $message = null, $data = null, $code = 200, $http_c
 		'data'    => $data,
 	);
 
-	if (defined('AMPLO_API_LOG') && AMPLO_API_LOG) {
-		write_log('amplo_api', _l("Request: %s<BR><BR>Response: %s", json_encode($_REQUEST), json_encode($response)));
+	if (AMPLO_API_LOG) {
+		$data_json = json_encode($data);
+		write_log('amplo_api', _l("%s (%s): %s<BR><BR>Request: %s<BR><BR>Response: %s", strtoupper($status), $code, $message, json_encode($_REQUEST), $data_json > AMPLO_API_LOG_MAX_SIZE ? strlen($data_json) . ' Bytes' : $data_json));
 	}
 
 	output_json($response);

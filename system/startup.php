@@ -74,6 +74,8 @@ defined('AMPLO_PROFILE_NO_CACHE') || define('AMPLO_PROFILE_NO_CACHE', false);
 defined('AMPLO_DEFAULT_THEME') || define('AMPLO_DEFAULT_THEME', 'amplo');
 defined('AMPLO_TIME_LOG') || define('AMPLO_TIME_LOG', false);
 defined('AMPLO_ACCESS_LOG') || define('AMPLO_ACCESS_LOG', 0);
+defined('AMPLO_API_LOG') || define('AMPLO_API_LOG', 0);
+defined('AMPLO_API_LOG_MAX_SIZE') || define('AMPLO_API_LOG_MAX_SIZE', 1024);
 defined('AMPLO_SESSION') || define('AMPLO_SESSION', COOKIE_PREFIX . 'amplo-session');
 defined('AMPLO_SESSION_TIMEOUT') || define('AMPLO_SESSION_TIMEOUT', 3600 * 2);
 defined('AMPLO_USER_EXPIRE') || define('AMPLO_USER_EXPIRE', 3600 * 24 * 365);
