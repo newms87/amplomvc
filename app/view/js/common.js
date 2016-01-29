@@ -9,6 +9,133 @@ var screen_lg = screen_width >= 1200,
 
 $('body').toggleClass('webkit', /AppleWebKit/.test(navigator.userAgent));
 
+$(document)
+	.ready(function() {
+		$('.ui-autocomplete-input').on("autocompleteselect", function(e, ui) {
+			if (!ui.item.value && ui.item.href) {
+				window.open(ui.item.href);
+			}
+		});
+
+		content_loaded();
+
+		$('body').removeClass('is-loading');
+
+		if (msg = $.cookie('message')) {
+			$('body').show_msg(msg);
+			$.cookie('message', null);
+		}
+	})
+
+	.click(function(e) {
+		var $n = $(e.target);
+
+		if ($n.is('a[data-loading]')) {
+			$n.loading();
+		}
+
+		if ($n.is('a.cancel, a.back') && $n.closest('#colorbox').length) {
+			$.colorbox.close();
+			return false;
+		}
+
+		if (($onClick = $n.closest('[data-amp-toggle], .on-click')).length) {
+			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
+				$onClick.ampToggle({
+					content: $onClick.attr('data-amp-toggle') || $onClick,
+				}).click();
+			} else {
+				$onClick.toggleClass('is-active');
+
+				if ($onClick.is('.link-menu')) {
+					$onClick.toggleClass('active');
+				}
+			}
+		}
+
+		if ($n.is('.expand')) {
+			$n.closest('.on-expand').toggleClass('active');
+			return false;
+		}
+
+		// Multistate Checkboxes
+		if ($n.is('[data-multistate]')) {
+			var val = $n.val();
+			var states = $n.attr('data-multistate').split(';');
+
+			if (!$n.prop('checked')) {
+				for (var s = 0; s < states.length; s++) {
+					if (states[s] === val) {
+						if (s < states.length - 1) {
+							$n.val(states[s + 1]);
+						} else {
+							$n.val(states[0]);
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+		}
+	})
+
+	.keyup(function(e) {
+		var $n = $(e.target);
+
+		if (!$.pageUnloading && e.keyCode === 13 && $n.is('input[type=text], input[type=password]') && $n.closest('form').length) {
+			$n.closest('form').submit();
+			return false;
+		}
+	})
+
+	.keydown(function(e) {
+		var $n = $(e.target), $form;
+
+		if (e.ctrlKey && e.keyCode === 83 && ($form = $('form.ctrl-save')).length) {
+			var $reloadOnNew = $form.attr('data-reload-on-new') !== 'false';
+
+			$form.trigger('ctrl-save-submit');
+
+			$form.submit_ajax_form({
+				callback: function(response) {
+
+					//Redirect from new form to edit form
+					if (response.data) {
+						for (var id in response.data) {
+							if (typeof response.data[id] !== 'object') {
+								var regx = new RegExp(id + '=\\d+');
+
+								if ($reloadOnNew && !location.href.match(regx)) {
+									return location = location.href.replace(/#.*/, '').replace(regx, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
+								}
+							}
+						}
+					}
+
+					$form.show_msg(response);
+
+					if (!response.error && $form.closest('#colorbox').length) {
+						$.colorbox.close();
+					}
+				}
+			});
+			e.preventDefault();
+			return false;
+		}
+	})
+
+	.change(function(e) {
+		var $t = $(e.target);
+
+		if ($t.is('[data-sync-field]')) {
+			$('[data-sync-listener]').html($t.val());
+		}
+	})
+
+	.ajaxComplete(function() {
+		content_loaded(true);
+	});
+
 Function.prototype.loop = function(time, count) {
 	var fn = this;
 	setTimeout(function() {
@@ -1934,133 +2061,6 @@ content_loaded.fn = {};
 content_loaded.fn['ajax_calls'] = register_ajax_calls;
 content_loaded.fn['confirms'] = register_confirms;
 content_loaded.fn['colorbox'] = register_colorbox;
-
-$(document)
-	.ready(function() {
-		$('.ui-autocomplete-input').on("autocompleteselect", function(e, ui) {
-			if (!ui.item.value && ui.item.href) {
-				window.open(ui.item.href);
-			}
-		});
-
-		content_loaded();
-
-		$('body').removeClass('is-loading');
-
-		if (msg = $.cookie('message')) {
-			$('body').show_msg(msg);
-			$.cookie('message', null);
-		}
-	})
-
-	.click(function(e) {
-		var $n = $(e.target);
-
-		if ($n.is('a[data-loading]')) {
-			$n.loading();
-		}
-
-		if ($n.is('a.cancel, a.back') && $n.closest('#colorbox').length) {
-			$.colorbox.close();
-			return false;
-		}
-
-		if (($onClick = $n.closest('[data-amp-toggle], .on-click')).length) {
-			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
-				$onClick.ampToggle({
-					content: $onClick.attr('data-amp-toggle') || $onClick,
-				}).click();
-			} else {
-				$onClick.toggleClass('is-active');
-
-				if ($onClick.is('.link-menu')) {
-					$onClick.toggleClass('active');
-				}
-			}
-		}
-
-		if ($n.is('.expand')) {
-			$n.closest('.on-expand').toggleClass('active');
-			return false;
-		}
-
-		// Multistate Checkboxes
-		if ($n.is('[data-multistate]')) {
-			var val = $n.val();
-			var states = $n.attr('data-multistate').split(';');
-
-			if (!$n.prop('checked')) {
-				for (var s = 0; s < states.length; s++) {
-					if (states[s] === val) {
-						if (s < states.length - 1) {
-							$n.val(states[s + 1]);
-						} else {
-							$n.val(states[0]);
-							return true;
-						}
-					}
-				}
-				return false;
-			}
-		}
-	})
-
-	.keyup(function(e) {
-		var $n = $(e.target);
-
-		if (!$.pageUnloading && e.keyCode === 13 && $n.is('input[type=text], input[type=password]') && $n.closest('form').length) {
-			$n.closest('form').submit();
-			return false;
-		}
-	})
-
-	.keydown(function(e) {
-		var $n = $(e.target), $form;
-
-		if (e.ctrlKey && e.keyCode === 83 && ($form = $('form.ctrl-save')).length) {
-			var $reloadOnNew = $form.attr('data-reload-on-new') !== 'false';
-
-			$form.trigger('ctrl-save-submit');
-
-			$form.submit_ajax_form({
-				callback: function(response) {
-
-					//Redirect from new form to edit form
-					if (response.data) {
-						for (var id in response.data) {
-							if (typeof response.data[id] !== 'object') {
-								var regx = new RegExp(id + '=\\d+');
-
-								if ($reloadOnNew && !location.href.match(regx)) {
-									return location = location.href.replace(/#.*/, '').replace(regx, '') + (location.href.indexOf('?') > 0 ? '&' : '?') + id + '=' + response.data[id];
-								}
-							}
-						}
-					}
-
-					$form.show_msg(response);
-
-					if (!response.error && $form.closest('#colorbox').length) {
-						$.colorbox.close();
-					}
-				}
-			});
-			e.preventDefault();
-			return false;
-		}
-	})
-
-	.change(function(e) {
-		var $t = $(e.target);
-
-		if ($t.is('[data-sync-field]')) {
-			$('[data-sync-listener]').html($t.val());
-		}
-	})
-
-	.ajaxComplete(function() {
-		content_loaded(true);
-	});
 
 $(window).on('beforeunload', function() {
 	$.pageUnloading = true;
