@@ -1185,7 +1185,7 @@ $.ampExtend($.ampTabs = function() {}, {
 		var o = $this.getOptions();
 
 		//Follow link if it is a URL
-		if (!$this.attr('href').match(/^[#.]/)) {
+		if (!$this.attr('href') || !$this.attr('href').match(/^[#.]/)) {
 			return;
 		}
 
@@ -1946,6 +1946,11 @@ $(document)
 		content_loaded();
 
 		$('body').removeClass('is-loading');
+
+		if (msg = $.cookie('message')) {
+			$('body').show_msg(msg);
+			$.cookie('message', null);
+		}
 	})
 
 	.click(function(e) {
