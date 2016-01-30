@@ -217,6 +217,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 		$.post(o.listingUrl, $.extend(true, o.listing, listing), function(response) {
 			$acm.ampContactManager('results', response.contacts, response.total);
+
+			if (!listing) {
+				$acm.toggleClass('has-records', !!+response.total).toggleClass('no-records', !+response.total);
+			}
 		})
 
 		return this;
@@ -225,10 +229,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 	results: function(contacts, total) {
 		var $acm = this;
 		var o = $acm.getOptions();
-		var $contactList = $acm.find('.acm-contact-list'),
+		var $contactList = $acm.find('.acm-contact-list').html(''),
 			isEmpty = typeof contacts !== 'object' || $.isEmptyObject(contacts);
 
-		$contactList.toggleClass('empty', isEmpty).html('');
+		$acm.toggleClass('is-empty', isEmpty).toggleClass('is-filled', !isEmpty);
 
 		if (!isEmpty) {
 			for (var c in contacts) {

@@ -40,14 +40,15 @@
 						</div>
 
 						<? if ($allow_delete) { ?>
-							<a data-confirm-modal="{{Are you sure you want to remove this <?= $title; ?>?}}" href="<?= site_url('manager/remove', $value . '=__ac_template__'); ?>" class="am-remove-record">
+							<a class="am-remove-record">
 								<i class="fa fa-trash-o"></i>
 							</a>
 						<? } ?>
 					</div>
 				</div>
 
-				<div class="no-results">{{There are no records matching your search.}}</div>
+				<div class="on-empty no-results">{{There are no records matching your search.}}</div>
+				<div class="on-no-records"></div>
 			</div>
 
 			<div class="row am-footer left">

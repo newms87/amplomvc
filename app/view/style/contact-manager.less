@@ -135,12 +135,6 @@
 					}
 				}
 			}
-
-			&.empty {
-				& + .no-results {
-					display: block;
-				}
-			}
 		}
 
 		&.adding {
@@ -170,6 +164,30 @@
 		.am-deselect {
 			white-space: nowrap;
 			font-size: .9em;
+		}
+	}
+
+	&.has-records {
+		.on-no-records {
+			display: none;
+		}
+	}
+
+	&.no-records {
+		.on-records {
+			display: none;
+		}
+	}
+
+	&.is-empty {
+		.on-filled {
+			display: none;
+		}
+	}
+
+	&.is-filled {
+		.on-empty {
+			display: none;
 		}
 	}
 }
