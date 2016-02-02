@@ -1847,7 +1847,7 @@ $.ampExtend('ampFormEditor', {
 	submitForm: function() {
 		var $form = $(this);
 
-		var cb = !$form.attr('data-callback') || window[$form.attr('data-callback')];
+		var cb = window[$form.attr('data-callback')];
 
 		$form.find('[data-loading]').loading();
 
@@ -1859,13 +1859,13 @@ $.ampExtend('ampFormEditor', {
 			if (response.error) {
 				$form.show_msg(response);
 
-				if (cb) {
+				if (typeof cb === 'function') {
 					cb.call($form, response);
 				}
 			} else {
 				if ($form.attr('data-reload')) {
 					window.location.reload();
-				} else if (cb) {
+				} else if (typeof cb === 'function') {
 					cb.call($form, response);
 				} else {
 					$form.find('[name]').each(function(i, e) {

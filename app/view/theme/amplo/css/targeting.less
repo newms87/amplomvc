@@ -108,14 +108,11 @@
 	}
 
 	.account-page {
-		h1 {
-			.height-animate;
-			margin: 0;
-			padding: 0;
-			text-transform: uppercase;
-			font-size: 1.7em;
-			font-weight: bold;
-			color: @color-secondary;
+		.section-style-b {
+			h1 {
+				font-size: 1.5em;
+				margin-top: .5em;
+			}
 		}
 
 		.account-details {
@@ -123,80 +120,8 @@
 				width: 95%;
 			}
 
-			.side-menu {
-				border-bottom: 2px solid @color-light;
-				margin-top: 0;
-
-				a {
-					.height-animate;
-					background: lighten(@color-base, 30%);
-					border-top: 2px solid @color-light;
-					padding: 0;
-					font-size: 1.5em;
-					font-weight: bold;
-					position: relative;
-
-					&.active {
-						max-height: 20em;
-						padding: 1em;
-
-						&:before {
-							.amp-sprite;
-							.si-chevron-blue;
-							position: absolute;
-							left: 1.5em;
-							top: 1.1em;
-						}
-					}
-				}
-
-				& + .content-box {
-					position: relative;
-
-					&.loading {
-						&:before {
-							content: '';
-							position: absolute;
-							left: 0;
-							top: 0;
-							width: 100%;
-							height: 100%;
-							background: rgba(0, 0, 0, .25);
-							z-index: 100;
-						}
-					}
-				}
-			}
-
 			.content-box {
 				padding: 1em;
-			}
-		}
-
-		&.account-menu {
-			.wrap {
-				padding: 0;
-				width: 100%;
-			}
-
-			h1 {
-				max-height: 25em;
-				padding: 1.3em 0;
-				text-transform: none;
-				color: @color-font-dark;
-				letter-spacing: .03em;
-			}
-
-			.side-menu {
-				a {
-					max-height: 20em;
-					padding: 1em;
-					color: @color-main;
-				}
-			}
-
-			.content-box {
-				display: none;
 			}
 		}
 	}

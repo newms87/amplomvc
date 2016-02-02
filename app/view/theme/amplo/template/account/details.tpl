@@ -1,4 +1,4 @@
-<div class="account-info">
+<div class="account-info section-style-b">
 	<h1>{{My Details}}</h1>
 
 	<div class="forms">

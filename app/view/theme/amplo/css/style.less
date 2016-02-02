@@ -1119,52 +1119,6 @@ section.page {
 	}
 }
 
-.side-menu {
-	.menu-tab {
-		position: relative;
-		color: @color-font-dark;
-		display: block;
-		padding: .8em .5em;
-		text-transform: uppercase;
-		cursor: pointer;
-
-		&.active, &:hover {
-			color: @color-main;
-
-			& > a {
-				color: @color-main;
-			}
-		}
-	}
-
-	.link-menu {
-		a {
-			color: @color-font-dark;
-
-			&:hover, &.active {
-				color: @color-main;
-
-				& > a {
-					color: @color-main;
-				}
-			}
-		}
-
-		& > .children {
-			position: relative;
-			left: 0;
-			max-height: 0;
-			overflow: hidden;
-		}
-
-		&.active, &.on-hover:hover {
-			& > .children {
-				max-height: none;
-			}
-		}
-	}
-}
-
 .content-box {
 	h1 {
 		color: @color-secondary;
@@ -1469,16 +1423,6 @@ section.page {
 	.google-map {
 		width: 100%;
 		height: 20em;
-	}
-}
-
-.account-page {
-	h1 {
-		margin-bottom: 1em;
-	}
-
-	.side-menu {
-		margin-top: 4em;
 	}
 }
 
