@@ -94,12 +94,20 @@ $.ampExtend($.ampManager = function() {}, {
 		return this;
 	},
 
-	select: function($record) {
+	select: function($record, data) {
 		var $am = this;
 		var o = $am.getOptions(), is_changed = false, selected = null;
 
 		if (typeof $record !== 'object') {
-			$record = $am.find('[data-am-record-id=' + $record + ']');
+			selected = $record;
+			$record = $am.find('[data-am-record-id=' + selected + ']');
+
+			if (!$record.length) {
+				if (data) {
+					$am.ampManager('append', data);
+					$record = $am.find('[data-am-record-id=' + selected + ']')
+				}
+			}
 		}
 
 		if (!$record.length) {
@@ -207,21 +215,7 @@ $.ampExtend($.ampManager = function() {}, {
 		if (!isEmpty) {
 			for (var c in records) {
 				var record = records[c];
-				record.id = record[o.type_id];
-
-				var $record = $recordList.ac_template(o.template_id, 'add', record);
-
-				$record.data('record', record);
-
-				if (!record.can_access) {
-					$record.find('.am-remove-record').addClass('hidden');
-				}
-
-				$am.ampManager('sync', $record.find('[data-name]'), record);
-
-				$record.attr('data-am-record-id', record.id);
-
-				$recordList.append($record);
+				$am.ampManager('append', record);
 			}
 
 			if (o.selectMultiple) {
@@ -232,6 +226,29 @@ $.ampExtend($.ampManager = function() {}, {
 				$recordList.find('[data-am-record-id=' + o.selected + ']').addClass('is-selected');
 			}
 		}
+
+		return this;
+	},
+
+	append: function(record) {
+		var o = this.getOptions();
+		var $recordList = this.find('.am-record-list');
+
+		record.id = record[o.type_id];
+
+		var $record = $recordList.ac_template(o.template_id, 'add', record);
+
+		$record.data('record', record);
+
+		if (!record.can_access) {
+			$record.find('.am-remove-record').addClass('hidden');
+		}
+
+		this.ampManager('sync', $record.find('[data-name]'), record);
+
+		$record.attr('data-am-record-id', record.id);
+
+		$recordList.append($record);
 
 		return this;
 	},

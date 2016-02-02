@@ -172,11 +172,19 @@ input, select, textarea {
 .messages {
 	.height-animate-hide;
 	position: relative;
-	padding: .5em 2em .5em 1em;
+	padding: 0 2em 0 1em;
 	margin: 0 auto;
 	font-size: .9em;
 	clear: both;
 	background: @color-success;
+
+	.message {
+		padding: .5em 0;
+
+		& + .message {
+			padding-top: 0;
+		}
+	}
 
 	b {
 		font-weight: bold;
@@ -1516,7 +1524,7 @@ section.page {
 			cursor: pointer;
 			margin-bottom: .5em;
 			font-size: 1.1em;
-			color: @color-gray;
+			color: @color-dark;
 		}
 
 		.answer {

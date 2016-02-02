@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class Image extends Library
 {
 	public
@@ -46,6 +46,10 @@ class Image extends Library
 
 	public function get($image_path, $return_dir = false)
 	{
+		if (preg_match("/#file_id=(\\d+)$/", $image_path, $matches)) {
+			return $this->Model_File->getField($matches[1], $return_dir ? 'path' : 'url');
+		}
+
 		$image_url = is_url($image_path) ? $image_path : false;
 
 		if (strpos($image_url, DIR_IMAGE) === 0 || strpos($image_url, DIR_DOWNLOAD) === 0 || strpos($image_url, DIR_SITE) === 0) {
@@ -62,13 +66,12 @@ class Image extends Library
 			}
 
 			$replace = array(
-				'#\\\\#'                 => '/',
-				'#/\\./#'                => '/',
-				'#' . URL_IMAGE . '#'    => DIR_IMAGE,
-				'#' . URL_DOWNLOAD . '#' => DIR_DOWNLOAD,
-				'#' . URL_SITE . '#'     => DIR_SITE,
-				'#^(http|https):#'       => '',
-				"#\\?.*$#"               => '',
+				'|\\\\|'                 => '/',
+				'|/\\./|'                => '/',
+				'|' . URL_IMAGE . '|'    => DIR_IMAGE,
+				'|' . URL_DOWNLOAD . '|' => DIR_DOWNLOAD,
+				'|' . URL_SITE . '|'     => DIR_SITE,
+				"|[#\\?].*$|"            => '',
 			);
 
 			$image = preg_replace(array_keys($replace), $replace, $image_path);

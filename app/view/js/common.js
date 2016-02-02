@@ -1358,7 +1358,7 @@ $.fn.show_msg = function(type, msg, o) {
 	var $context = $(this);
 
 	if (type === 'clear') {
-		return $context.find('.messages').remove();
+		return $context.find('.message').hide_msg({slideOut: false});
 	}
 
 	//Data types are not messages
@@ -1393,7 +1393,7 @@ $.fn.show_msg = function(type, msg, o) {
 	}, o);
 
 	if (o.clear) {
-		(o.inline ? $context : $('#message-box')).find('.messages').remove();
+		(o.inline ? $context : $('#message-box')).find('.message').hide_msg({slideOut: false});
 	}
 
 	if (typeof msg === 'object') {
@@ -1423,7 +1423,7 @@ $.fn.show_msg = function(type, msg, o) {
 
 			if (o.close) {
 				$box.append($('<div />').addClass('close').click(function() {
-					$(this).closest('.messages').remove();
+					$(this).closest('.messages').find('.message').hide_msg();
 				}));
 			}
 
@@ -1434,7 +1434,7 @@ $.fn.show_msg = function(type, msg, o) {
 			}
 		}
 
-		var $msg = $('<div />').addClass('message hide').html(msg);
+		var $msg = $('<div />').addClass('message').html(msg);
 
 		if (o.append_list) {
 			$box.append($msg);
@@ -1442,26 +1442,44 @@ $.fn.show_msg = function(type, msg, o) {
 			$box.prepend($msg);
 		}
 
-		$msg.removeClass('hide');
-
 		if (o.delay) {
-			$.fn.show_msg.count[type] = ($.fn.show_msg.count[type] || 0) + 1;
-
 			setTimeout(function() {
-				if ($.fn.show_msg.count[type]-- >= 1) {
-					$box.slideToggle(500, function() {
-						$(this).remove();
-					});
-				}
+				$msg.hide_msg();
 			}, o.delay);
 		}
+
+		$box.removeClass('hidden');
+		$('body').trigger('amp-show-msg', $msg);
 	});
 }
 
-$.fn.show_msg.count = {}
-
 $.show_msg = function(type, msg, o) {
 	$('body').show_msg(type, msg, o);
+}
+
+$.fn.hide_msg = function(o) {
+	var $msgs = $(this).closest('.message');
+
+	o = $.extend({}, {
+		slideOut: true,
+	}, o);
+
+	$msgs.each(function(){
+		var $this = $(this);
+		var $box = $this.closest('.messages');
+
+		if (o.slideOut) {
+			$this.slideToggle(500, function() {
+				$('body').trigger('amp-hide-msg', $this.remove());
+				$box.toggleClass('hidden', !$box.children('.message').length)
+			});
+		} else {
+			$('body').trigger('amp-hide-msg', $this.remove());
+			$box.toggleClass('hidden', !$box.children('.message').length)
+		}
+	})
+
+	return this;
 }
 
 $.loading = $.fn.loading = function(params) {
@@ -1829,6 +1847,8 @@ $.ampExtend('ampFormEditor', {
 	submitForm: function() {
 		var $form = $(this);
 
+		var cb = !$form.attr('data-callback') || window[$form.attr('data-callback')];
+
 		$form.find('[data-loading]').loading();
 
 		$.post($form.attr('action'), $form.serialize(), function(response) {
@@ -1838,14 +1858,15 @@ $.ampExtend('ampFormEditor', {
 
 			if (response.error) {
 				$form.show_msg(response);
+
+				if (cb) {
+					cb.call($form, response);
+				}
 			} else {
 				if ($form.attr('data-reload')) {
 					window.location.reload();
-				} else if ($form.attr('data-callback')) {
-					var cb = window[$form.attr('data-callback')];
-					if (typeof cb === 'function') {
-						cb.call($form);
-					}
+				} else if (cb) {
+					cb.call($form, response);
 				} else {
 					$form.find('[name]').each(function(i, e) {
 						var $e = $(e);
@@ -2047,12 +2068,12 @@ function content_loaded(is_ajax) {
 		}
 	}
 
-	if ($ac.show_msg_delay && $('.messages').length) {
-		setTimeout(function() {
-			$('.messages').slideToggle(500, function() {
-				$(this).remove()
-			});
-		}, $ac.show_msg_delay);
+	if ($ac.show_msg_delay) {
+		if (($msgs = $('.messages .message')).length) {
+			setTimeout(function() {
+				$msgs.hide_msg()
+			}, $ac.show_msg_delay);
+		}
 	}
 }
 
