@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Settings extends Model
 {
 	static $admin_settings = array(
@@ -63,6 +63,7 @@ class App_Model_Settings extends Model
 		'default_customer_role_id'                => '',
 		'config_customer_approval'                => 0,
 		'terms_agreement_page_id'                 => '',
+		'terms_agreement_date'                    => '',
 		'config_contact_page_id'                  => '',
 		'show_breadcrumbs'                        => 1,
 		'breadcrumb_separator'                    => ' / ',

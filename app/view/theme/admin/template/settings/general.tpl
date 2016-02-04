@@ -368,6 +368,14 @@
 							)); ?>
 						</td>
 					</tr>
+					<tr>
+						<td>{{Account Terms Date:}}
+							<span class="help">{{Users who have not agreed to the terms since this date, will be asked to review and agree to the terms.}}</span>
+						</td>
+						<td>
+							<input type="text" name="terms_agreement_date" value="<?= $terms_agreement_date; ?>" class="datepicker" />
+						</td>
+					</tr>
 
 					<tr>
 						<td>{{Allow Social Sharing:}}</td>
@@ -816,6 +824,8 @@
 </div>
 
 <script type="text/javascript">
+	$.ac_datepicker();
+
 	$('.table.form .zone_select').ac_zoneselect({listen: '.table.form [name=config_country_id]'});
 
 	$('[name=site_theme]').change(function() {
@@ -873,8 +883,6 @@
 	$ga_domains.ac_template('domain-list');
 
 	$('#tabs a').ampTabs();
-
-
 </script>
 
 <?= $is_ajax ? '' : call('admin/footer'); ?>
