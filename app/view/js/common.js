@@ -192,6 +192,38 @@ Number.prototype.roundFloat = function(p) {
 	return '' + Math.round(this * k) / k;
 }
 
+$.fn.use_once = function(label) {
+	label = label || 'activated';
+	return this.not('.' + label).addClass(label);
+}
+
+$.fn.scrollTo = function(target, options) {
+	target = $(target);
+
+	if (!target.length) {
+		return false;
+	}
+
+	var $this = this;
+	var $header = $('header.site-header');
+
+	options = $.extend({}, {
+		offset:   $header.css('position') === 'fixed' ? -$header.outerHeight() : 0,
+		callback: null
+	}, options);
+
+	var top = target.offset().top + options.offset;
+	this.stop();
+
+	$this.animate({scrollTop: top}, {
+		duration: 1000, complete: function(e) {
+			if (typeof options.callback == 'function') {
+				options.callback(e);
+			}
+		}
+	});
+}
+
 //Async Load on call
 $ac.alq = {}, $ac.al_loaded = {};
 
@@ -204,11 +236,11 @@ function register_autoload(fn, url) {
 		url = typeof url === 'string' ? [url] : url;
 
 		$[fn] = function() {
-			autoload_js_file.call(this, url, arguments, 'base')
+			return autoload_js_file.call(this, url, arguments, 'base')
 		}
 
 		$.fn[fn] = function() {
-			autoload_js_file.call(this, url, arguments, 'fn')
+			return autoload_js_file.call(this, url, arguments, 'fn')
 		}
 
 		$[fn].fn = $.fn[fn].fn = fn;
@@ -256,38 +288,6 @@ function autoload_js_file(url, args, type) {
 	$ac.alq[al].push({fn: fn, me: this, args: args, type: type});
 
 	return this;
-}
-
-$.fn.use_once = function(label) {
-	label = label || 'activated';
-	return this.not('.' + label).addClass(label);
-}
-
-$.fn.scrollTo = function(target, options) {
-	target = $(target);
-
-	if (!target.length) {
-		return false;
-	}
-
-	var $this = this;
-	var $header = $('header.site-header');
-
-	options = $.extend({}, {
-		offset:   $header.css('position') === 'fixed' ? -$header.outerHeight() : 0,
-		callback: null
-	}, options);
-
-	var top = target.offset().top + options.offset;
-	this.stop();
-
-	$this.animate({scrollTop: top}, {
-		duration: 1000, complete: function(e) {
-			if (typeof options.callback == 'function') {
-				options.callback(e);
-			}
-		}
-	});
 }
 
 //Extend amp protocol for jQuery plugins
