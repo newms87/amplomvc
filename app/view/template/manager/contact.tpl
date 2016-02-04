@@ -95,7 +95,7 @@
 						</div>
 					</div>
 
-					<div class="no-results">{{There are no contacts matching your search.}}</div>
+					<div class="on-empty no-results">{{There are no contacts matching your search.}}</div>
 
 					<div data-action="<?= site_url('manager/contact/save'); ?>" class="row left acm-new-contact-form form amp-nested-form"></div>
 				</div>

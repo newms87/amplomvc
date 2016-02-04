@@ -21,9 +21,8 @@
 		border: 1px solid @color-dark;
 		border-radius: 3px;
 
-		.no-results {
+		.result-msg {
 			padding: .5em;
-			display: none;
 		}
 
 		.am-record-list {
@@ -103,12 +102,6 @@
 					}
 				}
 			}
-
-			&.empty {
-				& + .no-results {
-					display: block;
-				}
-			}
 		}
 	}
 
@@ -117,6 +110,30 @@
 
 		.am-deselect {
 			font-size: .9em;
+		}
+	}
+
+	&.has-records {
+		.on-no-records {
+			display: none;
+		}
+	}
+
+	&.no-records {
+		.on-records {
+			display: none;
+		}
+	}
+
+	&.is-empty {
+		.on-filled {
+			display: none;
+		}
+	}
+
+	&.is-filled {
+		.on-empty {
+			display: none;
 		}
 	}
 }

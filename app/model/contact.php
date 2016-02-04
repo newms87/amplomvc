@@ -34,6 +34,15 @@ class App_Model_Contact extends App_Model_Table
 			return false;
 		}
 
+		if (!empty($contact['name']) && !isset($contact['first_name']) && !isset($contact['last_name'])) {
+			$name_parts = explode(' ', $contact['name'], 2);
+			$contact['first_name'] = $name_parts[0];
+
+			if (isset($name_parts[1])) {
+				$contact['last_name'] = $name_parts[1];
+			}
+		}
+
 		if (!empty($contact['address'])) {
 			$first_name = !empty($contact['first_name']) ? $contact['first_name'] : '';
 			$last_name  = !empty($contact['last_name']) ? $contact['last_name'] : '';

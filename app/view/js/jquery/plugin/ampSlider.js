@@ -7,13 +7,21 @@ $.ampExtend($.ampSlider = function() {}, {
 		}, o);
 
 		return this.each(function() {
-			var $slider = $(this).addClass('amp-slider');
+			var $slider = $(this).addClass('amp-slider'), $children;
 
 			if (!(o.slideList = $slider.find('.amp-slide-list')).length) {
 				o.slideList = $('<div />').addClass('amp-slide-list')
 
-				o.slideList.append($slider.children());
+				$children = $slider.children()
+			} else {
+				$children = o.slideList.children();
 			}
+
+			$children.each(function(){
+				$(this).width($(this).width());
+			})
+
+			o.slideList.append($children);
 
 			if (!(o.viewport = $slider.find('.amp-viewport')).length) {
 				o.viewport = $('<div />').addClass('amp-viewport');

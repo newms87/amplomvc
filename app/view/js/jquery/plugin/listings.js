@@ -1,6 +1,6 @@
 //ampListing jQuery Plugin
 $.ampExtend('ampListing', {
-	init: function (o) {
+	init: function(o) {
 		o = $.extend({}, {
 			view_id: null,
 			query:   {}
@@ -14,7 +14,7 @@ $.ampExtend('ampListing', {
 			$listing.attr('data-view-id', o.view_id);
 		}
 
-		$listing.find('.export-view').click(function () {
+		$listing.find('.export-view').click(function() {
 			if (confirm("Do you want to export the full data set?")) {
 				window.location = $(this).attr('href') + '&limit=0';
 				return false;
@@ -38,7 +38,7 @@ $.ampExtend('ampListing', {
 			$cols.ampSelect('sortable');
 		}
 
-		$listing.find('.modify-view').click(function () {
+		$listing.find('.modify-view').click(function() {
 			var $view_config = $(this).closest('.widget-listing')[0].view_config;
 			$view_config.find('.chart-data-cols .multiselect-list').sortable();
 
@@ -48,13 +48,13 @@ $.ampExtend('ampListing', {
 		$listing.trigger('loaded');
 	},
 
-	getQuery: function (key) {
+	getQuery: function(key) {
 		var query = this.getOptions().query;
 
 		return key ? query[key] : query;
 	},
 
-	queryString: function (key) {
+	queryString: function(key) {
 		var query = this.getOptions().query;
 
 		if (key) {
@@ -76,10 +76,10 @@ $.ampExtend('ampListing', {
 })
 
 //List View Scripts
-$.fn.listview = function () {
+$.fn.listview = function() {
 	$.ac_datepicker();
 
-	return this.use_once().each(function (i, e) {
+	return this.use_once().each(function(i, e) {
 		var $listview = $(e).addClass('list-view');
 
 		var $zoom = $listview.find('.zoom-hover')
@@ -102,7 +102,7 @@ $.fn.listview = function () {
 		$listview.find('.filter-list').keyup(listview_filter_on_enter);
 		$listview.find('.hide-filter').click(listview_toggle_filter);
 
-		$listview.find('.filter-list > td').click(function () {
+		$listview.find('.filter-list > td').click(function() {
 			if ($(this).closest('.filter-list').hasClass('hide')) {
 				listview_toggle_filter.call($(this).closest('.listing'), false);
 			}
@@ -110,7 +110,7 @@ $.fn.listview = function () {
 
 		if ($listview.attr('data-save-url')) {
 			$listview.find('tr.filter-list-item td.editable').click(listview_edit_field);
-			$listview.find('.editable-options').click(listview_noaction);
+			$listview.find('.editable-options').click(listview_noaction).draggable();
 			$listview.find('.editable-options .save-edit').click(listview_save_edit);
 			$listview.find('.editable-options .cancel-form').click(listview_cancel_edit);
 			$listview.find('.editable-option .input input[type=text]').keyup(listview_save_on_enter);
@@ -121,7 +121,7 @@ $.fn.listview = function () {
 }
 
 $.ampExtend('ampFilter', {
-	init: function (o) {
+	init: function(o) {
 		var $me = this;
 
 		o = $.extend({}, {
@@ -130,7 +130,7 @@ $.ampExtend('ampFilter', {
 			start:   'hide'
 		}, o);
 
-		$me.each(function (i, e) {
+		$me.each(function(i, e) {
 			var $filter = $(e);
 			var $button = $filter.find('.amp-filter-apply');
 			$filter.data('opts', o);
@@ -138,7 +138,7 @@ $.ampExtend('ampFilter', {
 			$filter.find('.amp-filter-reset').click($.ampFilter.reset);
 			$button.click($.ampFilter.filter);
 			$filter.find('.field.disabled [name]').prop('disabled', true);
-			$filter.find('[name]').keyup(function (e) {
+			$filter.find('[name]').keyup(function(e) {
 				if (e.keyCode === 13) {
 					$(this).ampFilter('filter');
 				}
@@ -150,20 +150,20 @@ $.ampExtend('ampFilter', {
 		return this;
 	},
 
-	reset: function () {
+	reset: function() {
 		var $af = $(this).closest('.amp-filter');
 		$.ampFilter.toggle.call($af.find('.field [name]').val('').change(), false);
 		$af.ampFilter('filter');
 	},
 
-	toggle: function (enabled) {
+	toggle: function(enabled) {
 		var $field = $(this).closest('.field');
 		enabled = typeof enabled !== 'object' ? enabled : $field.hasClass('disabled');
 		$field.removeClass('enabled disabled').addClass(enabled ? 'enabled' : 'disabled');
 		$field.find('[name]').prop('disabled', !enabled);
 	},
 
-	filter: function () {
+	filter: function() {
 		var $filter = $(this).closest('.amp-filter');
 		var $button = $filter.find('.amp-filter-apply'),
 			opts = $filter.data('opts');
@@ -173,7 +173,7 @@ $.ampExtend('ampFilter', {
 		$filter.find('[data-loading]').loading();
 
 		if (opts.replace) {
-			$.post(url, $filter.find('[name]').serialize(), function (response) {
+			$.post(url, $filter.find('[name]').serialize(), function(response) {
 				if (response.error) {
 					$filter.show_msg(response);
 				} else {
@@ -183,7 +183,7 @@ $.ampExtend('ampFilter', {
 						opts.success.call(this, response);
 					}
 				}
-			}).always(function (jqxhr, status, e) {
+			}).always(function(jqxhr, status, e) {
 				$filter.find('[data-loading]').loading('stop');
 
 				if (!status === 'success') {
@@ -229,13 +229,13 @@ function update_list_widget() {
 		columns: {}
 	};
 
-	$this.closest('.select-cols').find(':checked').each(function (i, e) {
+	$this.closest('.select-cols').find(':checked').each(function(i, e) {
 		data.columns[$(e).val()] = i;
 	});
 
 	data.view_id = $list_widget.attr('data-view-id');
 
-	$.get(href, data, function (response) {
+	$.get(href, data, function(response) {
 		var $parent = $list_widget.closest('.listing');
 		$list_widget.siblings('.messages').remove();
 		$list_widget.replaceWith(response);
@@ -253,7 +253,7 @@ function save_list_widget_settings() {
 
 	$this.loading();
 
-	$.post($ac.site_url + "block/widget/listing/save-settings", $form.find('[name]').serialize(), function (response) {
+	$.post($ac.site_url + "block/widget/listing/save-settings", $form.find('[name]').serialize(), function(response) {
 		$form.show_msg(response);
 		$this.closest('.view-config').removeClass('show');
 		$widget.find('.refresh-listing').click();
@@ -261,7 +261,7 @@ function save_list_widget_settings() {
 		//Hack to show chart / listing view
 		$widget.find('[data-view-type="' + view_type + '"]').click();
 
-	}, 'json').always(function () {
+	}, 'json').always(function() {
 		$this.loading('stop');
 	});
 }
@@ -347,7 +347,7 @@ function listview_apply_filter() {
 	$this.attr('href', $filter.apply_filter($this.closest('.list-view').attr('data-filter-url')));
 }
 
-function listview_edit_field() {
+function listview_edit_field(e) {
 	var $this = $(this);
 	var field = $this.attr('data-field');
 	var value = $this.attr('data-value').replace(/&quot;/g, '"');
@@ -359,12 +359,30 @@ function listview_edit_field() {
 		$this.append($options);
 		$options.attr('data-id', $this.closest('[data-row-id]').attr('data-row-id'));
 
-		var $listings = $options.closest('.listings');
+		var $listView = $options.closest('.list-view');
 
-		if (($options.offset().top + $options.outerHeight()) > $listings.height()) {
-			$options.css({bottom: '80%', top: 'initial'})
-		} else {
-			$options.css({bottom: 'initial', top: '80%'})
+		var offset = $this.offset();
+
+		var top = e.clientY + window.scrollY - offset.top - ($options.height() / 2);
+		var left = e.clientX - offset.left;
+
+		$options.css({top: top, left: left})
+
+		var optionsPos = $options.offset(), listPos = $listView.offset();
+
+		optionsPos.bottom = optionsPos.top + $options.outerHeight();
+		optionsPos.right = optionsPos.left + $options.outerWidth();
+		listPos.bottom = listPos.top + $listView.outerHeight() - $listView.scrollTop();
+		listPos.right = listPos.left + $listView.outerWidth();
+
+		if (optionsPos.top < listPos.top) {
+			$options.css({top: parseFloat($options.css('top')) + (optionsPos.top - listPos.top)});
+		} else if (optionsPos.bottom > listPos.bottom) {
+			$options.css({top: parseFloat($options.css('top')) - (optionsPos.bottom - listPos.bottom)});
+		}
+
+		if (optionsPos.right > listPos.right) {
+			$options.css({left: e.clientX - offset.left - $options.outerWidth()});
 		}
 	}
 }
@@ -400,7 +418,7 @@ function listview_save_edit() {
 	var orig_display = $field.html();
 	$field.html('Saving...');
 
-	$.post($listview.attr('data-save-url'), data, function (response) {
+	$.post($listview.attr('data-save-url'), data, function(response) {
 		$this.loading('stop');
 		$listview.show_msg(response);
 
@@ -440,7 +458,7 @@ function delay_update(my_delay) {
 
 			$('#ui-datepicker-div').remove();
 
-			$.get($filter.apply_filter($filter.closest('.list-view').attr('data-filter-url')), {}, function (response) {
+			$.get($filter.apply_filter($filter.closest('.list-view').attr('data-filter-url')), {}, function(response) {
 				$widget.replaceWith(response);
 			});
 		}
@@ -452,7 +470,7 @@ function delay_update(my_delay) {
 		if (e.keyCode === 13) {
 			delay_update.call($filter, my_delay);
 		} else {
-			setTimeout(function () {
+			setTimeout(function() {
 				delay_update.call($filter, my_delay)
 			}, 1500);
 		}
@@ -487,7 +505,7 @@ function zoom_hover_change() {
 			$value.html($value.attr('data-default') || 'Modify');
 		} else {
 			var str = '';
-			$selected.each(function (i, e) {
+			$selected.each(function(i, e) {
 				var label = $('[for="' + $(e).attr('id') + '"]').html();
 
 				str += (str ? ', ' : '') + (label || $(e).val());

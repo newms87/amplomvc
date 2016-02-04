@@ -49,6 +49,8 @@ $.ampExtend($.ampFileManager = function() {}, {
 				}
 			}, o);
 
+			o.fileInput = $input;
+
 			if (o.category) {
 				o.listing.filter.category = o.category;
 			}
@@ -76,7 +78,9 @@ $.ampExtend($.ampFileManager = function() {}, {
 		$.post(o.listingUrl, listing, function(response) {
 			if (response.files) {
 				for (var f in response.files) {
-					$afm.ampFileManager('newFile', response.files[f])
+					var file = response.files[f];
+					file.value = file.url + '#file_id=' + file.file_id;
+					$afm.ampFileManager('newFile', file)
 				}
 			}
 
@@ -225,6 +229,10 @@ $.ampExtend($.ampFileManager = function() {}, {
 
 	removeFile: function($file) {
 		var $afm = this;
+		var o = $afm.getOptions();
+
+		//hack to allow uploading the same file right after removing it.
+		o.fileInput.val('');
 
 		$.ampConfirm({
 			text:      "Are you sure you want to remove this file?",

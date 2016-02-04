@@ -161,6 +161,20 @@ $.ampExtend($.ampContactManager = function() {}, {
 		}
 	},
 
+	addContact: function() {
+		var o = this.getOptions();
+
+		var $results = this.find('.acm-results').toggleClass('adding');
+
+		var $form = $results.find('.acm-new-contact-form');
+
+		if (!$form.children().length) {
+			$form.append(o.contactForm.clone())
+		}
+
+		return this;
+	},
+
 	editContact: function($contact, contact) {
 		var $acm = this;
 		var o = $acm.getOptions();
@@ -217,6 +231,15 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 		$.post(o.listingUrl, $.extend(true, o.listing, listing), function(response) {
 			$acm.ampContactManager('results', response.contacts, response.total);
+
+			if (!listing) {
+				var hasRecords = +response.total > 0;
+				$acm.toggleClass('has-records', hasRecords).toggleClass('no-records', !hasRecords);
+
+				if (!hasRecords) {
+					$acm.ampContactManager('addContact');
+				}
+			}
 		})
 
 		return this;
@@ -225,10 +248,10 @@ $.ampExtend($.ampContactManager = function() {}, {
 	results: function(contacts, total) {
 		var $acm = this;
 		var o = $acm.getOptions();
-		var $contactList = $acm.find('.acm-contact-list'),
+		var $contactList = $acm.find('.acm-contact-list').html(''),
 			isEmpty = typeof contacts !== 'object' || $.isEmptyObject(contacts);
 
-		$contactList.toggleClass('empty', isEmpty).html('');
+		$acm.toggleClass('is-empty', isEmpty).toggleClass('is-filled', !isEmpty);
 
 		if (!isEmpty) {
 			for (var c in contacts) {
@@ -279,16 +302,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 		$acm.find('.amp-nested-form').ampNestedForm();
 
 		$acm.find('.acm-add-contact').click(function() {
-			var $acm = $(this).closest('.amp-contact-manager');
-			var o = $acm.getOptions();
-
-			var $results = $(this).closest('.acm-results').toggleClass('adding');
-
-			var $form = $results.find('.acm-new-contact-form');
-
-			if (!$form.children().length) {
-				$form.append(o.contactForm.clone())
-			}
+			$(this).closest('.amp-contact-manager').ampContactManager('addContact');
 		})
 
 		$acm.find('.am-deselect').click(function() {

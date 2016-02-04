@@ -11,6 +11,7 @@ $.ampExtend($.ampManager = function() {}, {
 		o = $.extend({}, {
 			id:             null,
 			input:          null,
+			label:          'record',
 			selected:       null,
 			type:           'amplo',
 			type_id:        'amplo_id',
@@ -22,12 +23,16 @@ $.ampExtend($.ampManager = function() {}, {
 			onChange:       null,
 			onEdit:         null,
 			url:            $ac.site_url + 'manager/',
-			listingUrl:     $ac.site_url + 'manager/get-records',
+			removeUrl:      null,
+			listingUrl:     null,
 			loadListings:   true,
 			listing:        {}
 		}, o);
 
 		o.template_id = 'am-' + o.type + '-' + $.ampManager.instanceId++;
+
+		o.removeUrl = o.removeUrl || o.url + 'remove';
+		o.listingUrl = o.listingUrl || o.url + 'get-records';
 
 		if (o.type) {
 			o.listing.filter || (o.listing.filter = {});
@@ -89,12 +94,20 @@ $.ampExtend($.ampManager = function() {}, {
 		return this;
 	},
 
-	select: function($record) {
+	select: function($record, data) {
 		var $am = this;
 		var o = $am.getOptions(), is_changed = false, selected = null;
 
 		if (typeof $record !== 'object') {
-			$record = $am.find('[data-am-record-id=' + $record + ']');
+			selected = $record;
+			$record = $am.find('[data-am-record-id=' + selected + ']');
+
+			if (!$record.length) {
+				if (data) {
+					$am.ampManager('append', data);
+					$record = $am.find('[data-am-record-id=' + selected + ']')
+				}
+			}
 		}
 
 		if (!$record.length) {
@@ -182,6 +195,10 @@ $.ampExtend($.ampManager = function() {}, {
 
 		$.post(o.listingUrl, $.extend(true, o.listing, listing), function(response) {
 			$am.ampManager('results', response.records, response.total);
+
+			if (!listing) {
+				$am.toggleClass('has-records', !!+response.total).toggleClass('no-records', !+response.total);
+			}
 		})
 
 		return this;
@@ -190,25 +207,15 @@ $.ampExtend($.ampManager = function() {}, {
 	results: function(records, total) {
 		var $am = this;
 		var o = $am.getOptions();
-		var $recordList = $am.find('.am-record-list'),
+		var $recordList = $am.find('.am-record-list').html(''),
 			isEmpty = typeof records !== 'object' || $.isEmptyObject(records);
 
-		$recordList.toggleClass('empty', isEmpty).html('');
+		$am.toggleClass('is-empty', isEmpty).toggleClass('is-filled', !isEmpty);
 
 		if (!isEmpty) {
 			for (var c in records) {
 				var record = records[c];
-				record.id = record[o.type_id];
-
-				var $record = $recordList.ac_template(o.template_id, 'add', record);
-
-				$record.data('record', record);
-
-				$am.ampManager('sync', $record.find('[data-name]'), record);
-
-				$record.attr('data-am-record-id', record.id);
-
-				$recordList.append($record);
+				$am.ampManager('append', record);
 			}
 
 			if (o.selectMultiple) {
@@ -221,6 +228,52 @@ $.ampExtend($.ampManager = function() {}, {
 		}
 
 		return this;
+	},
+
+	append: function(record) {
+		var o = this.getOptions();
+		var $recordList = this.find('.am-record-list');
+
+		record.id = record[o.type_id];
+
+		var $record = $recordList.ac_template(o.template_id, 'add', record);
+
+		$record.data('record', record);
+
+		if (!record.can_access) {
+			$record.find('.am-remove-record').addClass('hidden');
+		}
+
+		this.ampManager('sync', $record.find('[data-name]'), record);
+
+		$record.attr('data-am-record-id', record.id);
+
+		$recordList.append($record);
+
+		return this;
+	},
+
+	remove: function($record) {
+		var $am = this;
+		var o = $am.getOptions(), data = {};
+
+		$.ampConfirm({
+			title: "Remove " + o.label,
+			text: "Are you sure you want to remove this " + o.label + "?",
+			onConfirm: function(){
+				data[o.type_id] = $record.attr('data-am-record-id');
+
+				$.get(o.removeUrl, data, function(response) {
+					if (response.success) {
+						$record.remove();
+					}
+
+					$am.show_msg(response);
+				})
+			}
+		})
+
+		return $am;
 	},
 
 	removeUnselected: function() {
@@ -303,6 +356,11 @@ $.ampExtend($.ampManager = function() {}, {
 			$record.show_msg(response);
 		})
 
+		$am.find('.am-remove-record').click(function() {
+			$(this).closest('.amp-manager').ampManager('remove', $(this).closest('.am-record'));
+			return false;
+		})
+
 		$am.find('.am-new-record-form').ampNestedForm('onDone', function(response) {
 			var $form = $(this);
 
@@ -341,6 +399,8 @@ $.ampExtend($.ampManager = function() {}, {
 			});
 
 		$am.find('.am-record[data-row=__ac_template__]').ac_template(o.template_id);
+
+		$am.addClass('is-empty no-records');
 
 		if (o.loadListings) {
 			$am.ampManager('get');

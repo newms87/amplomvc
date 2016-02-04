@@ -245,8 +245,8 @@
 	.amp-modal-content-box {
 		position: relative;
 		z-index: 2;
-		max-width: 95vw;
-		max-height: 95vh;
+		max-width: 140em;
+		max-height: 100em;
 		line-height: 0;
 		display: inline-block;
 		vertical-align: middle;
@@ -261,7 +261,7 @@
 		& > iframe {
 			display: block;
 		}
-		
+
 		ul {
 			list-style: disc inside;
 
@@ -281,17 +281,17 @@
 		margin-top: 1em;
 		text-align: center;
 		padding: 1em;
+	}
 
-		button {
-			min-width: 10em;
+	.amp-modal-button {
+		min-width: 10em;
 
-			& + button {
-				margin-left: 1em;
-			}
+		& + .amp-modal-button {
+			margin-left: 1em;
+		}
 
-			&.cancel {
-				.button.light;
-			}
+		&.cancel {
+			.button.light;
 		}
 	}
 

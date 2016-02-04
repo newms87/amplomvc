@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Controller_Customer extends Controller
 {
 	public function __construct()
@@ -318,8 +318,8 @@ class App_Controller_Customer extends Controller
 		set_option('verify_password_on_change', false);
 
 		$reset = array(
-			'password'       => _post('password'),
-			'confirm'        => _post('confirm'),
+			'password' => _post('password'),
+			'confirm'  => _post('confirm'),
 		);
 
 		if ($this->Model_Customer->save($customer_id, $reset)) {

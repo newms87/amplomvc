@@ -164,6 +164,13 @@
 			}
 		}
 
+		& > .parent.is-active {
+			& + .children {
+				opacity: 1;
+				top: 3em;
+				transition: opacity .3s cubic-bezier(.96, -0.45, .06, .06), top .2s cubic-bezier(0, 1.22, .03, .48);
+			}
+		}
 		&.on-hover:hover, &.active, &.is-active {
 			& > .children {
 				opacity: 1;
