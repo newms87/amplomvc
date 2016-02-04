@@ -94,6 +94,11 @@ class Router
 		return $this->action;
 	}
 
+	public function getMethod()
+	{
+		return $this->action->getMethod();
+	}
+
 	public function getArgs()
 	{
 		return $this->args;
