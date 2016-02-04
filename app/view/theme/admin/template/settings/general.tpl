@@ -215,7 +215,10 @@
 							build(array(
 								'type'   => 'select',
 								'name'   => 'config_use_macro_languages',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_use_macro_languages
 							)); ?>
 						</td>
@@ -243,7 +246,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_currency_auto',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_currency_auto,
 							)); ?>
 						</td>
@@ -261,7 +267,10 @@
 							build(array(
 								'type'   => 'radio',
 								'name'   => 'cron_status',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $cron_status
 							)); ?></td>
 					</tr>
@@ -273,7 +282,10 @@
 							build(array(
 								'type'   => 'select',
 								'name'   => "show_breadcrumbs",
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $show_breadcrumbs
 							)); ?></td>
 					</tr>
@@ -321,7 +333,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_allow_close_message',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_allow_close_message
 							)); ?></td>
 					</tr>
@@ -348,7 +363,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_customer_approval',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_customer_approval
 							)); ?>
 						</td>
@@ -373,7 +391,7 @@
 							<span class="help">{{Users who have not agreed to the terms since this date, will be asked to review and agree to the terms.}}</span>
 						</td>
 						<td>
-							<input type="text" name="terms_agreement_date" value="<?= $terms_agreement_date; ?>" class="datepicker" />
+							<input type="text" name="terms_agreement_date" value="<?= $terms_agreement_date; ?>" class="datepicker"/>
 						</td>
 					</tr>
 
@@ -383,7 +401,10 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => "config_share_status",
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_share_status
 							)); ?>
 						</td>
@@ -555,7 +576,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_alert_mail',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_alert_mail
 							)); ?>
 						</td>
@@ -568,7 +592,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_account_mail',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_account_mail
 							)); ?>
 						</td>
@@ -587,7 +614,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_mail_logging',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_mail_logging
 							)); ?>
 						</td>
@@ -604,7 +634,10 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_debug',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_debug
 							)); ?>
 						</td>
@@ -615,7 +648,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'error_logging',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $error_logging
 							)); ?>
 						</td>
@@ -626,7 +662,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'error_notification_email',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $error_notification_email,
 							)); ?>
 						</td>
@@ -639,7 +678,10 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_jquery_cdn',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_jquery_cdn
 							)); ?>
 						</td>
@@ -652,7 +694,10 @@
 							<?= build(array(
 								'type'   => 'select',
 								'name'   => 'config_debug_send_emails',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_debug_send_emails
 							)); ?>
 						</td>
@@ -665,7 +710,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_use_ssl',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_use_ssl,
 							)); ?>
 						</td>
@@ -678,7 +726,10 @@
 							<?= build(array(
 								'type'   => 'radio',
 								'name'   => 'config_maintenance',
-								'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+								'data'   => array(
+									1 => "{{Yes}}",
+									0 => "{{No}}"
+								),
 								'select' => $config_maintenance,
 							)); ?>
 						</td>
@@ -754,7 +805,10 @@
 								<?= build(array(
 									'type'   => 'radio',
 									'name'   => 'ga_click_tracking',
-									'data'   => array(1 => "{{Yes}}", 0 => "{{No}}"),
+									'data'   => array(
+										1 => "{{Yes}}",
+										0 => "{{No}}"
+									),
 									'select' => $ga_click_tracking,
 								)); ?>
 							</div>
@@ -820,7 +874,6 @@
 			</div>
 		</div>
 	</form>
-</div>
 </div>
 
 <script type="text/javascript">
