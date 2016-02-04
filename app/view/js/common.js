@@ -805,7 +805,7 @@ $.ampExtend($.ampModal = function() {}, {
 			height:      null
 		}, o);
 
-		o.content = o.content === null ? this : o.content;
+		o.content = o.content === null ? this : $(o.content);
 		o.context = o.context === null ? o.content.parent() : o.context;
 
 		if (!(o.context = $(o.context)).length) {
