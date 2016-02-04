@@ -211,11 +211,9 @@ class Customer extends Library
 
 	public function setMeta($key, $value)
 	{
-		$this->removeMeta($key);
-
 		$this->meta[$key] = $value;
 
-		$meta_id = $this->Model_Customer->addMeta($this->customer_id, $key, $value);
+		$meta_id = $this->Model_Customer->setMeta($this->customer_id, $key, $value);
 
 		if (!$meta_id) {
 			$this->error = $this->Model_Customer->fetchError();
