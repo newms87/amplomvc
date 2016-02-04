@@ -153,6 +153,56 @@ input, select, textarea {
 	}
 }
 
+.amp-modal-slide-show {
+	.amp-modal-title {
+		background: @color-success;
+		color: @color-dark;
+		border-bottom: 2px #7cc57c solid;
+	}
+
+	.amp-slide-list {
+		.amp-slide {
+			padding: 1em;
+
+			.text {
+				line-height: 1.6em;
+			}
+
+			.image {
+				box-shadow: 1px 1px 5px rgba(0,0,0,.3);
+				
+				& + .text {
+					margin-top: 1em;
+				}
+			}
+		}
+	}
+
+	.amp-pagination {
+		.amp-page {
+			display: inline-block;
+			vertical-align: middle;
+			opacity: .5;
+			cursor: pointer;
+			font-size: .8em;
+
+			&.is-active {
+				opacity: 1;
+			}
+
+			& + .amp-page {
+				margin-left: .5em;
+			}
+		}
+	}
+
+	.amp-slide-nav {
+		margin-top: 1em;
+		border-top: 1px solid @color-gray;
+		padding: .5em 1em;
+	}
+}
+
 .amp-select-box {
 	.amp-options {
 		.amp-option {
