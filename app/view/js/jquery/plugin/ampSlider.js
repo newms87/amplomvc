@@ -17,7 +17,7 @@ $.ampExtend($.ampSlider = function() {}, {
 				$children = o.slideList.children();
 			}
 
-			$children.each(function(){
+			$children.each(function() {
 				$(this).width($(this).width());
 			})
 
@@ -82,25 +82,25 @@ $.ampExtend($.ampSlider = function() {}, {
 		return this;
 	},
 
-	nextSlide: function() {
+	nextSlide: function(i) {
 		var o = this.getOptions();
 
 		if (o.is_edge) {
 			this.ampSlider('slideTo', 0)
 		} else {
-			this.ampSlider('slideTo', o.current >= o.slides.length ? 0 : o.current + 1);
+			this.ampSlider('slideTo', o.current >= o.slides.length ? 0 : o.current + (i || 1));
 		}
 
 		return this;
 	},
 
-	prevSlide: function() {
+	prevSlide: function(i) {
 		var o = this.getOptions();
 
 		if (o.is_edge) {
 			this.ampSlider('slideTo', o.edge_index - 1);
 		} else {
-			this.ampSlider('slideTo', o.current > 0 ? o.current - 1 : o.slides.length - 1);
+			this.ampSlider('slideTo', o.current > 0 ? o.current - (i || 1) : o.slides.length - 1);
 		}
 
 		return this;
