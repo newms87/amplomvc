@@ -1464,7 +1464,7 @@ $.fn.hide_msg = function(o) {
 		slideOut: true,
 	}, o);
 
-	$msgs.each(function(){
+	$msgs.each(function() {
 		var $this = $(this);
 		var $box = $this.closest('.messages');
 

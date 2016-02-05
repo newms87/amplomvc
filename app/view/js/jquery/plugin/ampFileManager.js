@@ -162,7 +162,7 @@ $.ampExtend($.ampFileManager = function() {}, {
 		return $file;
 	},
 
-	setThumbnail: function ($file, $thumb) {
+	setThumbnail: function($file, $thumb) {
 		var $box = $file.find('.thumbnail');
 		$box.find('.fa, img').remove();
 		$box.append($thumb);
@@ -281,13 +281,16 @@ $.ampExtend($.ampFileManager = function() {}, {
 		this.find('.amp-fm-breadcrumb').remove();
 
 		var $breadcrumb = $.ac_template('afm-breadcrumb', 'add');
-		$breadcrumb.html(o.rootFolderTitle);
 
-		if (!$.isEmptyObject(o.breadcrumbs)) {
-			for (var b in o.breadcrumbs) {
-				var bc = o.breadcrumbs[b];
-				var $breadcrumb = $.ac_template('afm-breadcrumb', 'add');
-				$breadcrumb.html(bc.title).attr('data-file-id', bc.file_id);
+		if (typeof $breadcrumb === 'object') {
+			$breadcrumb.html(o.rootFolderTitle);
+
+			if (!$.isEmptyObject(o.breadcrumbs)) {
+				for (var b in o.breadcrumbs) {
+					var bc = o.breadcrumbs[b];
+					var $breadcrumb = $.ac_template('afm-breadcrumb', 'add');
+					$breadcrumb.html(bc.title).attr('data-file-id', bc.file_id);
+				}
 			}
 		}
 
