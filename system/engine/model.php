@@ -11,7 +11,7 @@
 
 abstract class Model
 {
-	static $model = array(), $model_history;
+	static $model = array();
 
 	protected $t, $db, $error = array();
 
@@ -29,7 +29,7 @@ abstract class Model
 
 	public function __construct()
 	{
-		global $registry, $model_history;
+		global $registry;
 
 		$reg_key = strtolower(get_class($this));
 
@@ -37,13 +37,7 @@ abstract class Model
 			$registry->set($reg_key, $this);
 		}
 
-		if (!self::$model_history) {
-			self::$model_history         = new Model_T;
-			self::$model_history->tables = &$model_history;
-		}
-
-		//use default database
-		//(Note: setting our own $db property allows us to use a different database for new Model instances)
+		//use default database (Note: setting the $db property - for example, in the constructor of a Model class - will allow the instance to use a different DB)
 		if (!$this->db) {
 			$this->setDb($registry->get('db'));
 		}
@@ -276,7 +270,7 @@ abstract class Model
 			}
 		}
 
-		if (isset(self::$model_history[$table])) {
+		if ($this->db->isHistoryTable($table)) {
 			$this->history($t, $row_id, 'insert', $data, true);
 
 		}
@@ -332,7 +326,7 @@ abstract class Model
 			return false;
 		}
 
-		if ($update_id !== true && isset(self::$model_history[$table])) {
+		if ($update_id !== true && $this->db->isHistoryTable($table)) {
 			$this->history($t, $update_id, 'update', $data, true);
 		}
 
@@ -359,7 +353,7 @@ abstract class Model
 			return false;
 		}
 
-		if (isset(self::$model_history[$table])) {
+		if ($this->db->isHistoryTable($table)) {
 			$delete_id = false;
 
 			if (is_array($where)) {

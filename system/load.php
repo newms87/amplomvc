@@ -1,19 +1,13 @@
 <?php
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
-//Model History
-global $model_history;
-if (!$model_history) {
-	$model_history = array();
-}
 
 // Registry
 $registry = new Registry();
@@ -78,6 +72,9 @@ if (isset($_GET['phpinfo']) && $registry->get('user')->isTopAdmin()) {
 	exit;
 }
 
+//Table Insert / Update / Delete History
+$db->setHistoryTables((array)option('history_tables'));
+
 //Amplo Cookie Token Check
 if (isset($_GET['amp_token'])) {
 	set_cookie($_GET['amp_token'], 1, 31536000, false);
@@ -89,9 +86,6 @@ $router->routeRequest();
 if (AMPLO_PROFILE) {
 	_profile('Site Routed');
 }
-
-//Model History User Defined
-$model_history = (array)option('model_history') + $model_history;
 
 //Customer Override (alternative logins)
 if (!defined("AC_CUSTOMER_OVERRIDE")) {

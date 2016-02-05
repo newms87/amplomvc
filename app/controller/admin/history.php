@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Controller_Admin_History extends Controller
 {
 	public function index()
@@ -39,13 +39,13 @@ class App_Controller_Admin_History extends Controller
 		list($entries, $total) = $this->Model_History->getRecords($sort, $filter, $options, true);
 
 		$listing = array(
-			'extra_cols'     => $this->Model_History->getColumns(false),
-			'records'        => $entries,
-			'sort'           => $sort,
-			'filter_value'   => $filter,
-			'pagination'     => true,
-			'total' => $total,
-			'listing_path'   => 'admin/history/listing',
+			'extra_cols'   => $this->Model_History->getColumns(false),
+			'records'      => $entries,
+			'sort'         => $sort,
+			'filter_value' => $filter,
+			'pagination'   => true,
+			'total'        => $total,
+			'listing_path' => 'admin/history/listing',
 		);
 
 		$output = block('widget/listing', null, $listing + $options);

@@ -21,6 +21,7 @@ class DB
 		$driver,
 		$synctime = false,
 		$error = array(),
+		$history,
 		$query_history;
 
 	public function __construct($driver = null, $hostname = null, $username = null, $password = null, $schema = null, $prefix = null)
@@ -88,6 +89,7 @@ class DB
 		$this->t->schema = $schema;
 		$this->t->prefix = $prefix === null ? DB_PREFIX : $prefix;
 
+		$this->history = new Model_T;
 
 		if (!AMPLO_PRODUCTION) {
 			if ($last_update = $this->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)cache('db_last_update') . "'")) {
@@ -153,6 +155,27 @@ class DB
 	public function getQueryError()
 	{
 		return $this->driver->getError();
+	}
+
+	public function isHistoryTable($table)
+	{
+		return isset($this->history[$table]);
+	}
+
+	public function addHistoryTable($table)
+	{
+		$this->history->tables[$table] = $table;
+	}
+
+	public function setHistoryTables(array $tables)
+	{
+		$this->history->tables = array_combine($tables, $tables);
+
+	}
+
+	public function getHistoryTables()
+	{
+		return $this->history;
 	}
 
 	public function queryHistory($offset = -1)
