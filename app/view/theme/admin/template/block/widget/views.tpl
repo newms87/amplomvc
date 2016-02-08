@@ -158,7 +158,12 @@
 			sort_order[$(e).attr('data-view-id')] = i;
 		});
 
-		$.post("<?= site_url('block/widget/views/save-sort-order'); ?>", {'sort_order': sort_order}, function(response) {
+		var data = {
+			'sort_order': sort_order,
+			page_path:    '<?= $page_path; ?>'
+		}
+
+		$.post($ac.site_url + 'block/widget/views/save-sort-order', data, function(response) {
 			if (!response.success) {
 				$('.widget-view-list').show_msg(response);
 			}
@@ -258,9 +263,11 @@
 
 		data = $.fn.extend({}, settings, data);
 
+		data.page_path = '<?= $page_path; ?>';
+
 		$this.loading();
 
-		$.post("<?= site_url('block/widget/views/save-view');?>", data, function(response) {
+		$.post($ac.site_url + 'block/widget/views/save-view', data, function(response) {
 			$this.loading('stop');
 			if (response.data && response.data.view_id) {
 				$view.attr('data-view-id', response.data.view_id);
@@ -288,7 +295,10 @@
 
 				$this.loading({text: "Removing..."});
 
-				$.post("<?= site_url('block/widget/views/remove-view'); ?>", {view_id: $view.attr('data-view-id')}, function() {
+				$.post($ac.site_url + 'block/widget/views/remove-view', {
+					view_id:   $view.attr('data-view-id'),
+					page_path: '<?= $page_path; ?>'
+				}, function() {
 					$view.remove();
 				});
 			}

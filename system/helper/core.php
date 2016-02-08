@@ -311,7 +311,8 @@ function amplo_routing_hook($router)
 		}
 
 		if (empty($nodes[1])) {
-			$router->setPath(option('admin_path', 'admin/index'));
+			$admin_path = option('admin_path', 'admin/index');
+			$router->setPath(($admin_path && $admin_path !== 'admin') ? $admin_path : 'admin/index');
 		}
 	} else {
 		if (option('config_maintenance')) {
