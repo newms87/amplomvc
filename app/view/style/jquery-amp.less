@@ -225,6 +225,7 @@
 	z-index: 5000;
 
 	.amp-modal-title {
+		line-height: 1em;
 		padding: .7em;
 		background: @color-gray;
 		color: white;
@@ -245,18 +246,27 @@
 	.amp-modal-content-box {
 		position: relative;
 		z-index: 2;
-		max-width: 140em;
-		max-height: 100em;
 		line-height: 0;
 		display: inline-block;
+		text-align: center;
 		vertical-align: middle;
 		background: white;
 		text-align: left;
 		box-shadow: 0 0 15px rgba(0, 0, 0, .4);
+		transition: all .5s;
+	}
+
+	.amp-modal-loading {
+		text-align: center;
+		padding: 10em;
 	}
 
 	.amp-modal-content {
+		max-width: 90vw;
+		max-height: 80vh;
+		overflow: auto;
 		line-height: 1em;
+		transition: all .5s;
 
 		& > iframe {
 			display: block;
@@ -278,6 +288,7 @@
 	}
 
 	.amp-modal-buttons {
+		line-height: 1em;
 		margin-top: 1em;
 		text-align: center;
 		padding: 1em;
@@ -297,6 +308,18 @@
 
 	&.active {
 		left: 0;
+	}
+
+	&.is-ready {
+		.on-loading {
+			display: none;
+		}
+	}
+
+	&.is-loading {
+		.on-ready {
+			display: none;
+		}
 	}
 }
 
