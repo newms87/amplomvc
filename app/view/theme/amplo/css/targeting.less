@@ -9,9 +9,9 @@
 		.mobile-menu {
 			position: absolute;
 			left: -120vw;
+			top: 0;
 			background: white;
 			width: 100vw;
-			top: 3em;
 			overflow: auto;
 			min-height: 0;
 			max-height: none;
@@ -30,9 +30,9 @@
 				& > .children {
 					position: relative;
 					left: 0;
+					top: 0;
 					box-shadow: none;
 					background: none;
-					top: 0;
 					opacity: 1;
 					width: auto;
 					margin-left: .5em;
@@ -40,11 +40,16 @@
 					text-align: left;
 					transition: none;
 					min-height: 0;
-					max-height: 0;
 					overflow: hidden;
 
 					& > .link-menu {
 						display: block;
+					}
+				}
+
+				& > .parent.is-active {
+					& + .children {
+						top: 0;
 					}
 				}
 
@@ -54,7 +59,7 @@
 					}
 
 					& > .children {
-						top: 0;
+						top: 0!important;
 						max-height: 100em;
 						-webkit-transition: all .3s cubic-bezier(1, .13, 1, -0.09);
 						transition: all .3s cubic-bezier(1, .13, 1, -0.09);

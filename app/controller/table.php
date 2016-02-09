@@ -80,7 +80,7 @@ abstract class App_Controller_Table extends Controller
 
 		$filter['customer_id'] = customer_info('customer_id');
 
-		$options = array(
+		$options += array(
 			'index' => $this->model['value'],
 			'start' => (int)_request('start', 0),
 			'limit' => (int)_request('limit', 10),
