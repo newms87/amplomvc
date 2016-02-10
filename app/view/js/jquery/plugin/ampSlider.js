@@ -17,6 +17,11 @@ $.ampExtend($.ampSlider = function() {}, {
 				$children = o.slideList.children();
 			}
 
+			if (!$children.length) {
+				$.error("There are no slides in the slider parent element.");
+				return;
+			}
+
 			$children.each(function() {
 				$(this).width($(this).width());
 			})
