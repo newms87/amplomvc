@@ -147,6 +147,10 @@ String.prototype.toSlug = function(sep) {
 	return this.toLowerCase().replace(/\s/, sep || '-').replace(/[^a-z0-9-_]/, '');
 }
 
+String.prototype.getUnit = function(d) {
+	return this.match(/\d+([a-z]+)/i)[1] || d || 'px';
+}
+
 String.prototype.repeat = function(times) {
 	return (new Array(times + 1)).join(this);
 };
@@ -617,9 +621,12 @@ $.ampExtend($.ampYouTube = function() {}, {
 
 	init: function(o) {
 		o = $.extend({}, {
-			width:      null,
+			width:      '70vw',
 			height:     null,
-			ratio:      .6,
+			maxWidth:   null,
+			maxHeight:  null,
+			unit:       null,
+			ratio:      .56286,
 			playlistId: '',
 			videoId:    '',
 			paused:     true,
@@ -635,20 +642,29 @@ $.ampExtend($.ampYouTube = function() {}, {
 		var firstScriptTag = $('script')[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-		o.width = o.width || this.width();
-		o.height = o.height || (o.ratio * o.width) || this.height();
+		o.unit = o.unit || (typeof o.width === 'string' ? o.width.getUnit() : 'px');
 
-		this.width(o.width);
-		this.height(o.height);
+		o.width = parseFloat(o.width) || this.width();
+		o.height = parseFloat(o.height) || (o.ratio * o.width) || this.height();
+
+		this.width(o.width + o.unit);
+		this.height(o.height + o.unit);
 
 		o.id = this.attr('id');
 
 		if (o.inModal) {
-			o.modal = this.ampModal({
-				onClose: function() {
+			var modalO = {
+				width:     o.width,
+				height:    o.height,
+				maxWidth:  o.maxWidth,
+				maxHeight: o.maxHeight,
+				unit:      o.unit,
+				onClose:   function() {
 					$.ampYouTube.getInstance(this.find('iframe').attr('id')).ampYouTube('pause')
 				}
-			}).ampModal('getBox');
+			}
+
+			o.modal = this.ampModal(modalO).ampModal('getBox');
 		}
 
 		this.setOptions(o);
@@ -805,7 +821,10 @@ $.ampExtend($.ampModal = function() {}, {
 			onContentLoaded: null,
 			show:            false,
 			width:           null,
-			height:          null
+			height:          null,
+			maxWidth:        '90vh',
+			maxHeight:       '80vh',
+			unit:            null,
 		}, o);
 
 		o.content = o.content === null ? this : $(o.content);
@@ -814,6 +833,8 @@ $.ampExtend($.ampModal = function() {}, {
 		if (!(o.context = $(o.context)).length) {
 			o.context = $('body');
 		}
+
+		o.unit = o.unit || (typeof o.width === 'string' ? o.width.getUnit() : 'px');
 
 		return $(o.content).use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
 			var $e = $(e),
@@ -824,10 +845,14 @@ $.ampExtend($.ampModal = function() {}, {
 
 			o.context.append($modal);
 
-			!o.width || $contentBox.css('width', o.width);
-			!o.height || $contentBox.css('height', o.height);
+			$content.css({
+				width:     (o.width + o.unit) || 'auto',
+				height:    (o.height + o.unit) || 'auto',
+				maxWidth:  (o.maxWidth + o.unit) || 'none',
+				maxHeight: (o.maxHeight + o.unit) || 'none'
+			});
 
-			$content.append($e)
+			$content.append($e);
 
 			if (!$.isEmptyObject(o.buttons)) {
 				var $buttons = $('<div/>').addClass('amp-modal-buttons');
