@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 abstract class Model
 {
 	static $model = array();
@@ -785,6 +785,11 @@ abstract class Model
 		$order = '';
 
 		foreach ($sort as $col => $ord) {
+			if (strpos($col, '#') === 0) {
+				$order .= ($order ? ',' : '') . $ord;
+				continue;
+			}
+
 			$col = $this->escape($col);
 			$t   = '';
 

@@ -13,8 +13,37 @@
 		<? if (!empty($terms_page) && is_logged()) { ?>
 			<div class="terms-agreement">
 				{{Our Terms &amp; Conditions have been updated! To review and accept
-				<a href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>">go here</a>.}}
+				<a class="agree-to-terms" href="<?= site_url('page', 'page_id=' . $terms_page['page_id']); ?>">go here</a>.}}
 			</div>
+
+			<script type="text/javascript">
+				$('.agree-to-terms').click(function() {
+					$.ampConfirm({
+						class:   'amp-terms-modal',
+						title:   'Terms &amp; Conditions',
+						text:    '',
+						url:     $(this).attr('href'),
+						buttons: {
+							confirm: {
+								label:  '{{I Agree to the Terms}}',
+								action: function($modal) {
+									var $btn = $(this).loading({text: "Please Wait..."})
+									$.get($ac.site_url + 'customer/agree-to-terms', {}, function() {
+										$modal.ampModal('close');
+										$btn.loading('stop');
+										location.reload();
+									})
+								}
+							},
+							cancel:  {
+								label: '{{I Disagree}}',
+							}
+						},
+
+					})
+					return false;
+				})
+			</script>
 		<? } ?>
 
 		<? if (option("show-header-banner", false)) { ?>
@@ -133,7 +162,7 @@
 
 	<main class="main">
 		<script type="text/javascript">
-			setTimeout(_ffix,0);
+			setTimeout(_ffix, 0);
 			window.addEventListener('resize', _ffix, true);
 
 			function _ffix() {
@@ -143,7 +172,7 @@
 				});
 			}
 
-			setTimeout(_isScrollTop,0);
+			setTimeout(_isScrollTop, 0);
 			$(document).on('scroll', _isScrollTop);
 
 			function _isScrollTop() {$('body').toggleClass('scroll-top', $(document).scrollTop() <= 0)}

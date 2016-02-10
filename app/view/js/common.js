@@ -790,19 +790,22 @@ $.ampExtend($.ampModal = function() {}, {
 		}
 
 		o = $.extend({}, {
-			context:     null,
-			title:       '',
-			class:       '',
-			content:     null,
-			buttons:     {},
-			shadow:      true,
-			shadowClose: true,
-			onAction:    null,
-			onOpen:      null,
-			onClose:     null,
-			show:        false,
-			width:       null,
-			height:      null
+			context:         null,
+			title:           '',
+			class:           '',
+			url:             null,
+			urlData:         null,
+			content:         null,
+			buttons:         {},
+			shadow:          true,
+			shadowClose:     true,
+			onAction:        null,
+			onOpen:          null,
+			onClose:         null,
+			onContentLoaded: null,
+			show:            false,
+			width:           null,
+			height:          null
 		}, o);
 
 		o.content = o.content === null ? this : $(o.content);
@@ -814,19 +817,17 @@ $.ampExtend($.ampModal = function() {}, {
 
 		return $(o.content).use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
 			var $e = $(e),
-				$box = $('<div />').addClass('amp-modal').addClass(o.class).setOptions(o),
+				$modal = $('<div />').addClass('amp-modal').addClass(o.class).setOptions(o),
 				$contentBox = $('<div />').addClass('amp-modal-content-box'),
 				$content = $('<div />').addClass('amp-modal-content'),
 				$title = $('<div/>').addClass('amp-modal-title');
 
-			o.context.append($box);
+			o.context.append($modal);
 
 			!o.width || $contentBox.css('width', o.width);
 			!o.height || $contentBox.css('height', o.height);
 
-			$content
-				.append(o.title ? $title.html(o.title) : '')
-				.append($e)
+			$content.append($e)
 
 			if (!$.isEmptyObject(o.buttons)) {
 				var $buttons = $('<div/>').addClass('amp-modal-buttons');
@@ -864,16 +865,21 @@ $.ampExtend($.ampModal = function() {}, {
 						})
 					}
 				}
-
-				$content.append($buttons);
 			}
 
-			$box
+			$contentBox
+				.append(o.title ? $title.html(o.title) : '')
+				.append($content.addClass('on-ready'))
+				.append($('<div/>').addClass('amp-modal-loading on-loading').append($('<img />').attr('src', $ac.site_url + 'app/view/image/ajax-loader.gif')))
+				.append($buttons);
+
+			$modal
+				.addClass('is-ready')
 				.append($('<div/>').addClass('align-middle'))
-				.append($contentBox.append($content))
+				.append($contentBox)
 
 			if (o.shadow) {
-				var $shadow = $('<div/>').addClass('shadow-box').appendTo($box);
+				var $shadow = $('<div/>').addClass('shadow-box').appendTo($modal);
 
 				if (o.shadowClose) {
 					$shadow.click($.ampModal.close)
@@ -881,7 +887,19 @@ $.ampExtend($.ampModal = function() {}, {
 			}
 
 			if (o.show) {
-				$box.ampModal('open');
+				$modal.ampModal('open');
+			}
+
+			if (o.url) {
+				$modal.addClass('is-loading').removeClass('is-ready')
+
+				$content.load(o.url, o.urlData, function(response, status, xhr) {
+					$modal.removeClass('is-loading').addClass('is-ready')
+
+					if (o.onContentLoaded) {
+						o.onContentLoaded.call($modal, response, status, xhr)
+					}
+				})
 			}
 		});
 	},
@@ -940,7 +958,7 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 	o = $.extend({}, {
 		title:       'Are you sure?',
 		class:       'amp-modal-confirm',
-		content:     $('<div/>').addClass('amp-confirm'),
+		content:     null,
 		context:     $('body'),
 		text:        'Are you sure you want to continue?',
 		onConfirm:   null,
@@ -960,9 +978,9 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 		show:        true
 	}, o)
 
-	if (o.content && o.text) {
-		o.content = $(o.content).append(o.text);
-	}
+	var $ampConfirm = $('<div/>').addClass('amp-confirm');
+
+	$ampConfirm.append(o.content).append(o.text);
 
 	if (o.buttons.confirm && !o.buttons.confirm.action) {
 		o.buttons.confirm.action = function() {
@@ -984,7 +1002,7 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 		}
 	}
 
-	return o.content.ampModal(o);
+	return $ampConfirm.ampModal(o);
 }
 
 //ampSelect jQuery Plugin

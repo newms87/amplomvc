@@ -311,7 +311,8 @@ function amplo_routing_hook($router)
 		}
 
 		if (empty($nodes[1])) {
-			$router->setPath(option('admin_path', 'admin/index'));
+			$admin_path = option('admin_path', 'admin/index');
+			$router->setPath(($admin_path && $admin_path !== 'admin') ? $admin_path : 'admin/index');
 		}
 	} else {
 		if (option('config_maintenance')) {
@@ -1093,6 +1094,21 @@ function str2bytes($str)
 		case 'k':
 			return $str * 1024;
 	}
+}
+
+function str_width($str, $font = null, $size = 16, $angle = 0)
+{
+	if (!$font) {
+		$font = theme_dir('font/opensans/opensans-regular-webfont.ttf');
+	}
+
+	$points = imagettfbbox($size * 3/4, $angle, $font, $str);
+
+	if ($points) {
+		return abs($points[2] - $points[0]);
+	}
+
+	return false;
 }
 
 function parse_xml_to_array($xml)

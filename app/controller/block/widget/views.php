@@ -22,6 +22,20 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 		if (!$this->user->isLogged()) {
 			redirect('admin/user/login');
 		}
+
+		switch($this->router->getMethod()) {
+			case 'create':
+			case 'save_view':
+			case 'remove_view':
+			case 'save_sort_order':
+				if (empty($_REQUEST['page_path']) || !user_can('w', $_REQUEST['page_path'])) {
+					message('error', _l("You do not have permission to modify this view."));
+					output_message();
+					output_flush();
+					exit;
+				}
+				break;
+		}
 	}
 
 	public function build($settings)
@@ -177,11 +191,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		//$settings['data_user_groups'] = $this->Model_User->getUserGroups();
 
-		if (is_file(DIR_SITE . 'app/controller/' . $this->router->getPath())) {
-			$settings['can_modify'] = user_can('w', $this->router->getPath());
-		} else {
-			$settings['can_modify'] = true;
-		}
+		$page_path = $this->router->getPath();
+		$settings['can_modify'] = user_can('w', $page_path);
+		$settings['page_path'] = $page_path;
 
 		//Render
 		$this->render('block/widget/views', $settings);

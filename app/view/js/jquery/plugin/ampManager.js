@@ -20,6 +20,8 @@ $.ampExtend($.ampManager = function() {}, {
 			selectMultiple: false,
 			syncFields:     null,
 			defaults:       {},
+			onResults:      null,
+			onAppend:       null,
 			onChange:       null,
 			onEdit:         null,
 			url:            $ac.site_url + 'manager/',
@@ -227,6 +229,10 @@ $.ampExtend($.ampManager = function() {}, {
 			}
 		}
 
+		if (o.onResults) {
+			o.onResults.call($am, $recordList.children(), records, total);
+		}
+
 		return this;
 	},
 
@@ -250,6 +256,10 @@ $.ampExtend($.ampManager = function() {}, {
 
 		$recordList.append($record);
 
+		if (o.onAppend) {
+			o.onAppend.call(this, $record, record);
+		}
+
 		return this;
 	},
 
@@ -258,9 +268,9 @@ $.ampExtend($.ampManager = function() {}, {
 		var o = $am.getOptions(), data = {};
 
 		$.ampConfirm({
-			title: "Remove " + o.label,
-			text: "Are you sure you want to remove this " + o.label + "?",
-			onConfirm: function(){
+			title:     "Remove " + o.label,
+			text:      "Are you sure you want to remove this " + o.label + "?",
+			onConfirm: function() {
 				data[o.type_id] = $record.attr('data-am-record-id');
 
 				$.get(o.removeUrl, data, function(response) {

@@ -169,8 +169,7 @@ class DB
 
 	public function setHistoryTables(array $tables)
 	{
-		$this->history->tables = array_combine($tables, $tables);
-
+		$this->history->tables = $tables ? array_combine($tables, $tables) : array();
 	}
 
 	public function getHistoryTables()
