@@ -326,7 +326,12 @@ function amplo_routing_hook($router)
 
 			$cookie_date          = _cookie('terms_agreed_date');
 			$customer_date        = customer_meta('terms_agreed_date');
-			$customer_agreed_date = $date->isAfter($cookie_date, $customer_date) ? $cookie_date : $customer_date;
+
+			if ($customer_date && $cookie_date) {
+				$customer_agreed_date = $date->isAfter($cookie_date, $customer_date) ? $cookie_date : $customer_date;
+			} else {
+				$customer_agreed_date = $cookie_date ? $cookie_date : $customer_date;
+			}
 
 			set_option('show_terms_agreement', $terms_agreement_date && (!$customer_agreed_date || $date->isAfter($terms_agreement_date, $customer_agreed_date)));
 		}

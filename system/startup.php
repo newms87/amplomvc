@@ -116,7 +116,7 @@ if (!defined('COOKIE_DOMAIN')) {
 }
 
 //Start Session
-if (!class_exists('SessionHandlerInterface')) {
+if (!interface_exists('SessionHandlerInterface')) {
 	require_once(DIR_SYSTEM . 'resources/SessionHandlerInterface.php');
 }
 
