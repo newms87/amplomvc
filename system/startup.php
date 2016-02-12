@@ -116,6 +116,10 @@ if (!defined('COOKIE_DOMAIN')) {
 }
 
 //Start Session
+if (!class_exists('SessionHandlerInterface')) {
+	require_once(DIR_SYSTEM . 'resources/SessionHandlerInterface.php');
+}
+
 require_once(_mod(DIR_SYSTEM . 'engine/session.php'));
 session_name(AMPLO_SESSION);
 
