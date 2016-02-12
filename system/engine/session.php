@@ -4,15 +4,6 @@ class AmploSessionHandler implements SessionHandlerInterface
 {
 	protected $save_path, $name;
 
-	public function __construct()
-	{
-		ini_set('session.use_cookies', 'On');
-		ini_set('session.use_trans_sid', 'Off');
-
-		ini_set("session.cookie_domain", COOKIE_DOMAIN);
-		session_set_cookie_params(0, '/', COOKIE_DOMAIN, false, false);
-	}
-
 	public function open($save_path, $name)
 	{
 		$this->save_path = $save_path . '/' . $name;

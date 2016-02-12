@@ -479,16 +479,19 @@ $.ampExtend($.ampDelay = function() {}, {
 			on:       null
 		}, o);
 
-		o.count = 0;
+		if (!this.is('.amp-delay-init')) {
+			o.count = 0;
+			this.setOptions(o).addClass('amp-delay-init');
 
-		this.setOptions(o);
+			if (o.on) {
+				this.on(o.on, function() {
+					$(this).ampDelay('countdown');
+				})
+			}
+		}
 
 		if (!o.on) {
 			this.ampDelay('countdown');
-		} else {
-			this.on(o.on, function() {
-				$(this).ampDelay('countdown');
-			})
 		}
 
 		return this;

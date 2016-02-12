@@ -69,6 +69,7 @@ defined('DIR_DATABASE_BACKUP') || define('DIR_DATABASE_BACKUP', DIR_SITE . 'syst
 
 defined('DEFAULT_TIMEZONE') || define('DEFAULT_TIMEZONE', 'America/Denver');
 defined('MYSQL_TIMEZONE') || define('MYSQL_TIMEZONE', '-6:00');
+defined('AMPLO_SESSION_HANDLER') || define('AMPLO_SESSION_HANDLER', false);
 defined('AMPLO_PROFILE') || define('AMPLO_PROFILE', false);
 defined('AMPLO_PROFILE_NO_CACHE') || define('AMPLO_PROFILE_NO_CACHE', false);
 defined('AMPLO_DEFAULT_THEME') || define('AMPLO_DEFAULT_THEME', 'amplo');
@@ -116,43 +117,51 @@ if (!defined('COOKIE_DOMAIN')) {
 }
 
 //Start Session
-if (!interface_exists('SessionHandlerInterface')) {
-	require_once(DIR_SYSTEM . 'resources/SessionHandlerInterface.php');
-}
-
-require_once(_mod(DIR_SYSTEM . 'engine/session.php'));
 session_name(AMPLO_SESSION);
-$session_handler = new AmploSessionHandler();
+ini_set('session.use_cookies', 'On');
+ini_set('session.use_trans_sid', 'Off');
+ini_set("session.cookie_domain", COOKIE_DOMAIN);
+session_set_cookie_params(0, '/', COOKIE_DOMAIN, false, false);
 
-if (version_compare(phpversion(), '5.4.0', '>=') == true) {
-	session_set_save_handler($session_handler, true);
-} else {
-	session_set_save_handler(
-		array(
-			$session_handler,
-			'open'
-		),
-		array(
-			$session_handler,
-			'close'
-		),
-		array(
-			$session_handler,
-			'read'
-		),
-		array(
-			$session_handler,
-			'write'
-		),
-		array(
-			$session_handler,
-			'destroy'
-		),
-		array(
-			$session_handler,
-			'gc'
-		)
-	);
+if (AMPLO_SESSION_HANDLER) {
+	if (!interface_exists('SessionHandlerInterface')) {
+		require_once(DIR_SYSTEM . 'resources/SessionHandlerInterface.php');
+	}
+
+	require_once(_mod(DIR_SYSTEM . 'engine/session.php'));
+
+	$session_handler = new AmploSessionHandler();
+
+	if (version_compare(phpversion(), '5.4.0', '>=') == true) {
+		session_set_save_handler($session_handler, true);
+	} else {
+		session_set_save_handler(
+			array(
+				$session_handler,
+				'open'
+			),
+			array(
+				$session_handler,
+				'close'
+			),
+			array(
+				$session_handler,
+				'read'
+			),
+			array(
+				$session_handler,
+				'write'
+			),
+			array(
+				$session_handler,
+				'destroy'
+			),
+			array(
+				$session_handler,
+				'gc'
+			)
+		);
+	}
 }
 
 session_start();
