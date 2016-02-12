@@ -122,9 +122,38 @@ if (!class_exists('SessionHandlerInterface')) {
 
 require_once(_mod(DIR_SYSTEM . 'engine/session.php'));
 session_name(AMPLO_SESSION);
-
 $session_handler = new AmploSessionHandler();
-session_set_save_handler($session_handler, true);
+
+if (version_compare(phpversion(), '5.4.0', '>=') == true) {
+	session_set_save_handler($session_handler, true);
+} else {
+	session_set_save_handler(
+		array(
+			$session_handler,
+			'open'
+		),
+		array(
+			$session_handler,
+			'close'
+		),
+		array(
+			$session_handler,
+			'read'
+		),
+		array(
+			$session_handler,
+			'write'
+		),
+		array(
+			$session_handler,
+			'destroy'
+		),
+		array(
+			$session_handler,
+			'gc'
+		)
+	);
+}
 
 session_start();
 
