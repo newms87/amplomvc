@@ -31,6 +31,8 @@ $.ampExtend($.ampManager = function() {}, {
 			listing:        {}
 		}, o);
 
+		o.url = o.url.replace(/\/$/, '') + '/';
+
 		o.template_id = 'am-' + o.type + '-' + $.ampManager.instanceId++;
 
 		o.removeUrl = o.removeUrl || o.url + 'remove';

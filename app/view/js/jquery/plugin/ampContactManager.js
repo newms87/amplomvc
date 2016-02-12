@@ -22,11 +22,15 @@ $.ampExtend($.ampContactManager = function() {}, {
 			onOpenEditor:   null,
 			onResults:      null,
 			onSync:         null,
-			url:            $ac.site_url + 'manager/contact',
-			listingUrl:     $ac.site_url + 'manager/contact/listing',
+			url:            $ac.site_url + 'manager/contact/',
+			removeUrl:      null,
+			listingUrl:     null,
 			loadListings:   true,
 			listing:        {}
 		}, o);
+
+		o.removeUrl = o.removeUrl || o.url + 'remove';
+		o.listingUrl = o.listingUrl || o.url + 'listing';
 
 		o.template_id = 'acm-contact-' + $.ampContactManager.instanceId++;
 
@@ -285,6 +289,29 @@ $.ampExtend($.ampContactManager = function() {}, {
 		return this;
 	},
 
+	remove: function($record) {
+		var $am = this;
+		var o = $am.getOptions(), data = {};
+
+		$.ampConfirm({
+			title:     "Remove Contact",
+			text:      "Are you sure you want to remove this contact?",
+			onConfirm: function() {
+				data['contact_id'] = $record.attr('data-contact-id');
+
+				$.get(o.removeUrl, data, function(response) {
+					if (response.success) {
+						$record.remove();
+					}
+
+					$am.show_msg(response);
+				})
+			}
+		})
+
+		return $am;
+	},
+
 	removeUnselected: function() {
 		this.find('.acm-contact').not('.is-selected').remove();
 	},
@@ -317,6 +344,11 @@ $.ampExtend($.ampContactManager = function() {}, {
 			$(this).closest('.acm-contact').removeClass('editing');
 		})
 
+		$acm.find('.acm-remove-contact').click(function() {
+			$(this).closest('.amp-contact-manager').ampContactManager('remove', $(this).closest('.acm-contact'));
+			return false;
+		})
+
 		$acm.find('.acm-contact').click(function() {
 			$(this).closest('.amp-contact-manager').ampContactManager('select', $(this));
 		})
@@ -339,6 +371,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 			if (response.success) {
 				var $acm = $form.closest('.amp-contact-manager').ampContactManager('results', {0: response.data}, 1);
+				$acm.removeClass('no-records').addClass('has-records');
 				$acm.find('.acm-results').removeClass('adding');
 				$form.find('input').val('');
 

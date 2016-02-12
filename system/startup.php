@@ -116,13 +116,12 @@ if (!defined('COOKIE_DOMAIN')) {
 }
 
 //Start Session
-ini_set('session.use_cookies', 'On');
-ini_set('session.use_trans_sid', 'Off');
-
+require_once(_mod(DIR_SYSTEM . 'engine/session.php'));
 session_name(AMPLO_SESSION);
 
-ini_set("session.cookie_domain", COOKIE_DOMAIN);
-session_set_cookie_params(0, '/', COOKIE_DOMAIN, false, false);
+$session_handler = new AmploSessionHandler();
+session_set_save_handler($session_handler, true);
+
 session_start();
 
 //Clean Globals
