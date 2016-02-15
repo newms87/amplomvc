@@ -147,7 +147,7 @@ class Router
 			cache('setting.config', $settings);
 		}
 
-		$_options = $site + $settings + $_options;
+		$_options += $site + $settings;
 
 		$this->url->setUrl($site['url']);
 		$this->url->setSsl($site['ssl']);
