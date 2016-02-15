@@ -114,7 +114,7 @@ class Router
 		return $this->site;
 	}
 
-	public function setSite(array $site)
+	public function setSite(array $site, $refresh_settings = false)
 	{
 		global $_options;
 
@@ -147,7 +147,12 @@ class Router
 			cache('setting.config', $settings);
 		}
 
-		$_options += $site + $settings;
+		if ($refresh_settings) {
+			$_options = $site + $settings + $_options;
+		} else {
+			$_options = $site + $_options + $settings;
+		}
+
 
 		$this->url->setUrl($site['url']);
 		$this->url->setSsl($site['ssl']);

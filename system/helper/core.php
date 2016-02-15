@@ -635,7 +635,7 @@ if (!defined('PASSWORD_DEFAULT')) {
 	require_once(DIR_RESOURCES . 'password_compat.php');
 }
 
-function _set_site($site)
+function _set_site($site, $refresh_settings = false)
 {
 	global $registry;
 
@@ -646,7 +646,7 @@ function _set_site($site)
 	if ($site) {
 		_set_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
 
-		$registry->get('router')->setSite($site);
+		$registry->get('router')->setSite($site, $refresh_settings);
 
 		return true;
 	}
