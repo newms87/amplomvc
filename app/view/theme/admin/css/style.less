@@ -1295,29 +1295,28 @@ ol.multiselect-list {
 }
 
 .htabs {
-	padding: 0 0 0 10px;
-	height: 30px;
-	line-height: 16px;
-	border-bottom: 1px solid #DDDDDD;
-	margin-bottom: 15px;
+	line-height: 1em;
+	border-bottom: 1px solid @color-gray-light;
+	margin-bottom: 1.5em;
 
 	a {
-		border-top: 1px solid #DDDDDD;
-		border-left: 1px solid #DDDDDD;
-		border-right: 1px solid #DDDDDD;
-		background: #FFFFFF url('@{theme-img}tab.png') repeat-x;
-		padding: 7px 15px 6px 15px;
-		float: left;
-		font-size: 13px;
-		font-weight: bold;
+		display: inline-block;
+		.ws-hack;
+		vertical-align: top;
 		text-align: center;
+		border: 1px solid @color-gray-light;
+		border-bottom-width: 0;
+		border-top-right-radius: 6px;
+		border-top-left-radius: 6px;
+		background: @color-light;
+		padding: .5em 1em;
+		font-weight: bold;
 		text-decoration: none;
-		color: #000000;
-		margin-right: 2px;
+		color: @color-font-dark;
 
 		&.active {
-			padding-bottom: 7px;
-			background: #FFFFFF;
+			background: white;
+			padding-bottom: .55em;
 		}
 	}
 }
