@@ -86,6 +86,20 @@ CREATE TABLE `category` (
 	PRIMARY KEY (`category_id`)
 );
 
+DROP TABLE IF EXISTS `contact`;
+CREATE TABLE `contact` (
+	`contact_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
+	`customer_id` int(10) unsigned NOT NULL  ,
+	`type` varchar(45)  DEFAULT NULL ,
+	`company` varchar(128)  DEFAULT NULL ,
+	`first_name` varchar(64)  DEFAULT NULL ,
+	`last_name` varchar(64)  DEFAULT NULL ,
+	`email` varchar(256)  DEFAULT NULL ,
+	`phone` varchar(15)  DEFAULT NULL ,
+	`address_id` int(10) unsigned NOT NULL  ,
+	PRIMARY KEY (`contact_id`)
+);
+
 DROP TABLE IF EXISTS `country`;
 CREATE TABLE `country` (
 	`country_id` int(11) NOT NULL  AUTO_INCREMENT,
@@ -179,6 +193,26 @@ CREATE TABLE `download` (
 	`remaining` int(11) NOT NULL DEFAULT '0' ,
 	`date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ,
 	PRIMARY KEY (`download_id`)
+);
+
+DROP TABLE IF EXISTS `file`;
+CREATE TABLE `file` (
+	`file_id` int(10) unsigned NOT NULL  AUTO_INCREMENT,
+	`user_id` int(10) unsigned NOT NULL  ,
+	`customer_id` int(10) unsigned NOT NULL  ,
+	`folder_id` int(10) unsigned NOT NULL  ,
+	`category` varchar(45) NOT NULL  ,
+	`type` varchar(45) NOT NULL  ,
+	`mime_type` varchar(64) NOT NULL  ,
+	`name` varchar(255) NOT NULL  ,
+	`path` varchar(1024) NOT NULL  ,
+	`url` varchar(1024) NOT NULL  ,
+	`title` varchar(100) NOT NULL  ,
+	`size` int(10) unsigned NOT NULL  ,
+	`date_added` datetime NOT NULL  ,
+	`date_updated` datetime NOT NULL  ,
+	`date_modified` datetime NOT NULL  ,
+	PRIMARY KEY (`file_id`)
 );
 
 DROP TABLE IF EXISTS `geo_zone`;
