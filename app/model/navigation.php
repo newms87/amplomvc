@@ -156,10 +156,10 @@ class App_Model_Navigation extends App_Model_Table
 
 	public function saveGroupLinks($navigation_group_id, $links, $append = true, $overwrite = false)
 	{
-		$navigation_group_id = $this->getGroupId($navigation_group_id);
+		$navigation_group_id = $this->getGroupId($name = $navigation_group_id);
 
 		if (!$navigation_group_id) {
-			$this->error['group'] = _l("Unknown Navigation Group");
+			$this->error['group'] = _l("Unknown Navigation Group %s", $name);
 
 			return false;
 		}
