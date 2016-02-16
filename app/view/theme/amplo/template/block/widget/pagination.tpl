@@ -6,11 +6,11 @@
 	<div class="pager">
 		<? if ($page > 1) { ?>
 			<a class="pager-nav first page" href="<?= $url_first; ?>">
-				<b class="amp-sprite si-chevron-dark-gray-horiz rotate-180"></b>
-				<b class="amp-sprite si-chevron-dark-gray-horiz rotate-180"></b>
+				<b class="fa fa-chevron-left"></b>
+				<b class="fa fa-chevron-left"></b>
 			</a>
 			<a class="pager-nav prev page" href="<?= $url_prev; ?>">
-				<b class="amp-sprite si-chevron-dark-gray-horiz rotate-180"></b>
+				<b class="fa fa-chevron-left"></b>
 			</a>
 		<? } ?>
 
@@ -30,11 +30,11 @@
 
 		<? if ($page < $num_pages) { ?>
 			<a class="pager-nav next page" href="<?= $url_next; ?>">
-				<b class="amp-sprite si-chevron-dark-gray-horiz"></b>
+				<b class="fa fa-chevron-right"></b>
 			</a>
 			<a class="pager-nav last page" href="<?= $url_last; ?>">
-				<b class="amp-sprite si-chevron-dark-gray-horiz"></b>
-				<b class="amp-sprite si-chevron-dark-gray-horiz"></b>
+				<b class="fa fa-chevron-right"></b>
+				<b class="fa fa-chevron-right"></b>
 			</a>
 		<? } ?>
 	</div>

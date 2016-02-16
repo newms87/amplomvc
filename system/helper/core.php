@@ -644,8 +644,6 @@ function _set_site($site, $refresh_settings = false)
 	}
 
 	if ($site) {
-		_set_prefix(isset($site['prefix']) ? $site['prefix'] : DB_PREFIX);
-
 		$registry->get('router')->setSite($site, $refresh_settings);
 
 		return true;

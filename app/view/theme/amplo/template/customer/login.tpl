@@ -33,7 +33,7 @@
 							<div class="one-click">
 								<h3>{{Or Log In With...}}</h3>
 								<? foreach ($medias as $media) { ?>
-									<a href="<?= $media['url']; ?>" class="social-login amp-sprite <?= 'si-' . $media['name'] . ' ' . $size; ?>"></a>
+									<a href="<?= $media['url']; ?>" class="social-login fa <?= 'fa-' . $media['name'] . ' ' . $size; ?>"></a>
 								<? } ?>
 							</div>
 						<? } ?>
@@ -96,7 +96,7 @@
 							<div class="one-click">
 								<h3>{{Or Sign Up With...}}</h3>
 								<? foreach ($medias as $media) { ?>
-									<a href="<?= $media['url']; ?>" class="social-login amp-sprite <?= 'si-' . $media['name'] . ' ' . $size; ?>"></a>
+									<a href="<?= $media['url']; ?>" class="social-login fa <?= 'fa-' . $media['name'] . ' ' . $size; ?>"></a>
 								<? } ?>
 							</div>
 						<? } ?>
