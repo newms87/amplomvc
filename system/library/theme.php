@@ -255,9 +255,9 @@ class Theme extends Library
 	 */
 	public function checkSpriteSheet()
 	{
-		$css_file = theme_dir('css/_sprite.less');
+		$css_file = DIR_THEMES . $this->theme . '/css/_sprite.less';
 
-		if (!$css_file) {
+		if (!is_file($css_file)) {
 			return false;
 		}
 
@@ -281,10 +281,9 @@ class Theme extends Library
 
 	public function getSpriteSheet($nx = 3, $prefix = 'si-', $refresh = false)
 	{
-		$css_file = theme_dir('css/_sprite.less');
+		$css_file = DIR_THEMES . $this->theme . '/css/_sprite.less';
 
-		if ($refresh || !$css_file) {
-			$css_file = DIR_THEMES . $this->theme . '/css/_sprite.less';
+		if ($refresh || !is_file($css_file)) {
 
 			if (!_is_writable(dirname($css_file))) {
 				return false;
