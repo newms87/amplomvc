@@ -991,6 +991,7 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 		text:        'Are you sure you want to continue?',
 		onConfirm:   null,
 		onCancel:    null,
+		onAlways:    null,
 		onClose:     function() {
 			this.remove()
 		},
@@ -1012,8 +1013,12 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 
 	if (o.buttons.confirm && !o.buttons.confirm.action) {
 		o.buttons.confirm.action = function() {
-			if (typeof o.onConfirm === 'function') {
+			if (o.onConfirm) {
 				o.onConfirm.call(this, $(this).closest('.amp-modal'));
+			}
+
+			if (o.onAlways) {
+				o.onAlways.call(this, $(this).closest('.amp-modal'));
 			}
 
 			$(this).ampModal('close');
@@ -1022,8 +1027,12 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 
 	if (o.buttons.cancel && !o.buttons.cancel.action) {
 		o.buttons.cancel.action = function() {
-			if (typeof o.onCancel === 'function') {
+			if (o.onCancel) {
 				o.onCancel.call(this, $(this).closest('.amp-modal'));
+			}
+
+			if (o.onAlways) {
+				o.onAlways.call(this, $(this).closest('.amp-modal'));
 			}
 
 			$(this).ampModal('close');

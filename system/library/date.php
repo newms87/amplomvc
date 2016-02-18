@@ -286,6 +286,12 @@ class Date extends Library
 
 	public function isBefore($d1, $d2)
 	{
+		if ($d1 === DATETIME_ZERO) {
+			return $d1 !== $d2;
+		} elseif ($d2 === DATETIME_ZERO) {
+			return false;
+		}
+
 		$diff = $this->diff($d1, $d2);
 
 		if ($diff) {
@@ -295,6 +301,12 @@ class Date extends Library
 
 	public function isAfter($d1, $d2)
 	{
+		if ($d1 === DATETIME_ZERO) {
+			return false;
+		} elseif ($d2 === DATETIME_ZERO) {
+			return true;
+		}
+
 		$diff = $this->diff($d1, $d2);
 
 		if ($diff) {
