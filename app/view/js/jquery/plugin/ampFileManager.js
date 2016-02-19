@@ -1,3 +1,5 @@
+$.ac_template();
+
 //ampFileManager jQuery Plugin
 $.ampExtend($.ampFileManager = function() {}, {
 	init: function(o) {
