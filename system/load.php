@@ -80,13 +80,6 @@ if (isset($_GET['amp_token'])) {
 	set_cookie($_GET['amp_token'], 1, 31536000, false);
 }
 
-//Route request after helpers (helper/core.php & helper/shortcuts.php required)
-$router->routeRequest();
-
-if (AMPLO_PROFILE) {
-	_profile('Site Routed');
-}
-
 //Customer Override (alternative logins)
 if (!defined("AC_CUSTOMER_OVERRIDE")) {
 	define("AC_CUSTOMER_OVERRIDE", substr(str_shuffle(md5(microtime())), 0, (int)rand(15, 20)));
@@ -105,6 +98,13 @@ if (option('cron_status', true)) {
 	elseif (option('cron_check')) {
 		$registry->get('cron')->check();
 	}
+}
+
+//Route request after helpers (helper/core.php & helper/shortcuts.php required)
+$router->routeRequest();
+
+if (AMPLO_PROFILE) {
+	_profile('Site Routed');
 }
 
 if (AMPLO_PROFILE) {
