@@ -414,7 +414,7 @@ function theme_url($path = '', $query = null, $theme = null)
 	$url = $registry->get('theme')->getUrl($path, $theme);
 
 	if (!$url) {
-		$url = URL_THEME . $path;
+		$url = URL_VIEW . $path;
 	}
 
 	if ($query) {

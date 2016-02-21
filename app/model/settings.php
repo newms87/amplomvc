@@ -156,8 +156,6 @@ class App_Model_Settings extends Model
 
 		if (!$result) {
 			$this->error = $this->config->fetchError();
-		} else {
-			$this->theme->install($settings['site_theme']);
 		}
 
 		return $result;

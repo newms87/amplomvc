@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class Router
 {
 	protected
@@ -153,9 +153,9 @@ class Router
 			$_options = $site + $_options + $settings;
 		}
 
-
 		$this->url->setUrl($site['url']);
 		$this->url->setSsl($site['ssl']);
+		$this->theme->setTheme(IS_ADMIN ? option('admin_theme') : option('site_theme'));
 
 		$this->site = $site;
 	}

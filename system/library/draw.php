@@ -30,7 +30,7 @@ class Draw extends Library
 	{
 		parent::__construct();
 
-		$this->font_path = DIR_THEME . "fonts/";
+		$this->font_path = theme_dir("fonts/");
 
 		$this->set_canvas('default');
 	}

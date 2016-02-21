@@ -1,70 +1,51 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class Theme extends Library
 {
-	private $theme_hierarchy;
-	private $theme;
-	private $settings = array();
+	protected
+		$theme,
+		$settings = array();
 
 	public function __construct()
 	{
 		parent::__construct();
 
-		$admin_theme = option('config_admin_theme', 'admin');
-		$theme       = option('site_theme', AMPLO_DEFAULT_THEME);
-
-		if (!is_dir(DIR_THEMES . $admin_theme)) {
-			save_option('config_admin_theme', 'admin');
-			$admin_theme = 'admin';
-		}
-
-		if (!is_dir(DIR_THEMES . $theme)) {
-			save_option('site_theme', AMPLO_DEFAULT_THEME);
-			$theme = AMPLO_DEFAULT_THEME;
-		}
-
-		if (IS_ADMIN) {
-			$this->theme = $admin_theme;
-		} else {
-			$this->theme    = $theme;
-			$this->settings = option('theme_settings', array());
-
-			if (!$this->settings) {
-				$this->install($this->theme);
-
-				$this->settings = option('theme_settings', array());
-			}
-		}
-
-		$this->settings += array(
-			'parents' => array(),
-		);
-
-		$this->theme_hierarchy = array_merge(array($this->theme), $this->settings['parents']);
-
-		//Url Constants
-		define('URL_THEME', URL_THEMES . $this->theme . '/');
-
-		//Directory Constants
-		define('DIR_THEME', DIR_THEMES . $this->theme . '/');
+		$this->setTheme(IS_ADMIN ? option('admin_theme', 'admin') : option('site_theme', AMPLO_DEFAULT_THEME));
 	}
 
 	public function setTheme($theme)
 	{
-		$this->theme = $theme;
+		if (!$theme || !is_dir(DIR_THEMES . $theme)) {
+			$theme = IS_ADMIN ? 'admin' : AMPLO_DEFAULT_THEME;
+		}
 
-		$this->theme_hierarchy = $this->getThemeParents($theme);
+		if ($this->theme === $theme) {
+			return true;
+		}
 
-		array_unshift($this->theme_hierarchy, $theme);
+		$settings = cache('theme.settings.' . $theme);
+
+		if (!$settings) {
+			$settings = array(
+				'hierarchy' => array_merge(array($theme), $this->getThemeParents($theme)),
+			);
+
+			cache('theme.settings.' . $theme, $settings);
+		}
+
+		$this->theme    = $theme;
+		$this->settings = $settings;
+
+		return true;
 	}
 
 	public function getTheme()
@@ -72,9 +53,9 @@ class Theme extends Library
 		return $this->theme;
 	}
 
-	public function getThemeHierarchy()
+	public function getThemeSettings()
 	{
-		return $this->theme_hierarchy;
+		return $this->settings;
 	}
 
 	public function getThemes($filter = array(), $select = '*', $index = null)
@@ -199,7 +180,7 @@ class Theme extends Library
 		}
 
 		//Resolve the current store themes heirachically
-		foreach ($this->theme_hierarchy as $theme_node) {
+		foreach ($this->settings['hierarchy'] as $theme_node) {
 			if (file_exists(DIR_VIEW . 'theme/' . $theme_node . '/' . $file)) {
 				return 'theme/' . $theme_node . '/' . $file;
 			}
@@ -274,7 +255,7 @@ class Theme extends Library
 	 */
 	public function checkSpriteSheet()
 	{
-		$css_file = DIR_THEME . 'css/_sprite.less';
+		$css_file = DIR_THEMES . $this->theme . '/css/_sprite.less';
 
 		if (!is_file($css_file)) {
 			return false;
@@ -282,7 +263,7 @@ class Theme extends Library
 
 		$modified = filemtime($css_file);
 
-		$theme_nodes   = $this->theme_hierarchy;
+		$theme_nodes   = $this->settings['hierarchy'];
 		$theme_nodes[] = '..';
 
 		foreach ($theme_nodes as $theme_node) {
@@ -300,16 +281,17 @@ class Theme extends Library
 
 	public function getSpriteSheet($nx = 3, $prefix = 'si-', $refresh = false)
 	{
-		$css_file = DIR_THEME . 'css/_sprite.less';
+		$css_file = DIR_THEMES . $this->theme . '/css/_sprite.less';
 
 		if ($refresh || !is_file($css_file)) {
+
 			if (!_is_writable(dirname($css_file))) {
 				return false;
 			}
 
 			$sprites = array();
 
-			$theme_nodes   = $this->theme_hierarchy;
+			$theme_nodes   = $this->settings['hierarchy'];
 			$theme_nodes[] = '..';
 
 			foreach ($theme_nodes as $theme_node) {
@@ -501,14 +483,5 @@ class Theme extends Library
 		}
 
 		return $parents;
-	}
-
-	public function install($theme)
-	{
-		$settings = array(
-			'parents' => $this->getThemeParents($theme),
-		);
-
-		return $this->config->save('general', 'theme_settings', $settings);
 	}
 }
