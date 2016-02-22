@@ -849,11 +849,14 @@ $.ampExtend($.ampModal = function() {}, {
 			o.context.append($modal);
 
 			$content.css({
-				width:     (o.width + o.unit) || 'auto',
-				height:    (o.height + o.unit) || 'auto',
-				maxWidth:  (o.maxWidth + o.unit) || 'none',
-				maxHeight: (o.maxHeight + o.unit) || 'none'
+				width:  (o.width + o.unit) || 'auto',
+				height: (o.height + o.unit) || 'auto',
 			});
+
+			$contentBox.css({
+				maxWidth:  o.maxWidth || 'none',
+				maxHeight: o.maxHeight || 'none'
+			})
 
 			$content.append($e);
 
