@@ -354,6 +354,10 @@ function listview_edit_field(e) {
 
 	if (field) {
 		var $options = $this.closest('.list-view').find('.editable-options');
+		if (!$options.length) {
+			return;
+		}
+
 		$options.children('.show').removeClass('show');
 		$options.find('[data-field="' + field + '"]').addClass('show').find('.input-value').val(value);
 		$this.append($options);
