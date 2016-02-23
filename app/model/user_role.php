@@ -100,6 +100,8 @@ class App_Model_UserRole extends App_Model_Table
 		$perm = $role['permissions'];
 
 		foreach ($path as $p) {
+			$p = str_replace('-', '_', $p);
+
 			if (isset($perm[$p])) {
 				$perm = $perm[$p];
 				continue;
