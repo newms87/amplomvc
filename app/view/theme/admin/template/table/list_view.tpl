@@ -297,7 +297,9 @@
 											$text = $value;
 										}
 
-										if (!preg_match("/<[a-z]+/i", $text)) {
+										if (_is_object($text)) {
+											$text = json_encode($text);
+										} elseif (!preg_match("/<[a-z]+/i", $text)) {
 											$text = nl2br($text);
 										}
 
