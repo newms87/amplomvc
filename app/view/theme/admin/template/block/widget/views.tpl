@@ -124,7 +124,7 @@
 			<a class="create-view button">{{Create Listing}}</a>
 
 			<div class="view-popup create-view-box">
-				<form action="<?= site_url('block/widget/views/create', array('redirect' => $r->url->here())); ?>" method="post">
+				<form action="<?= site_url('block/widget/views/create', array('redirect' => $r->url->here(), 'page_path' => $r->router->getPath())); ?>" method="post">
 					<div class="description">{{Provide your own SELECT SQL Statement. The view will be created as a filterable / sortable table.}}</div>
 					<input type="hidden" name="group" value="<?= $group; ?>"/>
 					<input type="text" name="name" value="{{View Name}}"/>
