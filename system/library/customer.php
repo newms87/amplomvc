@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class Customer extends Library
 {
 	protected $customer_id;
@@ -196,7 +196,7 @@ class Customer extends Library
 		set_cookie('terms_agreed_date', $date);
 
 		if (is_logged()) {
-			set_customer_meta('terms_agreed_date', $date);
+			save_customer_meta('terms_agreed_date', $date);
 		}
 	}
 
@@ -209,11 +209,11 @@ class Customer extends Library
 		return $this->meta;
 	}
 
-	public function setMeta($key, $value)
+	public function saveMeta($key, $value)
 	{
 		$this->meta[$key] = $value;
 
-		$meta_id = $this->Model_Customer->setMeta($this->customer_id, $key, $value);
+		$meta_id = $this->Model_Customer->saveMeta($this->customer_id, $key, $value);
 
 		if (!$meta_id) {
 			$this->error = $this->Model_Customer->fetchError();
@@ -242,13 +242,7 @@ class Customer extends Library
 
 	public function setInfo($key, $value)
 	{
-		if ($this->customer_id) {
-			if ($this->Model_Customer->save($this->customer_id, array($key => $value))) {
-				$this->info[$key] = $value;
-			}
-		}
-
-		return false;
+		$this->info[$key] = $value;
 	}
 
 	public function getIps($customer_id)
@@ -352,7 +346,7 @@ class Customer extends Library
 		if ($customer_id) {
 			$this->customer_id = $customer_id;
 
-			return $this->setMeta('pass_reset_code', $code);
+			return $this->saveMeta('pass_reset_code', $code);
 		}
 
 		if (!validate('email', $email)) {

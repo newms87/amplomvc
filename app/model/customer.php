@@ -129,7 +129,7 @@ class App_Model_Customer extends App_Model_Table
 		return $this->insert('customer_meta', $customer_meta);
 	}
 
-	public function setMeta($customer_id, $key, $value)
+	public function saveMeta($customer_id, $key, $value)
 	{
 		$this->deleteMeta($customer_id, $key);
 

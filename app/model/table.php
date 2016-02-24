@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 abstract class App_Model_Table extends Model
 {
 	protected $primary_key, $table;
@@ -60,7 +60,7 @@ abstract class App_Model_Table extends Model
 
 		if ($record_id) {
 			if (isset($data['meta'])) {
-				$this->Model_Meta->setAll($this->table, $record_id, $data['meta']);
+				$this->Model_Meta->saveAll($this->table, $record_id, $data['meta']);
 			}
 
 			clear_cache($this->table . '.rows');
@@ -92,6 +92,7 @@ abstract class App_Model_Table extends Model
 	{
 		if (!$filter) {
 			$this->error = _l("Must set filter value. Do not use removeWhere to delete all records.");
+
 			return false;
 		}
 

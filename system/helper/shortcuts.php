@@ -582,14 +582,14 @@ function customer_meta($key, $default = null)
 	return $registry->get('customer')->meta($key, $default);
 }
 
-function set_customer_meta($key, $value)
+function save_customer_meta($key, $value)
 {
 	global $registry;
 
 	if ($value === null) {
 		return $registry->get('customer')->removeMeta($key);
 	} else {
-		return $registry->get('customer')->setMeta($key, $value);
+		return $registry->get('customer')->saveMeta($key, $value);
 	}
 }
 
@@ -629,11 +629,11 @@ function user_meta($key, $default = null)
 	return $registry->get('user')->meta($key, $default);
 }
 
-function set_user_meta($key, $value = null)
+function save_user_meta($key, $value = null)
 {
 	global $registry;
 
-	return $registry->get('user')->setMeta($key, $value);
+	return $registry->get('user')->saveMeta($key, $value);
 }
 
 function get_user_info($user_id, $key = null, $default = null)

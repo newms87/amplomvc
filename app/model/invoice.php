@@ -98,7 +98,7 @@ class App_Model_Invoice extends App_Model_Table
 		if ($invoice_id) {
 			if ($meta_type && !empty($invoice['batch'])) {
 				foreach ($invoice['batch'] as $line_item) {
-					$this->Model_Meta->set($meta_type, $line_item, 'invoiced', $invoice_id);
+					$this->Model_Meta->save($meta_type, $line_item, 'invoiced', $invoice_id);
 				}
 			}
 		}

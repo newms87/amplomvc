@@ -1,19 +1,19 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Meta extends App_Model_Table
 {
 	protected $table = 'meta', $primary_key = 'meta_id', $meta = array();
 
-	public function set($type, $record_id, $key, $value)
+	public function save($type, $record_id, $key = null, $value = null)
 	{
 		$serialized = (int)_is_object($value);
 
@@ -47,7 +47,7 @@ class App_Model_Meta extends App_Model_Table
 		}
 	}
 
-	public function setAll($type, $record_id, $data)
+	public function saveAll($type, $record_id, $data)
 	{
 		foreach ($data as $key => $value) {
 			$this->set($type, $record_id, $key, $value);

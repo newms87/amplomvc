@@ -227,14 +227,14 @@ class User extends Library
 		return true;
 	}
 
-	public function setMeta($key, $value = null)
+	public function saveMeta($key, $value = null)
 	{
 		if ($this->user) {
 			if (is_array($key)) {
-				return $this->Model_Meta->setAll('user', $this->user['user_id'], $key);
+				return $this->Model_Meta->saveAll('user', $this->user['user_id'], $key);
 			}
 
-			return $this->Model_Meta->set('user', $this->user['user_id'], $key, $value);
+			return $this->Model_Meta->save('user', $this->user['user_id'], $key, $value);
 		}
 	}
 
@@ -251,7 +251,7 @@ class User extends Library
 		if ($this->user && $user_id !== $this->user['user_id']) {
 			$alerts              = $this->getAlerts($user_id);
 			$alerts[$type][$key] = $message;
-			$this->Model_Meta->set('user', $user_id, 'alert', $alerts);
+			$this->Model_Meta->save('user', $user_id, 'alert', $alerts);
 		} else {
 			//Alert user immediately
 			if ($this->alerts === null) {
@@ -349,7 +349,7 @@ class User extends Library
 
 		$code = $this->generateCode();
 
-		$this->Model_Meta->set('user', $user_id, 'pass_reset_code', $code);
+		$this->Model_Meta->save('user', $user_id, 'pass_reset_code', $code);
 
 		$email_data = array(
 			'reset' => site_url('admin/user/reset-form', 'code=' . $code),
