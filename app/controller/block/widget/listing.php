@@ -46,7 +46,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 		);
 
 		if ($settings['export']) {
-			$this->export($settings);
+			return $this->export($settings);
 		}
 
 		if (!empty($settings['records'])) {
