@@ -95,7 +95,7 @@ class App_Controller_Account extends Controller
 		if ($email) {
 			if ($customer_email) {
 				if ($customer_email === $email) {
-					$this->customer->setMeta('confirmed_email', $email);
+					$this->customer->saveMeta('confirmed_email', $email);
 					message('confirm-email', _l("Thank you! Your email has been confirmed!"), 'confirm');
 				} else {
 					message('error', _l("Your email did not match your registered email address %s. Please log in to your account using username %s.", $customer_email, $email));

@@ -186,7 +186,6 @@ $.ampExtend($.ampFileManager = function() {}, {
 				return this;
 			}
 
-
 			if (filter.folder_id && o.breadcrumbs.length) {
 				for (var b in o.breadcrumbs) {
 					if (o.breadcrumbs[b].file_id == filter.folder_id) {

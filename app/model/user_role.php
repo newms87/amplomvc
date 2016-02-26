@@ -96,7 +96,7 @@ class App_Model_UserRole extends App_Model_Table
 			$level = 'w';
 		}
 
-		$path = explode('/', $action);
+		$path = explode('/', str_replace('-', '_', $action));
 		$perm = $role['permissions'];
 
 		foreach ($path as $p) {

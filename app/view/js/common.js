@@ -932,6 +932,10 @@ $.ampExtend($.ampModal = function() {}, {
 					}
 				})
 			}
+
+			if (o.onReady) {
+				o.onReady.call($modal);
+			}
 		});
 	},
 
