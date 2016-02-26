@@ -15,10 +15,19 @@ $.ampExtend('ampListing', {
 		}
 
 		$listing.find('.export-view').click(function() {
-			if (confirm("Do you want to export the full data set?")) {
-				window.location = $(this).attr('href') + '&limit=0';
-				return false;
-			}
+			var url = $(this).attr('href');
+			var $listing = $(this).closest('.listing');
+			var rows = $listing.find('.filter-list-item').length;
+
+			$.ampConfirm({
+				title:     "Export Current Record List",
+				text:      "How many rows would you like to export? (set to 0 or leave blank for all rows)<br><input type=\"text\" class=\"export-rows\" value=\"" + rows + "\" />",
+				onConfirm: function($modal) {
+					location = url + '&limit=' + $modal.find('.export-rows').val();
+				}
+			});
+
+			return false;
 		});
 
 		$listing.find('.pagination a, .sortable, .filter-button, .reset-button, .block-widget-limit a, .refresh-listing').click(update_list_widget);
