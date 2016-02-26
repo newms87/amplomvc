@@ -155,8 +155,8 @@ abstract class App_Model_Table extends Model
 		//Where
 		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter);
 
-		$group_by = !empty($options['group_by']) ? $options['group_by'] : '';
-		$having   = !empty($options['having']) ? $options['having'] : '';
+		$group_by = !empty($options['group_by']) ? "GROUP BY " . $options['group_by'] : '';
+		$having   = !empty($options['having']) ? "HAVING " . $options['having'] : '';
 
 		//Order
 		$order = $this->extractOrder($sort, $tbl);
@@ -164,8 +164,10 @@ abstract class App_Model_Table extends Model
 		//Limit
 		$limit = $this->extractLimit($options);
 
+		$sql_calc_found_rows = isset($options['sql_calc_found_rows']) ? $options['sql_calc_found_rows'] : null;
+
 		//The Query
-		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $group_by $having $order $limit", !empty($options['index']) ? $options['index'] : null, $total);
+		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $group_by $having $order $limit", !empty($options['index']) ? $options['index'] : null, $total, $sql_calc_found_rows);
 
 		//Get Meta Data
 		if (!empty($options['meta'])) {

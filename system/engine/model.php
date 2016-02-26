@@ -145,10 +145,10 @@ abstract class Model
 		return $this->db->queryRow($sql);
 	}
 
-	protected function queryRows($sql, $index = null, $total = false)
+	protected function queryRows($sql, $index = null, $total = false, $sql_calc_found_rows = null)
 	{
 		if ($total) {
-			return $this->queryTotal($sql, $index);
+			return $this->queryTotal($sql, $index, $sql_calc_found_rows);
 		}
 
 		return $this->db->queryRows($sql, $index);
@@ -544,10 +544,14 @@ abstract class Model
 			if (is_string($options['columns'])) {
 				$select .= ' ' . $options['columns'];
 			} else {
-				$columns = array_intersect_key($options['columns'], $this->getTableColumns($table));
+				$table_columns = $this->getTableColumns($table);
 
-				foreach ($columns as $col => $data) {
-					$select .= ($select ? ',' : '') . "`$t`.`$col`";
+				foreach ($options['columns'] as $col => $data) {
+					if (!empty($data['field'])) {
+						$select .= ($select ? ',' : '') . $data['field'] . ' as ' . $col;
+					} elseif (isset($table_columns[$col])) {
+						$select .= ($select ? ',' : '') . "`$t`.`$col`";
+					}
 				}
 			}
 		} else {
@@ -868,6 +872,10 @@ abstract class Model
 	{
 		//Use EXPLAIN to determine optimal performance
 		if (!$sort && !$filter) {
+			if (preg_match("/GROUP BY /i", $table)) {
+				return true;
+			}
+
 			$results = $this->queryRows("EXPLAIN $table");
 
 			$fast_types = array(
@@ -911,24 +919,28 @@ abstract class Model
 
 	public function getTableColumns($table, $filter = array(), $merge = array(), $sort = true)
 	{
-		$table_model = $this->getTableModel($table);
+		$table_model = $table ? $this->getTableModel($table) : false;
 
-		if (!$table_model) {
-			return $merge;
-		}
+		if ($table_model) {
+			$columns = $table_model['columns'];
 
-		$columns = $table_model['columns'];
-
-		//Merge
-		if ($merge) {
-			foreach ($merge as $field => $data) {
-				if (isset($columns[$field])) {
-					$columns[$field] = $data + $columns[$field];
-				} //$filter === false - only return merged columns when specifically requested (do not want these if building query for example)
-				elseif (!$filter || isset($filter[$field])) {
-					$columns[$field] = $data;
+			//Merge
+			if ($merge) {
+				foreach ($merge as $field => $data) {
+					if (isset($columns[$field])) {
+						$columns[$field] = $data + $columns[$field];
+					} //$filter === false - only return merged columns when specifically requested (do not want these if building query for example)
+					elseif (!$filter || isset($filter[$field])) {
+						$columns[$field] = $data;
+					}
 				}
 			}
+		} else {
+			$columns = $merge;
+		}
+
+		if (!$columns) {
+			return array();
 		}
 
 		//Filter
