@@ -50,7 +50,7 @@ class App_Model_Meta extends App_Model_Table
 	public function saveAll($type, $record_id, $data)
 	{
 		foreach ($data as $key => $value) {
-			$this->set($type, $record_id, $key, $value);
+			$this->save($type, $record_id, $key, $value);
 		}
 
 		return true;
