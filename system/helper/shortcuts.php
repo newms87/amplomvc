@@ -208,14 +208,12 @@ function image_srcset($srcsets, $nx = 3, $alt = null, $title = null)
 	}
 
 	if (!is_array($srcsets)) {
-		$srcsets = array(
-			1 => $srcsets,
-		);
+		$path    = pathinfo($srcsets);
+		$srcsets = array();
+	} else {
+		reset($srcsets);
+		$path = pathinfo(current($srcsets));
 	}
-
-	reset($srcsets);
-
-	$path = pathinfo(current($srcsets));
 
 	if (empty($path['filename'])) {
 		return '';
@@ -223,7 +221,7 @@ function image_srcset($srcsets, $nx = 3, $alt = null, $title = null)
 
 	while ($nx > 0) {
 		if (empty($srcsets[$nx])) {
-			$path['filename'] = preg_replace("/[-@]1x$/", '', $path['filename']);
+			$path['filename'] = preg_replace("/[-@]\\dx$/", '', $path['filename']);
 
 			$src_name = image($path['dirname'] . '/' . $path['filename'] . '@' . $nx . 'x.' . $path['extension']);
 

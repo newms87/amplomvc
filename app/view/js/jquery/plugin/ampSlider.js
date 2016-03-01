@@ -73,7 +73,18 @@ $.ampExtend($.ampSlider = function() {}, {
 
 		o.edge = o.slideList.width() - o.viewport.width();
 
-		this.find('.amp-control').toggleClass('hidden', o.edge <= 0);
+		this.find('.amp-control').toggleClass('hidden', o.edge <= 0).click(function() {
+			var $t = $(this);
+			var $ampSlider = $t.closest('.amp-slider');
+
+			if ($t.is('.amp-control-prev')) {
+				$ampSlider.ampSlider('prevSlide');
+			} else if ($t.is('.amp-control-next')) {
+				$ampSlider.ampSlider('nextSlide');
+			} else if ($t.is('.amp-control-slide')) {
+				$ampSlider.ampSlider('slideTo', +$t.attr('data-slide-index'));
+			}
+		});
 
 		for (var i in o.slides) {
 			var s = o.slides[i];
