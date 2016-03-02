@@ -374,12 +374,13 @@ abstract class Model
 		return true;
 	}
 
-	public function history($table, $record_id, $action, $data, $message = null)
+	public function history($table, $record_id, $action, $data, $message = null, $status = null)
 	{
-		if (strpos($table, 'history') === false) {
-			$model_table = $this->t[$this->table];
-			$columns     = $table === $model_table ? $this->getColumns() : $this->getTableColumns($table);
-			$data        = array_intersect_key($data, $columns);
+		$table = $this->t[$table];
+
+		if ($table !== $this->t['history']) {
+			$columns = $this->getTableColumns($table);
+			$data    = array_intersect_key($data, $columns);
 
 			$json_data = json_encode($data);
 
@@ -391,12 +392,6 @@ abstract class Model
 					file_put_contents($history_file, $json_data);
 					$json_data = $history_file;
 				}
-			}
-
-			$status = !empty($data['status']) ? $data['status'] : null;
-
-			if ($status !== null && $table === $model_table) {
-				$status = !empty($columns['status']['build']) ? get_build_value($columns['status']['build'], $data['status']) : '';
 			}
 
 			$history = array(

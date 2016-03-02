@@ -246,4 +246,21 @@ abstract class App_Model_Table extends Model
 			}
 		}
 	}
+
+	public function history($table, $record_id, $action, $data, $message = null, $status = null)
+	{
+		$table = $this->t[$table];
+
+		if ($status === null && $table !== $this->t['history'] && $this->t[$this->table] === $table) {
+			$columns = $this->getColumns();
+
+			$status = !empty($data['status']) ? $data['status'] : null;
+
+			if ($status !== null) {
+				$status = !empty($columns['status']['build']) ? get_build_value($columns['status']['build'], $data['status']) : '';
+			}
+		}
+
+		return parent::history($table, $record_id, $action, $data, $message, $status);
+	}
 }
