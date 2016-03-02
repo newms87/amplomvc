@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
@@ -23,7 +23,7 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 			redirect('admin/user/login');
 		}
 
-		switch($this->router->getMethod()) {
+		switch ($this->router->getMethod()) {
 			case 'create':
 			case 'save_view':
 			case 'remove_view':
@@ -155,6 +155,14 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 				$view['query'] = $settings['query'] + $listing['query'] + $view['query'];
 
+				$view['query'] += array(
+					'sort'   => array(),
+					'filter' => array(),
+				);
+
+				$view['query']['sort']   = (array)_get('sort') + $view['query']['sort'];
+				$view['query']['filter'] = (array)_get('filter') + $view['query']['filter'];
+
 				$_GET     = $view['query'];
 				$_REQUEST = $view['query'];
 
@@ -191,9 +199,9 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 
 		//$settings['data_user_groups'] = $this->Model_User->getUserGroups();
 
-		$page_path = $this->router->getPath();
+		$page_path              = $this->router->getPath();
 		$settings['can_modify'] = user_can('w', $page_path);
-		$settings['page_path'] = $page_path;
+		$settings['page_path']  = $page_path;
 
 		//Render
 		$this->render('block/widget/views', $settings);
