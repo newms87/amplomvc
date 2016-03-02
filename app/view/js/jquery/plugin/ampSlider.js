@@ -1,12 +1,16 @@
 $.ampExtend($.ampSlider = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {
-			boundEdge:       true,
-			onReady:         null,
-			onSlide:         null,
-			autoPlay:        false,
-			transitionDelay: 5000,
-			isPlaying:       false
+			boundEdge:          true,
+			onReady:            null,
+			onSlide:            null,
+			autoPlay:           false,
+			transitionDelay:    5000,
+			isPlaying:          false,
+			stopOnControlClick: true,
+			pauseOnHover:       false,
+			slidesPerPage:      null,
+			slideWidth:         null
 		}, o);
 
 		return this.each(function() {
@@ -16,6 +20,8 @@ $.ampExtend($.ampSlider = function() {}, {
 				o.slideList = $('<div />').addClass('amp-slide-list')
 
 				$children = $slider.children()
+
+				o.childrenInContext = true;
 			} else {
 				$children = o.slideList.children();
 			}
@@ -25,14 +31,19 @@ $.ampExtend($.ampSlider = function() {}, {
 				return;
 			}
 
-			$children.each(function() {
-				$(this).width($(this).width());
-			})
-
-			o.slideList.append($children);
-
 			if (!(o.viewport = $slider.find('.amp-viewport')).length) {
 				o.viewport = $('<div />').addClass('amp-viewport');
+			}
+
+			//Setup default width
+			if (!o.slideWidth && !o.slidesPerPage) {
+				$children.each(function() {
+					$(this).width($(this).width());
+				})
+			}
+
+			if (o.childrenInContext) {
+				o.slideList.append($children);
 			}
 
 			//if elements not already in context, append to correct parent
@@ -92,10 +103,18 @@ $.ampExtend($.ampSlider = function() {}, {
 			slides:  []
 		})
 
+		if (o.slidesPerPage) {
+			o.slideWidth = o.viewport.width() / o.slidesPerPage;
+		}
+
 		o.slideList.children().each(function(i, e) {
+			var $e = $(e);
+
+			$e.width(o.slideWidth || $e.width());
+
 			o.slides[i] = {
-				x:     -$(e).position().left,
-				width: $(e).outerWidth()
+				x:     -$e.position().left,
+				width: $e.outerWidth()
 			};
 		})
 
@@ -104,9 +123,10 @@ $.ampExtend($.ampSlider = function() {}, {
 
 		o.edge = o.slideList.width() - o.viewport.width();
 
-		this.find('.amp-control').toggleClass('hidden', o.edge <= 0).click(function() {
+		this.find('.amp-control').use_once().toggleClass('hidden', o.edge <= 0).click(function() {
 			var $t = $(this);
 			var $slider = $t.closest('.amp-slider');
+			var o = $slider.getOptions();
 
 			if ($t.is('.amp-control-prev')) {
 				$slider.ampSlider('prevSlide');
@@ -115,7 +135,15 @@ $.ampExtend($.ampSlider = function() {}, {
 			} else if ($t.is('.amp-control-slide')) {
 				$slider.ampSlider('slideTo', +$t.attr('data-slide-index'));
 			}
+
+			if (o.stopOnControlClick) {
+				$slider.ampSlider('stop');
+			}
 		});
+
+		if (o.pauseOnHover) {
+			this.use_once('on-slider-hover').hover(function() {$(this).ampSlider('stop')}, function() {$(this).ampSlider('play')})
+		}
 
 		for (var i in o.slides) {
 			var s = o.slides[i];
@@ -125,6 +153,8 @@ $.ampExtend($.ampSlider = function() {}, {
 				break;
 			}
 		}
+
+		this.ampSlider('slideTo', o.current);
 
 		return this;
 	},
