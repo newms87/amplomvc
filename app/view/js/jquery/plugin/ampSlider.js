@@ -1,9 +1,12 @@
 $.ampExtend($.ampSlider = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {
-			boundEdge: true,
-			onReady:   null,
-			onSlide:   null
+			boundEdge:       true,
+			onReady:         null,
+			onSlide:         null,
+			autoPlay:        false,
+			transitionDelay: 5000,
+			isPlaying:       false
 		}, o);
 
 		return this.each(function() {
@@ -47,7 +50,35 @@ $.ampExtend($.ampSlider = function() {}, {
 			if (o.onReady) {
 				o.onReady.call($slider);
 			}
+
+			if (o.autoPlay) {
+				$slider.ampSlider('play');
+			}
 		});
+	},
+
+	play: function() {
+		var $slider = this;
+		var o = $slider.getOptions();
+
+		o.isPlaying = true;
+		$slider.ampSlider('playing');
+	},
+
+	playing: function() {
+		var $slider = this;
+		var o = $slider.getOptions();
+
+		setTimeout(function() {
+			if (o.isPlaying) {
+				$slider.ampSlider('nextSlide').ampSlider('playing');
+			}
+		}, o.transitionDelay)
+	},
+
+	stop: function() {
+		var o = this.getOptions();
+		o.isPlaying = false;
 	},
 
 	reset: function() {
@@ -75,14 +106,14 @@ $.ampExtend($.ampSlider = function() {}, {
 
 		this.find('.amp-control').toggleClass('hidden', o.edge <= 0).click(function() {
 			var $t = $(this);
-			var $ampSlider = $t.closest('.amp-slider');
+			var $slider = $t.closest('.amp-slider');
 
 			if ($t.is('.amp-control-prev')) {
-				$ampSlider.ampSlider('prevSlide');
+				$slider.ampSlider('prevSlide');
 			} else if ($t.is('.amp-control-next')) {
-				$ampSlider.ampSlider('nextSlide');
+				$slider.ampSlider('nextSlide');
 			} else if ($t.is('.amp-control-slide')) {
-				$ampSlider.ampSlider('slideTo', +$t.attr('data-slide-index'));
+				$slider.ampSlider('slideTo', +$t.attr('data-slide-index'));
 			}
 		});
 
