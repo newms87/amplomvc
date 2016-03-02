@@ -377,8 +377,9 @@ abstract class Model
 	public function history($table, $record_id, $action, $data, $message = null)
 	{
 		if (strpos($table, 'history') === false) {
-			$columns = $table === $this->table ? $this->getColumns() : $this->getTableColumns($table);
-			$data    = array_intersect_key($data, $columns);
+			$model_table = $this->t[$this->table];
+			$columns     = $table === $model_table ? $this->getColumns() : $this->getTableColumns($table);
+			$data        = array_intersect_key($data, $columns);
 
 			$json_data = json_encode($data);
 
@@ -394,7 +395,7 @@ abstract class Model
 
 			$status = !empty($data['status']) ? $data['status'] : null;
 
-			if ($status !== null && $table === $this->table) {
+			if ($status !== null && $table === $model_table) {
 				$status = !empty($columns['status']['build']) ? get_build_value($columns['status']['build'], $data['status']) : '';
 			}
 
