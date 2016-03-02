@@ -1007,6 +1007,31 @@ HTML;
 	}
 }
 
+function get_build_value($build, $value, $default = null)
+{
+	$build += array(
+		'value' => '',
+		'label' => '',
+		'data'  => array(),
+	);
+
+	if ($build['value']) {
+		foreach ($build['data'] as $status_key => $status_data) {
+			if (!is_array($status_data)) {
+				if ($status_key === $value) {
+					return $status_data;
+				}
+			} else {
+				if (isset($status_data[$build['value']]) && $status_data[$build['value']] === $value) {
+					return !empty($status_data[$build['label']]) ? $status_data[$build['label']] : $default;
+				}
+			}
+		}
+	}
+
+	return !empty($build['data'][$value]) ? $build['data'][$value] : $default;
+}
+
 function build_links($links, $options = array(), $active_url = null, &$is_active = false)
 {
 	global $registry;

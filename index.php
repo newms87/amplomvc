@@ -9,7 +9,7 @@
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
 
-define('AMPLO_VERSION', '0.3.7');
+define('AMPLO_VERSION', '0.3.8');
 
 if (is_file(dirname(__FILE__) . '/config.php')) {
 	include_once(dirname(__FILE__) . '/config.php');

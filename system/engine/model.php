@@ -377,7 +377,7 @@ abstract class Model
 	public function history($table, $record_id, $action, $data, $message = null)
 	{
 		if (strpos($table, 'history') === false) {
-			$columns = $this->getTableColumns($table);
+			$columns = $table === $this->table ? $this->getColumns() : $this->getTableColumns($table);
 			$data    = array_intersect_key($data, $columns);
 
 			$json_data = json_encode($data);
@@ -392,11 +392,18 @@ abstract class Model
 				}
 			}
 
+			$status = !empty($data['status']) ? $data['status'] : null;
+
+			if ($status !== null && $table === $this->table) {
+				$status = !empty($columns['status']['build']) ? get_build_value($columns['status']['build'], $data['status']) : '';
+			}
+
 			$history = array(
 				'user_id'   => user_info('user_id'),
 				'table'     => $table,
 				'record_id' => $record_id,
 				'action'    => $action,
+				'status'    => $status,
 				'data'      => $json_data,
 				'date'      => $this->date->now(),
 			);
@@ -547,7 +554,9 @@ abstract class Model
 				$table_columns = $this->getTableColumns($table);
 
 				foreach ($options['columns'] as $col => $data) {
-					if (!empty($data['field'])) {
+					if (strpos($col, '#') === 0) {
+						$select .= ($select ? ',' : '') . $data;
+					} elseif (!empty($data['field'])) {
 						$select .= ($select ? ',' : '') . $data['field'] . ' as ' . $col;
 					} elseif (isset($table_columns[$col])) {
 						$select .= ($select ? ',' : '') . "`$t`.`$col`";
