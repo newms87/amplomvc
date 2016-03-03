@@ -230,6 +230,8 @@ class User extends Library
 	public function saveMeta($key, $value = null)
 	{
 		if ($this->user) {
+			unset($_SESSION['user']);
+
 			if (is_array($key)) {
 				return $this->Model_Meta->saveAll('user', $this->user['user_id'], $key);
 			}
@@ -241,6 +243,8 @@ class User extends Library
 	public function removeMeta($key, $value = null)
 	{
 		if ($this->user) {
+			unset($_SESSION['user']);
+
 			return $this->Model_Meta->removeKey('user', $this->user['user_id'], $key, $value);
 		}
 	}

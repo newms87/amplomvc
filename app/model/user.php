@@ -62,7 +62,14 @@ class App_Model_User extends App_Model_Table
 			$user['date_added'] = $this->date->now();
 		}
 
-		return parent::save($user_id, $user);
+		$user_id = parent::save($user_id, $user);
+
+		//This clears the cache set in the user library
+		if ($user_id && user_info('user_id') == $user_id) {
+			unset($_SESSION['user']);
+		}
+
+		return $user_id;
 	}
 
 	public function getUser($user_id)
