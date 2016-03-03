@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Contact extends App_Model_Table
 {
 	protected $table = 'contact', $primary_key = 'contact_id';
@@ -35,7 +35,7 @@ class App_Model_Contact extends App_Model_Table
 		}
 
 		if (!empty($contact['name']) && !isset($contact['first_name']) && !isset($contact['last_name'])) {
-			$name_parts = explode(' ', $contact['name'], 2);
+			$name_parts            = explode(' ', $contact['name'], 2);
 			$contact['first_name'] = $name_parts[0];
 
 			if (isset($name_parts[1])) {
@@ -55,10 +55,12 @@ class App_Model_Contact extends App_Model_Table
 
 			$contact['address_id'] = $this->Model_Address->save($this->Model_Contact->getField($contact_id, 'address_id'), $contact['address']);
 
-			if (!empty($contact['address_required']) && !$contact['address_id']) {
+			if (!$contact['address_id']) {
 				$this->error += $this->Model_Address->fetchError();
 
-				return false;
+				if (!empty($contact['address_required'])) {
+					return false;
+				}
 			}
 		}
 

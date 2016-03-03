@@ -144,7 +144,7 @@
 								<?= build(array(
 									'type'          => 'select',
 									'name'          => 'address[zone_id]',
-									'data'          => $data['zones'],
+									'data'          => array('' => "{{(Select State)}}") + $data['zones'],
 									'value'         => 'zone_id',
 									'label'         => 'name',
 									'#autocomplete' => 'state',
