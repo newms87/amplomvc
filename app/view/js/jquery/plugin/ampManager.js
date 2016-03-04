@@ -139,7 +139,7 @@ $.ampExtend($.ampManager = function() {}, {
 		o.selected = selected;
 
 		if (is_changed) {
-			if (o.input.length) {
+			if (o.input && o.input.length) {
 				o.input.val(o.selected).change();
 			}
 
