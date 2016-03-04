@@ -413,20 +413,20 @@ $.ampExtend($.ampManager = function() {}, {
 			return false;
 		})
 
-		$searchForm.find('input')
-			.on('keyup', function(e) {
-				if (e.keyCode === 13) {
-					e.stopPropagation();
-					return false;
-				}
-			})
-			.ampDelay({
-				callback: function() {
-					$(this).closest('.amp-nested-form').submit();
-				},
-				delay:    200,
-				on:       'keyup'
-			});
+		$searchForm.ampDelay({
+			callback: function() {
+				$(this).closest('.amp-nested-form').submit();
+			},
+			delay:    200,
+			on:       'keyup change'
+		});
+
+		$searchForm.find('input').on('keyup', function(e) {
+			if (e.keyCode === 13) {
+				e.stopPropagation();
+				return false;
+			}
+		})
 
 		$am.find('.am-record[data-row=__ac_template__]').ac_template(o.template_id);
 
