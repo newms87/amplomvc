@@ -24,6 +24,7 @@ $.ampExtend($.ampManager = function() {}, {
 			onAppend:       null,
 			onChange:       null,
 			onEdit:         null,
+			onReady:        null,
 			url:            $ac.site_url + 'manager/',
 			removeUrl:      null,
 			listingUrl:     null,
@@ -118,15 +119,17 @@ $.ampExtend($.ampManager = function() {}, {
 			is_changed = $am.find('.am-record.is-selected').length;
 			$am.find('.am-record').removeClass('is-selected');
 		} else if (o.selectMultiple) {
-			$record.toggleClass('is-selected');
+			record_id = $record.toggleClass('is-selected').attr('data-am-record-id');
 
-			selected = []
+			selected = o.selected || [];
 
-			$am.find('.am-record.is-selected').each(function() {
-				selected.push($(this).attr('data-am-record-id'))
-			})
-
-			is_changed = o.selected.toString() === selected.toString();
+			if ($record.hasClass('is-selected')) {
+				selected.push(record_id)
+				is_changed = true;
+			} else if ((index = selected.indexOf(record_id.toString())) >= 0) {
+				selected.splice(index, 1)
+				is_changed = true;
+			}
 		} else {
 			$am.find('.am-record').removeClass('is-selected');
 			selected = $record.addClass('is-selected').attr('data-am-record-id');
@@ -145,7 +148,7 @@ $.ampExtend($.ampManager = function() {}, {
 			}
 
 			if (o.onChange) {
-				o.onChange.call($am, o.selected, $record, $record.data('record'));
+				o.onChange.call($am, o.selected, $record, $record.data('record'), $record.hasClass('is-selected'));
 			}
 		}
 
@@ -174,6 +177,12 @@ $.ampExtend($.ampManager = function() {}, {
 		}
 	},
 
+	setSelected: function(selected) {
+		var o = this.getOptions();
+		o.selected = selected;
+		return this;
+	},
+
 	editRecord: function($record, record) {
 		var $am = this;
 		var o = $am.getOptions();
@@ -193,7 +202,7 @@ $.ampExtend($.ampManager = function() {}, {
 		return this;
 	},
 
-	get: function(listing) {
+	get: function(listing, callback) {
 		var $am = this;
 		var o = $am.getOptions();
 
@@ -202,6 +211,10 @@ $.ampExtend($.ampManager = function() {}, {
 
 			if (!listing) {
 				$am.toggleClass('has-records', !!+response.total).toggleClass('no-records', !+response.total);
+			}
+
+			if (callback) {
+				callback.call($am);
 			}
 		})
 
@@ -221,14 +234,6 @@ $.ampExtend($.ampManager = function() {}, {
 				var record = records[c];
 				$am.ampManager('append', record);
 			}
-
-			if (o.selectMultiple) {
-				for (var s in o.selected) {
-					$recordList.find('[data-am-record-id=' + o.selected[s] + ']').addClass('is-selected');
-				}
-			} else {
-				$recordList.find('[data-am-record-id=' + o.selected + ']').addClass('is-selected');
-			}
 		}
 
 		if (o.onResults) {
@@ -244,6 +249,11 @@ $.ampExtend($.ampManager = function() {}, {
 
 		record.id = record[o.type_id];
 
+		//record already exists
+		if ($recordList.find('[data-am-record-id=' + record.id + ']').length) {
+			return this;
+		}
+
 		var $record = $recordList.ac_template(o.template_id, 'add', record);
 
 		$record.data('record', record);
@@ -255,6 +265,14 @@ $.ampExtend($.ampManager = function() {}, {
 		this.ampManager('sync', $record.find('[data-name]'), record);
 
 		$record.attr('data-am-record-id', record.id);
+
+		if (o.selectMultiple) {
+			if (o.selected && o.selected.indexOf(record.id.toString()) >= 0) {
+				$record.addClass('is-selected');
+			}
+		} else {
+			$record.toggleClass('is-selected', record.id == o.selected);
+		}
 
 		$recordList.append($record);
 
@@ -415,7 +433,9 @@ $.ampExtend($.ampManager = function() {}, {
 		$am.addClass('is-empty no-records');
 
 		if (o.loadListings) {
-			$am.ampManager('get');
+			$am.ampManager('get', null, o.onReady);
+		} else if (o.onReady) {
+			o.onReady.call(this);
 		}
 
 		return this;

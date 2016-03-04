@@ -73,10 +73,10 @@ abstract class App_Controller_Table extends Controller
 		output($this->render($options['template'], $options));
 	}
 
-	public function get_records($options = array())
+	public function get_records($sort = array(), $filter = array(), $options = array())
 	{
-		$sort   = (array)_request('sort', !empty($options['sort_default']) ? $options['sort_default'] : null);
-		$filter = (array)_request('filter', !empty($options['filter_default']) ? $options['filter_default'] : null);
+		$sort   += (array)_request('sort', !empty($options['sort_default']) ? $options['sort_default'] : null);
+		$filter += (array)_request('filter', !empty($options['filter_default']) ? $options['filter_default'] : null);
 
 		$filter['customer_id'] = customer_info('customer_id');
 
