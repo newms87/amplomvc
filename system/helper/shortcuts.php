@@ -672,6 +672,30 @@ function validate($method, $value)
 	), $args);
 }
 
+function date_compare($date1, $op, $date2 = null)
+{
+	global $registry;
+
+	$date = $registry->get('date');
+
+	switch ($op) {
+		case '<':
+			return $date->isBefore($date1, $date2);
+
+		case '<=':
+			return $date->isBefore($date1, $date2) ?: $date->isEqual($date1, $date2);
+
+		case '>':
+			return $date->isAfter($date1, $date2);
+
+		case '>=':
+			return $date->isAfter($date1, $date2) ?: $date->isEqual($date1, $date2);
+
+		case '=':
+			return $date->isEqual($date1, $date2);
+	}
+}
+
 function format($type, $data, $param = null)
 {
 	global $registry;

@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Plugin extends App_Model_Table
 {
 	protected $table = 'plugin', $primary_key = 'plugin_id';
@@ -156,11 +156,11 @@ class App_Model_Plugin extends App_Model_Table
 						break;
 
 					case 'date':
-						if (!empty($value['gte']) && $this->date->isAfter($value['gte'], $plugin[$field])) {
+						if (!empty($value['gte']) && date_compare($value['gte'], '>=', $plugin[$field])) {
 							continue 3;
 						}
 
-						if (!empty($value['lte']) && $this->date->isBefore($this->date->add($value['lte'], '1 day'), $plugin[$field])) {
+						if (!empty($value['lte']) && date_compare($this->date->add($value['lte'], '1 day'), '<', $plugin[$field])) {
 							continue 3;
 						}
 						break;
