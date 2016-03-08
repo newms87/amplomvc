@@ -352,7 +352,7 @@ $.ampExtend($.ampNestedForm = function() {}, {
 			fields:        null
 		}, o)
 
-		return $forms.each(function() {
+		$forms.each(function() {
 			var $form = $(this);
 
 			if (!o.fields) {
@@ -418,6 +418,8 @@ $.ampExtend($.ampNestedForm = function() {}, {
 				return false;
 			})
 		})
+
+		return this;
 	},
 
 	onSubmit: function(callback) {

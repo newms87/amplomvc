@@ -746,7 +746,7 @@ abstract class Model
 							$where .= " AND `$t`.`$key` " . ($not ? 'NOT' : '') . " IN ('" . implode("','", $value) . "')";
 						} else {
 							if ($start && $end) {
-								if ($this->date->isAfter($start, $end)) {
+								if (date_compare($start, '>', $end)) {
 									$temp  = $end;
 									$end   = $start;
 									$start = $temp;

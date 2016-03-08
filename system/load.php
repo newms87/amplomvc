@@ -100,12 +100,12 @@ if (option('cron_status', true)) {
 	}
 }
 
+if (AMPLO_PROFILE) {
+	_profile('Route request');
+}
+
 //Route request after helpers (helper/core.php & helper/shortcuts.php required)
 $router->routeRequest();
-
-if (AMPLO_PROFILE) {
-	_profile('Site Routed');
-}
 
 if (AMPLO_PROFILE) {
 	_profile('Dispatching request');

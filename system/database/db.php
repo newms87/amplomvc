@@ -19,6 +19,7 @@ class DB
 
 	protected
 		$driver,
+		$info,
 		$synctime = false,
 		$error = array(),
 		$history,
@@ -43,6 +44,13 @@ class DB
 		}
 
 		$key = $driver . $hostname . $username . $schema;
+
+		$this->info = array(
+			'driver'   => $driver,
+			'hostname' => $hostname,
+			'username' => $username,
+			'schema'   => $schema,
+		);
 
 		if (!isset(self::$drivers[$key])) {
 			//the database interface
@@ -155,6 +163,15 @@ class DB
 	public function getQueryError()
 	{
 		return $this->driver->getError();
+	}
+
+	public function info($key = null)
+	{
+		if ($key) {
+			return isset($this->info[$key]) ? $this->info[$key] : null;
+		}
+
+		return $this->info;
 	}
 
 	public function isHistoryTable($table)

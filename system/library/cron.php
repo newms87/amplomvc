@@ -78,7 +78,7 @@ class Cron extends Library
 
 				if ($diff->days + $diff->h + $diff->i <= 0) {
 					$msg .= _l("Already ran.");
-				} elseif (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
+				} elseif (!$task['last_run'] || date_compare($last_scheduled, '>', $task['last_run'])) {
 					$task['last_run'] = $this->date->now();
 
 					$msg .= _l("Executing %s\r\n", $task['name']);
