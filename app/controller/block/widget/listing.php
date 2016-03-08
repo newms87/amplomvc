@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
@@ -18,6 +18,7 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 	public function build($settings)
 	{
 		$settings += array(
+			'columns'             => array(),
 			'extra_cols'          => array(),
 			'template'            => 'table/list_view',
 			'ajax'                => 1,
@@ -170,6 +171,10 @@ class App_Controller_Block_Widget_Listing extends App_Controller_Block_Block
 				'Bar'  => _l('Bar Chart'),
 				'Pie'  => _l('Pie Chart'),
 			);
+		}
+
+		if ($group_by = !empty($settings['chart']['group_by']) ? $settings['chart']['group_by'] : false) {
+			$settings['chart']['build'] = !empty($settings['columns'][$group_by]['build']) ? $settings['columns'][$group_by]['build'] : array();
 		}
 
 		//Render

@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class Chart extends Library
 {
 	static $colors = array(
@@ -102,6 +102,7 @@ class Chart extends Library
 		$settings += array(
 			'group_by'  => null,
 			'data_cols' => null,
+			'build'     => null,
 		);
 
 		if (!$settings['group_by'] || !$settings['data_cols']) {
@@ -114,7 +115,7 @@ class Chart extends Library
 			$settings['group_by'] = array();
 
 			foreach ($data as $entry) {
-				$settings['group_by'][] = $entry[$data_index];
+				$settings['group_by'][] = !empty($entry[$data_index]) ? ($settings['build'] ? get_build_value($settings['build'], $entry[$data_index]) : $entry[$data_index]) : '';
 			}
 		}
 
@@ -145,7 +146,7 @@ class Chart extends Library
 							) + self::$colors[($color_index++ % $max_color_index)];
 					}
 
-					$datasets[$col]['data'][] = isset($entry[$col_name]) ? $entry[$col_name] : $entry[$col];
+					$datasets[$col]['data'][] = isset($entry[$col_name]) ? $entry[$col_name] : (isset($entry[$col]) ? $entry[$col] : '');
 				}
 			}
 		} else {
@@ -172,8 +173,8 @@ class Chart extends Library
 
 		foreach ($data as $entry) {
 			$discrete[] = array(
-					'value' => (int)$entry[$value],
-					'label' => $entry[$label],
+					'value' => isset($entry[$value]) ? (int)$entry[$value] : '',
+					'label' => !empty($entry[$label]) ? ($settings['build'] ? get_build_value($settings['build'], $entry[$label]) : $entry[$label]) : '',
 				) + self::$discrete_colors[($color_index++ % $max_color_index)];
 		}
 

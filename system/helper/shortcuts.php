@@ -1016,20 +1016,20 @@ function get_build_value($build, $value, $default = null)
 	);
 
 	if ($build['value']) {
-		foreach ($build['data'] as $status_key => $status_data) {
-			if (!is_array($status_data)) {
-				if ($status_key === $value) {
-					return $status_data;
+		foreach ($build['data'] as $key => $data) {
+			if (!is_array($data)) {
+				if ($key === $value) {
+					return $data;
 				}
 			} else {
-				if (isset($status_data[$build['value']]) && $status_data[$build['value']] === $value) {
-					return !empty($status_data[$build['label']]) ? $status_data[$build['label']] : $default;
+				if (isset($data[$build['value']]) && $data[$build['value']] === $value) {
+					return !empty($data[$build['label']]) ? $data[$build['label']] : $default;
 				}
 			}
 		}
 	}
 
-	return !empty($build['data'][$value]) ? $build['data'][$value] : $default;
+	return (!empty($build['data'][$value]) && !_is_object($build['data'][$value])) ? $build['data'][$value] : $default;
 }
 
 function build_links($links, $options = array(), $active_url = null, &$is_active = false)
