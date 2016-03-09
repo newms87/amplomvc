@@ -1027,7 +1027,7 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 			}
 
 			if (o.onAlways) {
-				o.onAlways.call(this, $(this).closest('.amp-modal'));
+				o.onAlways.call(this, $(this).closest('.amp-modal'), true);
 			}
 
 			$(this).ampModal('close');
@@ -1041,7 +1041,7 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 			}
 
 			if (o.onAlways) {
-				o.onAlways.call(this, $(this).closest('.amp-modal'));
+				o.onAlways.call(this, $(this).closest('.amp-modal'), false);
 			}
 
 			$(this).ampModal('close');

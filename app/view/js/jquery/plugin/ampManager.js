@@ -126,7 +126,7 @@ $.ampExtend($.ampManager = function() {}, {
 			if ($record.hasClass('is-selected')) {
 				selected.push(record_id)
 				is_changed = true;
-			} else if ((index = selected.indexOf(record_id.toString())) >= 0) {
+			} else if ((index = $am.ampManager('selectedIndex', record_id)) !== false) {
 				selected.splice(index, 1)
 				is_changed = true;
 			}
@@ -267,7 +267,7 @@ $.ampExtend($.ampManager = function() {}, {
 		$record.attr('data-am-record-id', record.id);
 
 		if (o.selectMultiple) {
-			if (o.selected && o.selected.indexOf(record.id.toString()) >= 0) {
+			if (o.selected && this.ampManager('selectedIndex',record.id) !== false) {
 				$record.addClass('is-selected');
 			}
 		} else {
@@ -308,6 +308,18 @@ $.ampExtend($.ampManager = function() {}, {
 
 	removeUnselected: function() {
 		this.find('.am-record').not('.is-selected').remove();
+	},
+
+	selectedIndex: function(value) {
+		var selected = this.getOptions().selected;
+
+		for (var s in selected) {
+			if (selected[s] == value) {
+				return selected[s];
+			}
+		}
+
+		return false;
 	},
 
 	initTemplate: function() {
