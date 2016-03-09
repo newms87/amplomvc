@@ -174,6 +174,10 @@ $js_autoload = array(
 	'jqzoom'            => 'app/view/js/jquery/plugin/jqzoom/jqzoom.js',
 	'ac_imageinput'     => 'app/view/js/jquery/plugin/image_manager.js',
 	'ac_filemanager'    => 'app/view/js/jquery/plugin/image_manager.js',
+	'renderChart'       => array(
+		'system/resources/js/chartjs/chart.js',
+		'system/resources/js/chartjs/barext.js'
+	),
 );
 
 
@@ -324,8 +328,8 @@ function amplo_routing_hook($router)
 		if ($terms_agreement_date) {
 			$date = $registry->get('date');
 
-			$cookie_date          = _cookie('terms_agreed_date');
-			$customer_date        = customer_meta('terms_agreed_date');
+			$cookie_date   = _cookie('terms_agreed_date');
+			$customer_date = customer_meta('terms_agreed_date');
 
 			if ($customer_date && $cookie_date) {
 				$customer_agreed_date = $date->isAfter($cookie_date, $customer_date) ? $cookie_date : $customer_date;
@@ -1105,7 +1109,7 @@ function str_width($str, $font = null, $size = 16, $angle = 0)
 		$font = theme_dir('font/opensans/opensans-regular-webfont.ttf');
 	}
 
-	$points = imagettfbbox($size * 3/4, $angle, $font, $str);
+	$points = imagettfbbox($size * 3 / 4, $angle, $font, $str);
 
 	if ($points) {
 		return abs($points[2] - $points[0]);

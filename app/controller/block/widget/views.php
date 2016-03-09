@@ -109,7 +109,6 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				'title' => 'New View __ac_template__',
 			) + $default_view;
 
-
 		foreach ($views as $key => &$view) {
 			$view += $default_view;
 
@@ -154,6 +153,8 @@ class App_Controller_Block_Widget_Views extends App_Controller_Block_Block
 				}
 
 				$view['query'] = $settings['query'] + $listing['query'] + $view['query'];
+
+				$view['query']['view_id'] = $view['view_id'];
 
 				$view['query'] += array(
 					'sort'   => array(),
