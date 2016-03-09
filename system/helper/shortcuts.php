@@ -680,12 +680,14 @@ function date_compare($date1, $op, $date2 = null)
 
 	switch ($op) {
 		case '<':
+		case 'before':
 			return $date->isBefore($date1, $date2);
 
 		case '<=':
 			return $date->isBefore($date1, $date2) ?: $date->isEqual($date1, $date2);
 
 		case '>':
+		case 'after':
 			return $date->isAfter($date1, $date2);
 
 		case '>=':
