@@ -89,7 +89,7 @@
 								<div data-action="<?= site_url('manager/contact/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
 							</div>
 
-							<a data-confirm-modal="{{Are you sure you want to remove this contact?}}" href="<?= site_url('manager/contact/remove', 'contact_id=__ac_template__'); ?>" class="acm-remove-contact">
+							<a class="acm-remove-contact">
 								<i class="fa fa-trash-o"></i>
 							</a>
 						</div>
