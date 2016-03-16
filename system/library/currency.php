@@ -90,9 +90,9 @@ class Currency extends Library
 			$number = (float)$number * $value;
 		}
 
-		$string = number_format($number, $decimals, $decimal_point, $thousand_point);
+		$string = number_format(abs($number), $decimals, $decimal_point, $thousand_point);
 
-		return $symbol_left . $string . $symbol_right;
+		return ($number < 0 ? '-' : '') . $symbol_left . $string . $symbol_right;
 	}
 
 	public function convert($value, $from, $to)
