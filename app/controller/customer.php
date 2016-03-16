@@ -215,11 +215,6 @@ class App_Controller_Customer extends Controller
 				post_redirect('customer/login', 'register=1');
 			}
 
-			//Redirect to requested page
-			if ($this->request->hasRedirect()) {
-				$this->request->doRedirect();
-			}
-
 			redirect('customer/success');
 		}
 	}
@@ -239,7 +234,12 @@ class App_Controller_Customer extends Controller
 			//Render
 			output($this->render('customer/success'));
 		} else {
-			redirect('');
+			//Redirect to requested page
+			if ($this->request->hasRedirect()) {
+				$this->request->doRedirect();
+			} else {
+				redirect('');
+			}
 		}
 	}
 
