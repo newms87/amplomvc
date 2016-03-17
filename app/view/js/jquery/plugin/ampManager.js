@@ -99,7 +99,7 @@ $.ampExtend($.ampManager = function() {}, {
 		return this;
 	},
 
-	select: function($record, data) {
+	select: function($record, data, triggerChange) {
 		var $am = this;
 		var o = $am.getOptions(), is_changed = false, selected = null;
 
@@ -138,7 +138,7 @@ $.ampExtend($.ampManager = function() {}, {
 
 		o.selected = selected;
 
-		if (is_changed) {
+		if (is_changed && triggerChange !== false) {
 			if (o.input && o.input.length) {
 				o.input.val(o.selected).change();
 			}
