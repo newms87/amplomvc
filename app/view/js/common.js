@@ -128,7 +128,7 @@ $(document)
 		var $t = $(e.target);
 
 		if ($t.is('[data-sync-field]')) {
-			$('[data-sync-listener]').html($t.val());
+			$('[data-sync-listener=' + $t.attr('data-sync-field') + ']').html($t.is('select') ? $t.find('option[value=' + $t.val() + ']').html() : $t.val());
 		}
 	})
 
@@ -543,7 +543,7 @@ $.ampExtend($.ampToggle = function() {}, {
 		o.content.setOptions(o);
 
 		//Hide content when dormant if set in options or toggle is not a child of content
-		if (o.hideContent || (o.hideContent === null && !o.content.find(this).length)) {
+		if (o.hideContent || (o.hideContent === null && !o.content.find(this).length) && !o.content.is('.on-always')) {
 			o.content.addClass('on-active');
 		}
 

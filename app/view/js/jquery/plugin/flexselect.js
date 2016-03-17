@@ -13,28 +13,28 @@
  *
  * Copyright (c) 2009-2015, Ryan McGeary (ryan -[at]- mcgeary [*dot*] org)
  */
-(function ($) {
-	$.flexselect = function (select, options) {
+(function($) {
+	$.flexselect = function(select, options) {
 		this.init(select, options);
 	};
 
 	$.extend($.flexselect.prototype, {
 		settings:                {
 			allowMismatch:            false,
-			allowMismatchBlank:       true, // If "true" a user can backspace such that the value is nothing (even if no blank value was provided in the original criteria)
+			allowMismatchBlank:       true,
 			sortBy:                   'score', // 'score' || 'name'
 			preSelection:             true,
-			hideDropdownOnEmptyInput: false,
+			hideDropdownOnEmptyInput: true,
 			selectedClass:            "flexselect_selected",
 			dropdownClass:            "flexselect_dropdown",
 			showDisabledOptions:      false,
-			inputIdTransform:         function (id) {
+			inputIdTransform:         function(id) {
 				return id + "_flexselect";
 			},
-			inputNameTransform:       function (name) {
+			inputNameTransform:       function(name) {
 				return;
 			},
-			dropdownIdTransform:      function (id) {
+			dropdownIdTransform:      function(id) {
 				return id + "_flexselect_dropdown";
 			}
 		},
@@ -52,18 +52,18 @@
 		dropdownMouseover:       false, // Workaround for poor IE behaviors
 		indexOptgroupLabels:     false,
 
-		init: function (select, options) {
+		init: function(select, options) {
 			this.settings = $.extend({}, this.settings, options);
-			this.select = $(select);
+			this.select = $(select).uniqueId();
 			this.reloadCache();
 			this.renderControls();
 			this.wire();
 		},
 
-		reloadCache: function () {
+		reloadCache: function() {
 			var name, group, text, disabled;
 			var indexGroup = this.settings.indexOptgroupLabels;
-			this.cache = this.select.find("option").map(function () {
+			this.cache = this.select.find("option").map(function() {
 				name = $(this).text();
 				group = $(this).parent("optgroup").attr("label");
 				text = indexGroup ? [name, group].join(" ") : name;
@@ -72,7 +72,7 @@
 			});
 		},
 
-		renderControls: function () {
+		renderControls: function() {
 			var selected = this.settings.preSelection ? this.select.find("option:selected") : null;
 
 			this.input = $("<input type='text' autocomplete='off' />").attr({
@@ -96,26 +96,26 @@
 			$("body").append(this.dropdown);
 		},
 
-		wire: function () {
+		wire: function() {
 			var self = this;
 
-			this.input.click(function () {
+			this.input.click(function() {
 				self.lastAbbreviation = null;
 				self.focus();
 			});
 
-			this.input.mouseup(function (event) {
+			this.input.mouseup(function(event) {
 				// This is so Safari selection actually occurs.
 				event.preventDefault();
 			});
 
-			this.input.focus(function () {
+			this.input.focus(function() {
 				self.abbreviationBeforeFocus = self.input.val();
 				self.input.select();
-				if (!self.picked) self.filterResults();
+				if (!self.picked && (!self.settings.hideDropdownOnEmptyInput || self.input.val())) self.filterResults();
 			});
 
-			this.input.blur(function () {
+			this.input.blur(function() {
 				if (!self.dropdownMouseover) {
 					self.hide();
 					if (self.settings.allowMismatchBlank && $.trim($(this).val()) == '')
@@ -128,14 +128,14 @@
 
 				self.select.val('');
 
-				self.select.children().each(function (i, e) {
+				self.select.children().each(function(i, e) {
 					if ($(e).html() === self.input.val()) {
 						self.select.val($(e).attr('value'));
 					}
 				});
 			});
 
-			this.dropdownList.mouseover(function (event) {
+			this.dropdownList.mouseover(function(event) {
 				if (!self.allowMouseMove) {
 					self.allowMouseMove = true;
 					return;
@@ -146,24 +146,24 @@
 					self.markSelected(rows.index($(event.target)));
 				}
 			});
-			this.dropdownList.mouseleave(function () {
+			this.dropdownList.mouseleave(function() {
 				self.markSelected(-1);
 			});
-			this.dropdownList.mouseup(function (event) {
+			this.dropdownList.mouseup(function(event) {
 				self.pickSelected();
 				self.focusAndHide();
 			});
-			this.dropdown.mouseover(function (event) {
+			this.dropdown.mouseover(function(event) {
 				self.dropdownMouseover = true;
 			});
-			this.dropdown.mouseleave(function (event) {
+			this.dropdown.mouseleave(function(event) {
 				self.dropdownMouseover = false;
 			});
-			this.dropdown.mousedown(function (event) {
+			this.dropdown.mousedown(function(event) {
 				event.preventDefault();
 			});
 
-			this.input.keyup(function (event) {
+			this.input.keyup(function(event) {
 				switch (event.keyCode) {
 					case 13: // return
 						event.preventDefault();
@@ -187,7 +187,7 @@
 				}
 			});
 
-			this.input.keydown(function (event) {
+			this.input.keydown(function(event) {
 				switch (event.keyCode) {
 					case 9:  // tab
 						self.pickSelected();
@@ -218,18 +218,18 @@
 			});
 
 			var input = this.input;
-			this.select.change(function () {
+			this.select.change(function() {
 				input.val($.trim($(this).find('option:selected').text()));
 			});
 		},
 
-		filterResults: function () {
+		filterResults: function() {
 			var showDisabled = this.settings.showDisabledOptions;
 			var abbreviation = this.input.val();
 			if (abbreviation == this.lastAbbreviation) return;
 
 			var results = [];
-			$.each(this.cache, function () {
+			$.each(this.cache, function() {
 				if (this.disabled && !showDisabled) return;
 				this.score = LiquidMetal.score(this.text, abbreviation);
 				if (this.score > 0.0) results.push(this);
@@ -248,19 +248,19 @@
 			this.allowMouseMove = false;
 		},
 
-		sortResultsByScore: function () {
-			this.results.sort(function (a, b) {
+		sortResultsByScore: function() {
+			this.results.sort(function(a, b) {
 				return b.score - a.score;
 			});
 		},
 
-		sortResultsByName: function () {
-			this.results.sort(function (a, b) {
+		sortResultsByName: function() {
+			this.results.sort(function(a, b) {
 				return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
 			});
 		},
 
-		renderDropdown: function () {
+		renderDropdown: function() {
 			var showDisabled = this.settings.showDisabledOptions;
 			var dropdownBorderWidth = this.dropdown.outerWidth() - this.dropdown.innerWidth();
 			var inputOffset = this.input.offset();
@@ -273,7 +273,7 @@
 
 			var html = '';
 			var disabledAttribute = '';
-			$.each(this.results, function () {
+			$.each(this.results, function() {
 				if (this.disabled && !showDisabled) return;
 				disabledAttribute = this.disabled ? ' class="disabled"' : '';
 				html += '<li' + disabledAttribute + '>' + this.name + '</li>';
@@ -283,13 +283,13 @@
 			this.dropdown.show();
 		},
 
-		adjustMaxHeight: function () {
+		adjustMaxHeight: function() {
 			var maxTop = $(window).height() + $(window).scrollTop() - this.dropdown.outerHeight();
 			var top = parseInt(this.dropdown.css('top'), 10);
 			this.dropdown.css('max-height', top > maxTop ? (Math.max(0, maxTop - top + this.dropdown.innerHeight()) + 'px') : '');
 		},
 
-		markSelected: function (n) {
+		markSelected: function(n) {
 			if (n < 0 || n >= this.results.length) return;
 
 			var rows = this.dropdown.find("li");
@@ -314,7 +314,7 @@
 			}
 		},
 
-		pickSelected: function () {
+		pickSelected: function() {
 			var selected = this.results[this.selectedIndex];
 			if (selected && !selected.disabled) {
 				this.input.val(selected.name);
@@ -327,39 +327,39 @@
 			}
 		},
 
-		setValue: function (val) {
+		setValue: function(val) {
 			if (this.select.val() === val) return;
 			this.select.val(val).change();
 		},
 
-		hide: function () {
+		hide: function() {
 			this.dropdown.hide();
 			this.lastAbbreviation = null;
 		},
 
-		moveSelected: function (n) {
+		moveSelected: function(n) {
 			this.markSelected(this.selectedIndex + n);
 		},
-		markFirst:    function () {
+		markFirst:    function() {
 			this.markSelected(0);
 		},
-		markLast:     function () {
+		markLast:     function() {
 			this.markSelected(this.results.length - 1);
 		},
-		reset:        function () {
+		reset:        function() {
 			this.input.val(this.abbreviationBeforeFocus);
 		},
-		focus:        function () {
+		focus:        function() {
 			this.input.focus();
 		},
-		focusAndHide: function () {
+		focusAndHide: function() {
 			this.focus();
 			this.hide();
 		}
 	});
 
-	$.fn.flexselect = function (options) {
-		this.each(function () {
+	$.fn.flexselect = function(options) {
+		this.each(function() {
 			if ($(this).data("flexselect")) {
 				$(this).data("flexselect").reloadCache();
 			} else if (this.tagName == "SELECT") {
@@ -385,7 +385,7 @@
  *
  * Copyright (c) 2009-2012, Ryan McGeary (ryan -[at]- mcgeary [*dot*] org)
  */
-var LiquidMetal = (function () {
+var LiquidMetal = (function() {
 	var SCORE_NO_MATCH = 0.0;
 	var SCORE_MATCH = 1.0;
 	var SCORE_TRAILING = 0.8;
@@ -397,7 +397,7 @@ var LiquidMetal = (function () {
 		lastScore:      null,
 		lastScoreArray: null,
 
-		score: function (string, abbrev) {
+		score: function(string, abbrev) {
 			// short circuits
 			if (abbrev.length === 0) return SCORE_TRAILING;
 			if (abbrev.length > string.length) return SCORE_NO_MATCH;
@@ -436,7 +436,7 @@ var LiquidMetal = (function () {
 			return maxScore;
 		},
 
-		_scoreAll: function (string, search, abbrev, searchIndex, abbrIndex, scores, allScores) {
+		_scoreAll: function(string, search, abbrev, searchIndex, abbrIndex, scores, allScores) {
 			// save completed match scores at end of search
 			if (abbrIndex == abbrev.length) {
 				// add trailing score for the remainder of the match
