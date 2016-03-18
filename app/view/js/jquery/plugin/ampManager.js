@@ -315,7 +315,7 @@ $.ampExtend($.ampManager = function() {}, {
 
 		for (var s in selected) {
 			if (selected[s] == value) {
-				return selected[s];
+				return s;
 			}
 		}
 
