@@ -384,7 +384,7 @@ $.ampExtend($.ampManager = function() {}, {
 		$am.find('.am-record').click(function(e) {
 			var $t = $(e.target);
 
-			$t.closest('.no-select').length || $t.closest('.amp-manager').ampManager('select', $t);
+			$t.closest('.no-select').length || $t.closest('.amp-manager').ampManager('select', $(this));
 		})
 
 		$am.find('.am-record .am-edit-record-form').ampNestedForm('onDone', function(response) {
