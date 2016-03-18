@@ -381,8 +381,10 @@ $.ampExtend($.ampManager = function() {}, {
 			$(this).closest('.am-record').removeClass('editing');
 		})
 
-		$am.find('.am-record').click(function() {
-			$(this).closest('.amp-manager').ampManager('select', $(this));
+		$am.find('.am-record').click(function(e) {
+			var $t = $(e.target);
+
+			$t.closest('.no-select').length || $t.closest('.amp-manager').ampManager('select', $t);
 		})
 
 		$am.find('.am-record .am-edit-record-form').ampNestedForm('onDone', function(response) {
