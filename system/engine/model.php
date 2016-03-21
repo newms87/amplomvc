@@ -1069,7 +1069,7 @@ abstract class Model
 				$indexes = $this->queryRows("SHOW INDEX FROM `$t`");
 
 				foreach ($columns as &$column) {
-					$type = strtolower(trim(preg_replace("/\\(.*$/", '', $column['Type'])));
+					$type = strtolower(trim(preg_replace("/(\\(|\\s).*$/", '', $column['Type'])));
 
 					if ($type === 'text') {
 						$type = 'textarea';
