@@ -564,9 +564,13 @@ abstract class Model
 		}
 
 		if (!empty($options['join'])) {
-			foreach ($options['join'] as $join_table => $join) {
-				if (strpos($join_table, '#') !== 0 && isset($join['columns'])) {
-					$select .= ($select ? ',' : '') . $this->extractSelect($join_table, $join);
+			foreach ($options['join'] as $join_table => $join_data) {
+				if (strpos($join_table, '#') !== 0 && isset($join_data['columns'])) {
+					if (isset($join_data['alias'])) {
+						$join_table .= ' ' . $join_data['alias'];
+					}
+
+					$select .= ($select ? ',' : '') . $this->extractSelect($join_table, $join_data);
 				}
 			}
 		}
@@ -622,7 +626,7 @@ abstract class Model
 		return $from;
 	}
 
-	protected function extractWhere($table, $filter, $columns = array())
+	protected function extractWhere($table, $filter, $options = array())
 	{
 		$where = '';
 
@@ -653,7 +657,7 @@ abstract class Model
 			$t = $this->t[$table];
 		}
 
-		$columns += $this->getTableColumns($table);
+		$columns = $this->getTableColumns($table);
 
 		foreach ($filter as $key => $value) {
 			if (strpos($key, '#') === 0) {
@@ -777,7 +781,33 @@ abstract class Model
 			}
 		}
 
-		return $where ? preg_replace("/^\\s*(AND|OR)/", '', $where) : '1';
+		$where = $where ? preg_replace("/^\\s*(AND|OR)/", '', $where) : '1';
+
+		if (!empty($options['join'])) {
+			$prev_join_table = false;
+			$join_filter     = $filter;
+
+			foreach ($join_filter as $key => $f) {
+				if (strpos($key, '#') === 0) {
+					unset($join_filter[$key]);
+				}
+			}
+
+			foreach ($options['join'] as $join_table => $join_data) {
+				$join_filter = array_diff_key($join_filter, $prev_join_table ? (array)$this->getTableColumns($prev_join_table) : $columns);
+				$alias       = isset($join_data['alias']) ? ' ' . $join_data['alias'] : '';
+
+				$join_where = $this->extractWhere($join_table . $alias, $join_filter);
+
+				if ($join_where !== '1') {
+					$where .= " AND " . $join_where;
+				}
+
+				$prev_join_table = $join_table;
+			}
+		}
+
+		return $where;
 	}
 
 	protected function extractOrder($sort, $table = null)

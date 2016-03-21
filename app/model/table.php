@@ -153,7 +153,7 @@ abstract class App_Model_Table extends Model
 		$from = $this->extractFrom($this->table . ' ' . $tbl, $options);
 
 		//Where
-		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter);
+		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter, $options);
 
 		$group_by = !empty($options['group_by']) ? "GROUP BY " . $options['group_by'] : '';
 		$having   = !empty($options['having']) ? "HAVING " . $options['having'] : '';

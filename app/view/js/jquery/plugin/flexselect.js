@@ -25,6 +25,7 @@
 			sortBy:                   'score', // 'score' || 'name'
 			preSelection:             true,
 			hideDropdownOnEmptyInput: true,
+			showEmptyValue:           true,
 			selectedClass:            "flexselect_selected",
 			dropdownClass:            "flexselect_dropdown",
 			showDisabledOptions:      false,
@@ -167,7 +168,6 @@
 				switch (event.keyCode) {
 					case 13: // return
 						event.preventDefault();
-						self.pickSelected();
 						self.focusAndHide();
 						break;
 					case 27: // esc
@@ -176,11 +176,15 @@
 						self.focusAndHide();
 						break;
 					default:
-						self.filterResults();
+						if (self.input.val() === '' && self.settings.hideDropdownOnEmptyInput) {
+							self.setValue('');
+						} else {
+							self.filterResults();
+						}
 						break;
 				}
 				if (self.settings.hideDropdownOnEmptyInput) {
-					if (self.input.val() == "")
+					if (self.input.val() == "" && (!self.settings.showEmptyValue || !self.dropdownList['']))
 						self.dropdownList.hide();
 					else
 						self.dropdownList.show();
@@ -189,7 +193,7 @@
 
 			this.input.keydown(function(event) {
 				switch (event.keyCode) {
-					case 9:  // tab
+					case 13:  // return
 						self.pickSelected();
 						self.hide();
 						break;
@@ -206,20 +210,21 @@
 						self.moveSelected(-1);
 						break;
 					case 40: // down
+					case 9: // tab
 						event.preventDefault();
 						self.moveSelected(1);
 						break;
-					case 13: // return
 					case 27: // esc
 						event.preventDefault();
 						event.stopPropagation();
+						self.hide();
 						break;
 				}
 			});
 
 			var input = this.input;
 			this.select.change(function() {
-				input.val($.trim($(this).find('option:selected').text()));
+				input.val($(this).val() === '' ? '' : $.trim($(this).find('option:selected').text()));
 			});
 		},
 
@@ -302,6 +307,7 @@
 			}
 
 			this.selectedIndex = n;
+
 			row.addClass(this.settings.selectedClass);
 			var top = row.position().top;
 			var delta = top + row.outerHeight() - this.dropdown.height();
@@ -316,8 +322,9 @@
 
 		pickSelected: function() {
 			var selected = this.results[this.selectedIndex];
+
 			if (selected && !selected.disabled) {
-				this.input.val(selected.name);
+				this.input.val(selected.value === '' ? '' : selected.name);
 				this.setValue(selected.value);
 				this.picked = true;
 			} else if (!this.settings.allowMismatch) {
