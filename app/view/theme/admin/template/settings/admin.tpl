@@ -169,7 +169,6 @@
 		</div>
 	</form>
 </div>
-</div>
 
 <script type="text/javascript">
 	$('[name=admin_logo]').ac_imageinput({width: '<?= $admin_logo_width; ?>', height: '<?= $admin_logo_height; ?>'});
