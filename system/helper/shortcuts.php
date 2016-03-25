@@ -1071,9 +1071,8 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	$html = '';
 
 	$options += array(
-		'sort'       => null,
-		'class'      => 'vertical',
-		'amp_toggle' => false,
+		'sort'  => null,
+		'class' => 'vertical',
 	);
 
 	$active_url = path_format($active_url === null ? $registry->get('url')->here() : $active_url);
