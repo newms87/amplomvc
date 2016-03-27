@@ -80,11 +80,16 @@ $.ampExtend($.ampSlider = function() {}, {
 		var $slider = this;
 		var o = $slider.getOptions();
 
-		setTimeout(function() {
-			if (o.isPlaying) {
-				$slider.ampSlider('nextSlide').ampSlider('playing');
-			}
-		}, o.transitionDelay)
+		if (!o.isScheduled) {
+			o.isScheduled = true;
+			setTimeout(function() {
+				o.isScheduled = false;
+
+				if (o.isPlaying) {
+					$slider.ampSlider('nextSlide').ampSlider('playing');
+				}
+			}, o.transitionDelay)
+		}
 	},
 
 	stop: function() {
