@@ -119,10 +119,11 @@
 			this.input.blur(function() {
 				if (!self.dropdownMouseover) {
 					self.hide();
-					if (self.settings.allowMismatchBlank && $.trim($(this).val()) == '')
+					if (self.settings.allowMismatchBlank && $.trim($(this).val()) == '') {
 						self.setValue('');
-					if (!self.settings.allowMismatch && !self.picked)
+					} else if (!self.settings.allowMismatch && !self.picked) {
 						self.reset();
+					}
 				}
 				if (self.settings.hideDropdownOnEmptyInput)
 					self.dropdownList.show();
