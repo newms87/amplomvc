@@ -151,7 +151,12 @@
 			this.dropdownList.mouseleave(function() {
 				self.markSelected(-1);
 			});
-			this.dropdownList.mouseup(function(event) {
+			this.dropdownList.on('mouseup click', function(e) {
+				var $t = $(e.target);
+				if ($t.is('li')) {
+					self.markSelected($(event.target).index());
+				}
+
 				self.pickSelected();
 				self.focusAndHide();
 			});
