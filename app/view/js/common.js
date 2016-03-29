@@ -53,6 +53,7 @@ $(document)
 			}
 		}
 
+
 		if ($n.is('.expand')) {
 			$n.closest('.on-expand').toggleClass('active');
 			return false;
@@ -601,7 +602,12 @@ $.ampExtend($.ampToggle = function() {}, {
 			var $t = $(e.target);
 			var $content = $t.closest('.amp-toggle-content');
 
-			e.stopPropagation();
+			//Check if the event was for a nested amp-toggle instance
+			if (e.originalEvent.ampToggleHandled) {
+				return false;
+			}
+
+			e.originalEvent.ampToggleHandled = true;
 
 			if ($t.closest('.amp-toggle-off').length) {
 				$content.ampToggle('setDormant');
@@ -664,7 +670,6 @@ $.ampExtend($.ampToggle = function() {}, {
 		var $this = $(this);
 		var o = $this.getOptions();
 
-		console.log('active ', this);
 		o.toggle.addClass(o.activeClass).removeClass(o.dormantClass);
 		o.content.addClass(o.activeContentClass).removeClass(o.dormantContentClass);
 		$.ampToggle.active = $this;
