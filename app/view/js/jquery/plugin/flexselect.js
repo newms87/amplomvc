@@ -184,9 +184,9 @@
 					default:
 						if (self.input.val() === '' && self.settings.hideDropdownOnEmptyInput) {
 							self.setValue('');
-						} else {
-							self.filterResults();
 						}
+
+						self.filterResults();
 						break;
 				}
 				if (self.settings.hideDropdownOnEmptyInput) {
@@ -283,11 +283,10 @@
 			});
 
 			var html = '';
-			var disabledAttribute = '';
+
 			$.each(this.results, function() {
 				if (this.disabled && !showDisabled) return;
-				disabledAttribute = this.disabled ? ' class="disabled"' : '';
-				html += '<li' + disabledAttribute + '>' + this.name + '</li>';
+				html += '<li' + (this.disabled ? ' class="disabled"' : '') + '>' + this.name + '</li>';
 			});
 			this.dropdownList.html(html);
 			this.adjustMaxHeight();
