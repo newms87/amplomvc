@@ -271,10 +271,6 @@ a.color-main:hover {
 		border-radius: 5px;
 		cursor: pointer;
 
-		&:after {
-			content: "X";
-		}
-
 		&:hover, &:active {
 			background: @color-lightest;
 		}
@@ -1315,10 +1311,7 @@ section.page {
 	position: relative;
 
 	&:after {
-		.amp-sprite;
-		.si-chevron-wht;
-		.amp-sprite.rotate-180;
-
+		content: "\f078";
 		position: absolute;
 		top: 1em;
 		right: .5em;
@@ -1330,7 +1323,7 @@ section.page {
 
 	&.hide {
 		&:after {
-			.amp-sprite.rotate-0;
+			content: "\f077";
 		}
 
 		.collapse {

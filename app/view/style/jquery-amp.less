@@ -49,11 +49,23 @@
 	.on-dormant, &.on-dormant {
 		display: none;
 	}
+
+	.is-dormant {
+		.on-dormant, &.on-dormant {
+			display: inline-block;
+		}
+	}
 }
 
 .is-dormant {
 	.on-active, &.on-active {
 		display: none;
+	}
+
+	.is-active {
+		.on-active, &.on-active {
+			display: inline-block;
+		}
 	}
 }
 
@@ -462,8 +474,7 @@ select.amp-select-enabled {
 				cursor: all-scroll;
 
 				&:before {
-					.amp-sprite;
-					.si-drag-handle-dark-gray-sm;
+					content: "\f142";
 					top: 2px;
 					margin-right: .6em;
 				}
@@ -667,16 +678,8 @@ label.checkbox {
 	}
 
 	&.white {
-		input[type="checkbox"] {
-			& + .label:before {
-				.si-checkbox-inactive-wht;
-			}
-
-			&:checked {
-				& + .label:before {
-					.si-checkbox-active-wht;
-				}
-			}
+		input[type="checkbox"] + .label:before {
+			color: white;
 		}
 	}
 }
@@ -779,7 +782,7 @@ label.select {
 	&.form-select {
 		&:before {
 			font-size: .9em;
-			top: .5em;
+			top: .8em;
 		}
 	}
 }

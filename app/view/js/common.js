@@ -548,12 +548,14 @@ $.ampExtend($.ampToggle = function() {}, {
 		}
 
 		o.content.click(function(e) {
-			var $target = $(e.target);
+			var $t = $(e.target);
 
-			if ($target.closest('.amp-toggle-off').length) {
+			if ($t.closest('.amp-toggle-off').length) {
 				$(this).ampToggle('setDormant');
-			} else if ($target.closest('.amp-toggle-on').length) {
+			} else if ($t.closest('.amp-toggle-on').length) {
 				$(this).ampToggle('setActive');
+			} else if ($t.closest('.amp-toggle-void').length) {
+				return;
 			}
 		})
 
@@ -561,6 +563,16 @@ $.ampExtend($.ampToggle = function() {}, {
 			o.content.addClass('amp-toggle-content');
 
 			o.toggle.addClass('amp-toggle').click(function(e) {
+				var $t = $(e.target);
+
+				if ($t.closest('.amp-toggle-off').length) {
+					$(this).ampToggle('setDormant');
+				} else if ($t.closest('.amp-toggle-on').length) {
+					$(this).ampToggle('setActive');
+				} else if ($t.closest('.amp-toggle-void').length) {
+					return;
+				}
+
 				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.activeClass) ? 'setDormant' : 'setActive');
 				e.stopPropagation();
 				return false;
@@ -1486,7 +1498,7 @@ $.fn.show_msg = function(type, msg, o) {
 			$box = $('<div />').addClass('messages ' + type + ' ' + o.style);
 
 			if (o.close) {
-				$box.append($('<div />').addClass('close').click(function() {
+				$box.append($('<div />').addClass('close').append('<b class="fa fa-close"></b>').click(function() {
 					$(this).closest('.messages').find('.message').hide_msg();
 				}));
 			}
