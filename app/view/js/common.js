@@ -441,33 +441,82 @@ $.ampExtend($.ampNestedForm = function() {}, {
 
 //ampFormat jQuery Plugin
 $.ampExtend($.ampFormat = function() {}, {
+	formats: {
+		'integer':          /^-?[0-9]*$/,
+		'unsigned integer': /^[0-9]*$/,
+		'float':            /^-?[0-9]*\.?[0-9]*$/,
+		'unsigned float':   /^[0-9]*\.?[0-9]*$/
+	},
+
 	init: function(o) {
 		o = $.extend({}, {
-			type:     'float',
-			unsigned: false
+			format:       'float',
+			charMap:      {},
+			defaultValue: '',
+			allowEmpty:   true
 		}, o);
 
+		if (typeof o.format === 'string') {
+			o.format = $.ampFormat.formats[o.format];
+		}
+
+		if (!(o.format instanceof RegExp) && typeof o.format !== 'function') {
+			$.error("Invalid Option (format): Format must be a string of a valid format ('integer', 'float', 'unsigned integer', etc.), a regular expression or a function");
+			return this;
+		}
 		this.setOptions(o);
 
 		this.keypress(function(e) {
 			return $(this).ampFormat('validate', e);
 		})
 
+		if (!o.allowEmpty) {
+			this.keyup(function() {
+				var $input = $(this);
+				var o = $input.getOptions();
+
+				if ($input.val() === '') {
+					$input.val(o.defaultValue);
+				}
+			})
+		}
+
 		return this;
 	},
 
-	validate: function(e, type) {
-		var o = this.getOptions();
+	validate: function(e) {
+		//For incompatible browsers (like IE8 and below) disable formatting
+		if (typeof e.target.selectionStart === 'undefined') {
+			return true;
+		}
 
-		var type = typeof type === 'string' ? type : o.type,
-			char = String.fromCharCode(e.keyCode);
+		var o = this.getOptions(),
+			char = e.key || String.fromCharCode(e.keyCode || e.charCode),
+			string = this.val();
 
-		switch (type) {
-			case 'float':
-				return o.unsigned ? !!char.match(/[0-9\.]/) : !!char.match(/[0-9\.\-]/);
+		var newString = string.slice(0, e.target.selectionStart) + char + string.slice(e.target.selectionEnd);
 
-			case 'integer':
-				return o.unsigned ? !!char.match(/[0-9]/) : !!char.match(/[0-9\-]/);
+		//Mozilla charCode === 0 means not a char (enter key, tab, etc.)
+		if (e.charCode === 0) {
+			return true;
+		}
+
+		if (typeof o.charMap[char] !== 'undefined') {
+			return o.charMap[char];
+		}
+
+		if (typeof o.format === 'function') {
+			return o.format(newString, char, string);
+		} else {
+			if (!newString.match(o.format)) {
+				if (!string.match(o.format)) {
+					this.val(o.defaultValue);
+				}
+
+				return false;
+			}
+
+			return true;
 		}
 	}
 })
@@ -532,6 +581,7 @@ $.ampExtend($.ampToggle = function() {}, {
 			start:               'dormant',
 			acceptParent:        '',
 			blurOnModal:         false,
+			dormantOnBlur:       true,
 			onShow:              null,
 			onHide:              null
 		}, o);
@@ -549,11 +599,14 @@ $.ampExtend($.ampToggle = function() {}, {
 
 		o.content.click(function(e) {
 			var $t = $(e.target);
+			var $content = $t.closest('.amp-toggle-content');
+
+			e.stopPropagation();
 
 			if ($t.closest('.amp-toggle-off').length) {
-				$(this).ampToggle('setDormant');
+				$content.ampToggle('setDormant');
 			} else if ($t.closest('.amp-toggle-on').length) {
-				$(this).ampToggle('setActive');
+				$content.ampToggle('setActive');
 			} else if ($t.closest('.amp-toggle-void').length) {
 				return;
 			}
@@ -564,17 +617,20 @@ $.ampExtend($.ampToggle = function() {}, {
 
 			o.toggle.addClass('amp-toggle').click(function(e) {
 				var $t = $(e.target);
+				var $toggle = $t.closest('.amp-toggle');
+				var o = $toggle.getOptions();
+
+				e.stopPropagation();
 
 				if ($t.closest('.amp-toggle-off').length) {
-					$(this).ampToggle('setDormant');
+					$toggle.ampToggle('setDormant');
 				} else if ($t.closest('.amp-toggle-on').length) {
-					$(this).ampToggle('setActive');
+					$toggle.ampToggle('setActive');
 				} else if ($t.closest('.amp-toggle-void').length) {
 					return;
 				}
 
 				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.activeClass) ? 'setDormant' : 'setActive');
-				e.stopPropagation();
 				return false;
 			})
 
@@ -588,6 +644,10 @@ $.ampExtend($.ampToggle = function() {}, {
 
 	_blur: function(e) {
 		var $t = $(e.target), o = $.ampToggle.active.getOptions();
+
+		if (!o.dormantOnBlur) {
+			return;
+		}
 
 		if ($t.closest(o.content).length || ($t.closest('.amp-modal').length && !o.blurOnModal)) {
 			!o.content.is('.amp-toggle') || ($.ampToggle.skipToggle = true);
@@ -604,6 +664,7 @@ $.ampExtend($.ampToggle = function() {}, {
 		var $this = $(this);
 		var o = $this.getOptions();
 
+		console.log('active ', this);
 		o.toggle.addClass(o.activeClass).removeClass(o.dormantClass);
 		o.content.addClass(o.activeContentClass).removeClass(o.dormantContentClass);
 		$.ampToggle.active = $this;
