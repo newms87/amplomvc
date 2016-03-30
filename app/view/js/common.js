@@ -604,7 +604,7 @@ $.ampExtend($.ampToggle = function() {}, {
 
 			//Check if the event was for a nested amp-toggle instance
 			if (e.originalEvent.ampToggleHandled) {
-				return false;
+				return;
 			}
 
 			e.originalEvent.ampToggleHandled = true;
