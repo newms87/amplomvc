@@ -1,4 +1,4 @@
-$.ac_template = $.fn.ac_template = function (name, action, data, relate) {
+$.ac_template = $.fn.ac_template = function(name, action, data, relate) {
 	if (!name || !this.length) {
 		return this;
 	}
@@ -8,7 +8,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 	function get_count(list) {
 		var count = 0;
 
-		list.find('[data-rel="' + list.attr('data-list-rel') + '"]').each(function (i, e) {
+		list.find('[data-rel="' + list.attr('data-list-rel') + '"]').each(function(i, e) {
 			count = Math.max(count, (parseInt($(e).attr('data-row')) || 0) + 1);
 		});
 
@@ -49,7 +49,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 		}, action);
 
 		//update counts
-		$('[data-list-rel]').each(function (i, e) {
+		$('[data-list-rel]').each(function(i, e) {
 			$(e).attr('data-count', $(e).children().length);
 		});
 	} else {
@@ -73,7 +73,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			template.attr('data-row', count);
 			template.attr('data-id', data[row.unique] || count);
 
-			template.find('[id]').each(function (i, e) {
+			template.find('[id]').each(function(i, e) {
 				var id = $(e).attr('id'), c = 0;
 				while ($('#' + (new_id = id.replace('__ac_template__', count) + '-' + c++)).length);
 				$(e).attr('id', new_id);
@@ -87,13 +87,13 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			var row_list = [count], row_find = ['__ac_template__'];
 
 			if (!template.attr('data-template-root')) {
-				template.parents('[data-row]').each(function (i, e) {
+				template.parents('[data-row]').each(function(i, e) {
 					row_list.unshift(parseInt($(e).attr('data-row')));
 					row_find.push('__ac_template__');
 				});
 			}
 
-			template.find('[name]').each(function (i, e) {
+			template.find('[name]').each(function(i, e) {
 				var $e = $(e);
 				var e_name = $e.attr('name');
 
@@ -136,29 +136,29 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 
 				var value = find_value(key, data);
 
-				if ($e.is('select')) {
-					if (typeof value !== 'undefined') {
+				if (typeof value !== 'undefined') {
+					if ($e.is('select')) {
 						$e.val(value);
-					}
 
-					if (!$e.find(':selected').length) {
-						$e.val($e.find(':first').val());
-					}
-				} else if ($.inArray($e.attr('type'), ['checkbox', 'radio']) >= 0) {
-					if ($e.val() === '__ac_template__') {
-						$e.val(value);
-					}
+						if (!$e.find(':selected').length) {
+							$e.val($e.find(':first').val());
+						}
+					} else if ($.inArray($e.attr('type'), ['checkbox', 'radio']) >= 0) {
+						if ($e.val() === '__ac_template__') {
+							$e.val(value);
+						}
 
-					$e.prop('checked', $e.val() == value);
-				} else {
-					$e.val(value).attr('value', value);
+						$e.prop('checked', $e.val() == value);
+					} else {
+						$e.val(value).attr('value', value);
+					}
 				}
 			});
 
 			//Replace all attribute occurrences
-			template.find('*').addBack().not('option').each(function (i, e) {
+			template.find('*').addBack().not('option').each(function(i, e) {
 				var $e = $(e);
-				$.each(this.attributes, function (a, attr) {
+				$.each(this.attributes, function(a, attr) {
 					$e.attr(attr.name, attr.value.str_replace(row_find, row_list));
 					if (attr.name === 'value') {
 						$e.val($e.attr('value'));
@@ -167,9 +167,9 @@ $.ac_template = $.fn.ac_template = function (name, action, data, relate) {
 			});
 
 			//Replace all text occurrences
-			template.find('*').contents().filter(function () {
+			template.find('*').contents().filter(function() {
 				return this.nodeType === 3;
-			}).each(function (i, e) {
+			}).each(function(i, e) {
 				e.nodeValue = e.nodeValue.str_replace(row_find, row_list);
 			});
 

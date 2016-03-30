@@ -603,11 +603,13 @@ $.ampExtend($.ampToggle = function() {}, {
 			var $content = $t.closest('.amp-toggle-content');
 
 			//Check if the event was for a nested amp-toggle instance
-			if (e.originalEvent.ampToggleHandled) {
-				return;
-			}
+			if (e.originalEvent) {
+				if (e.originalEvent.ampToggleHandled) {
+					return;
+				}
 
-			e.originalEvent.ampToggleHandled = true;
+				e.originalEvent.ampToggleHandled = true;
+			}
 
 			if ($t.closest('.amp-toggle-off').length) {
 				$content.ampToggle('setDormant');
