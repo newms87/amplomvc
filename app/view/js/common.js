@@ -1887,22 +1887,6 @@ function register_colorbox() {
 	}
 }
 
-$.fn.collapsible = function() {
-	return this.each(function(i, e) {
-		var $c = $(e);
-
-		$c.click(function() {
-			$(this).toggleClass('hide');
-		});
-
-		$c.find('.collapse, input, select, textarea, a').click(stopProp);
-	});
-}
-
-function stopProp(e) {
-	e.stopPropagation();
-}
-
 //ampAccordion jQuery Plugin
 $.ampExtend('ampAccordion', {
 	count: 0,

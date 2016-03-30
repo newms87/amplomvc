@@ -1307,31 +1307,6 @@ section.page {
 	}
 }
 
-.collapsible {
-	position: relative;
-
-	&:after {
-		content: "\f078";
-		position: absolute;
-		top: 1em;
-		right: .5em;
-	}
-
-	.collapse {
-		.height-animate-hide;
-	}
-
-	&.hide {
-		&:after {
-			content: "\f077";
-		}
-
-		.collapse {
-			.height-animate-hide.hide;
-		}
-	}
-}
-
 .form-editor {
 	.input {
 		& + .input {
