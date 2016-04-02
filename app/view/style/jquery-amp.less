@@ -448,6 +448,8 @@ select.amp-select-enabled {
 }
 
 .amp-select-box {
+	position: relative;
+
 	&.amp-select-checkboxes {
 		.amp-option {
 			margin: 0 .5em;
@@ -487,6 +489,31 @@ select.amp-select-enabled {
 			.amp-select-done {
 				text-align: center;
 				width: 100%;
+			}
+		}
+	}
+
+	&.amp-select-inline {
+		.amp-select-options {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			z-index: 1000;
+			background: white;
+			border: 1px solid black;
+
+			.amp-option {
+				display: block;
+				padding: .3em .5em;
+
+				&.is-active {
+					color: white;
+					background: #0177B5;
+				}
+
+				&:hover {
+					background: @color-lighter;
+				}
 			}
 		}
 	}

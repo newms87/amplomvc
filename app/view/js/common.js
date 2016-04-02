@@ -1133,35 +1133,332 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 
 //ampSelect jQuery Plugin
 $.ampExtend($.ampSelect = function() {}, {
-	init: function(o) {
-		o = $.extend({}, {}, o);
+	instanceCount: 0,
+	init:          function(o) {
+		o = $.extend({
+			style:           null, //modal, inline, checkboxes or null (for auto detect)
+			source:          null, //object (eg: {url: 'http://example-source.com', query:{...}} ) or function
+			selectedValues:  null, //array of values, or null to use <input> / <select> values
+			selectMultiple:  null, //true, false, or null (for auto detect),
+			allowNewOptions: true
+		}, {}, o);
 
-		return this.use_once('amp-select-enabled').each(function(i, e) {
-			o.select = $(e).removeClass('amp-select');
+		return this.use_once('amp-select-enabled').each(function() {
+			var $field = $(this).removeClass('amp-select').addClass('amp-select-field'),
+				$ampSelect = $("<div />").addClass('amp-select');
 
-			var $ampSelect = $("<div />").addClass('amp-select');
+			if (o.source === null && !$field.is('select')) {
+				return $.error("ampSelect Error: source not set and instance is not a <select> element");
+			}
 
-			if (o.select.is('.amp-select-checkboxes')) {
-				o.checkboxes = true;
+			o.style = o.style || $field.attr('data-amp-select-style') || ($field.is('input') ? 'inline' : 'modal');
+
+			if (o.selectedValues === null) {
+				o.selectedValues = $field.val();
+			}
+
+			if (o.selectMultiple === null) {
+				o.selectMultiple = o.style !== 'inline';
 			}
 
 			//Save Options to Instance
 			$ampSelect.setOptions($.extend({}, o, {
-				placeholder: o.select.attr('data-placeholder') || 'Select Items...'
+				placeholder:     $field.attr('data-placeholder') || 'Select Items...',
+				optionGroupName: 'amp_option_' + $.ampSelect.instanceCount++
 			}));
 
 			//Build Template
-			o.select.before($ampSelect);
-			$ampSelect.append(o.select);
+			$field.before($ampSelect);
+			$ampSelect.append($field);
 
-			if (o.checkboxes) {
-				$ampSelect.ampSelect('initCheckboxes');
-			} else {
-				$ampSelect.ampSelect('initSelectModal');
+			switch (o.style) {
+				case 'modal':
+					$ampSelect.ampSelect('initSelectModal');
+					break;
+				case 'checkboxes':
+					$ampSelect.ampSelect('initCheckboxes');
+					break;
+				case 'inline':
+				default:
+					$ampSelect.ampSelect('initInline');
+					break;
 			}
 
-			$ampSelect.ampSelect('assignSelect', o.select);
+			$field.change(function() {
+				$(this).closest('.amp-select').ampSelect('setSelected', $(this).val());
+			});
+
+			$ampSelect.ampSelect('loadSourceOptions', o.source || $field);
 		});
+	},
+
+	open: function() {
+		var o = this.getOptions();
+
+		switch (o.style) {
+			case 'modal':
+				this.find('.amp-modal').ampModal('open');
+				break;
+
+			case 'inline':
+				var $options = this.find('.amp-select-options').addClass('is-active').removeClass('is-dormant');
+				var $input = this.find('.amp-select-input');
+				var css = $input.offset();
+				css.top += $input.outerHeight();
+				css.minWidth = $input.outerWidth();
+				$options.css(css)
+				this.ampSelect('setFirstActive');
+				break;
+
+			default:
+				break;
+		}
+
+		return this;
+	},
+
+	close: function() {
+		var o = this.getOptions();
+
+		switch (o.style) {
+			case 'modal':
+				this.find('.amp-modal').ampModal('close');
+				break;
+
+			case 'inline':
+				this.find('.amp-select-options').addClass('is-dormant').removeClass('is-active');
+				break;
+
+			default:
+				break;
+		}
+
+		return this;
+	},
+
+	checkall: function(checked) {
+		var $ampSelect = $(this).closest('.amp-select');
+		$ampSelect.find('.amp-option input').prop('checked', typeof checked === 'boolean' ? checked : $ampSelect.find('.amp-select-checkall input').is(':checked')).first().change();
+	},
+
+	sortable: function(s) {
+		var $ampSelect = $(this).closest('.amp-select');
+		var o = $ampSelect.getOptions();
+
+		$ampSelect.find('.amp-select-options').sortable(o.sortable || {});
+	},
+
+	setSelected: function(values) {
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions(),
+			$options = $ampSelect.find('.amp-select-options'),
+			$field = $ampSelect.find('.amp-select-field'),
+			placeholder = '';
+
+		$options.find('input').prop('checked', false);
+
+		if (typeof values !== 'object') {
+			values = [values];
+		}
+
+		for (var s in values) {
+			var val = values[s]
+			var $opt = $options.find('[value="' + val + '"]');
+
+			if (o.style === 'inline') {
+				if (o.allowNewOptions && !$opt.length && val) {
+					o.selectOptions[val] = val;
+					$ampSelect.ampSelect('setSelectOptions', o.selectOptions);
+					$opt = $options.find('[value="' + val + '"]');
+				}
+			}
+
+			$opt.prop('checked', true)
+
+			placeholder += (placeholder ? ', ' : '') + $opt.siblings('.label').html();
+		}
+
+		$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
+
+		o.selectedValues = values;
+		$field.val(values).data('textValue', values[0]);
+
+		return $ampSelect;
+	},
+
+	loadSourceOptions: function(source) {
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions(), options;
+
+		if (typeof source === 'function') {
+			options = source.call($ampSelect);
+		} else if (source instanceof jQuery) {
+			options = {};
+			o.selectedValues = [];
+
+			source.find('option').each(function() {
+				var $o = $(this);
+				options[$o.attr('value')] = $o.html();
+
+				if ($o.is(':selected')) {
+					o.selectedValues.push($o.attr('value'))
+				}
+			});
+		} else if (typeof source === 'object') {
+			options = source;
+		}
+
+		if (typeof options === 'object') {
+			$ampSelect.ampSelect('setSelectOptions', options);
+		}
+
+		return this;
+	},
+
+	getSelectOptions: function() {
+		return this.getOptions().selectOptions;
+	},
+
+	setSelectOptions: function(options) {
+		var $ampSelect = $(this).closest('.amp-select');
+		var $options = $ampSelect.find('.amp-select-options');
+		var o = $ampSelect.getOptions();
+
+		o.selectOptions = options;
+
+		$options.children().remove();
+
+		for (var opt in options) {
+			$options.append(
+				$('<label />').addClass('amp-option ' + (o.selectMultiple ? 'checkbox' : 'radio'))
+					.append($('<input/>').attr('type', o.selectMultiple ? 'checkbox' : 'radio').attr('name', o.optionGroupName).attr('value', opt).prop('checked', o.selectedValues.indexOf(opt) > -1))
+					.append($('<span/>').addClass('label').html(options[opt]))
+			);
+		}
+
+		$options.find('.amp-option input').change(function() {
+			var $ampSelect = $(this).closest('.amp-select');
+			var values = [], $field = $ampSelect.find('.amp-select-field');
+
+			$ampSelect.find('.amp-option input:checked').each(function() {
+				values.push($(this).val());
+			})
+
+			$field.val($field.is('input') ? values[0] : values).change();
+		})
+
+		if (o.sortable) {
+			$ampSelect.ampSelect('sortable', typeof o.sortable === 'object' ? o.sortable : {});
+		}
+
+		return $ampSelect.ampSelect('setSelected', o.selectedValues);
+	},
+
+	getActive: function() {
+		return this.find('.amp-option.is-active');
+	},
+
+	setActive: function(value) {
+		var $options = this.find('.amp-select-options');
+		$options.find('.amp-option').removeClass('is-active');
+		$options.find('.amp-option input[value="' + value + '"]').closest('.amp-option').addClass('is-active');
+		return this;
+	},
+
+	setFirstActive: function() {
+		this.ampSelect('setActive', this.find('.amp-option:visible').first().find('input').val());
+		return this;
+	},
+
+	nextActive: function(dir) {
+		var $active = this.ampSelect('getActive');
+		dir || (dir = 1);
+
+		var $next = dir > 0 ? $active.nextAll(':visible').first() : $active.prevAll(':visible').first();
+
+		if (!$next.length) {
+			$next = dir > 0 ? this.find('.amp-option:first-child') : this.find('.amp-option:last-child');
+		}
+
+		return this.ampSelect('setActive', $next.find('input').val());
+	},
+
+	selectActive: function() {
+		this.ampSelect('close');
+		this.ampSelect('setSelected', [this.ampSelect('getActive').find('input').val()]);
+		return this;
+	},
+
+	filter: function(value) {
+		var $ampSelect = this;
+
+		$ampSelect.find('.amp-select-options .amp-option').each(function() {
+			var $this = $(this);
+			var regex = new RegExp('.*' + value + '.*', 'i');
+			var str = $this.find('.label').html();
+			$this.toggleClass('hidden', !str.match(regex));
+		})
+
+		$ampSelect.ampSelect('open');
+
+		return $ampSelect;
+	},
+
+	initInline: function() {
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions(), $field = $ampSelect.find('.amp-select-field');
+
+		var $box = $('<div/>').addClass('amp-select-box amp-select-inline'),
+			$input = $field.is('input') ? $field : $('<input/>').attr('type', 'text'),
+			$options = $('<div/>').addClass('amp-select-options no-parent-scroll is-dormant on-active');
+
+		//Setup Box
+		$box.append($options)
+
+		$box.append($input.addClass('amp-select-input'));
+
+		$input.data('textValue', $input.val());
+
+		$input.focus(function() {
+			$(this).closest('.amp-select').ampSelect('open')
+		})
+
+		$input.blur(function() {
+			$(this).closest('.amp-select').ampSelect('close')
+		})
+
+		$input.keydown(function(e) {
+			var $ampSelect = $(this).closest('.amp-select');
+
+			var k = e.which || e.keyCode || e.charCode;
+
+			switch (k) {
+				case 13:
+					$ampSelect.ampSelect('selectActive');
+					return false;
+
+				case 38:
+				case 40:
+					$ampSelect.ampSelect('nextActive', k === 38 ? -1 : 1);
+					return false;
+				case 9:
+					$ampSelect.ampSelect('nextActive', e.shiftKey ? -1 : 1);
+					return false;
+			}
+		})
+
+		$input.keyup(function() {
+			var $this = $(this);
+
+			if ($this.data('textValue') !== $this.val()) {
+				$this.closest('.amp-select').ampSelect('filter', $this.val())
+				$this.data('textValue', $this.val());
+			}
+		})
+
+		$ampSelect.append($box);
+
+		return this;
 	},
 
 	initCheckboxes: function() {
@@ -1173,10 +1470,10 @@ $.ampExtend($.ampSelect = function() {}, {
 
 	initSelectModal: function() {
 		var $ampSelect = this;
-		var o = $ampSelect.getOptions();
+		var $field = $ampSelect.find('.amp-select-field');
 
 		var $selected = $("<div />")
-			.addClass(o.select.attr('class').replace('amp-select-enabled', 'amp-selected'))
+			.addClass($field.attr('class').replace('amp-select-enabled', 'amp-selected'))
 			.append($('<div/>').addClass('align-middle'))
 			.append($('<div/>').addClass('value'))
 			.append($('<div/>').addClass('amp-select-button').append($('<div />').addClass('align-middle no-ws-hack')).append($('<div />').addClass('amp-select-button-icon fa fa-ellipsis-h')));
@@ -1186,7 +1483,7 @@ $.ampExtend($.ampSelect = function() {}, {
 			$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
 			$actions = $('<div/>').addClass('amp-select-actions'),
 			$done = $('<a/>').addClass('amp-select-done button').html('Done'),
-			$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html(o.select.attr('data-label') || 'Select one or more items'));
+			$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html($field.attr('data-label') || 'Select one or more items'));
 
 		$ampSelect.append($selected);
 
@@ -1210,89 +1507,6 @@ $.ampExtend($.ampSelect = function() {}, {
 		}
 
 		return this;
-	},
-
-	open: function() {
-		$(this).closest('.amp-select').find('.amp-modal').ampModal('open');
-	},
-
-	close: function() {
-		$(this).closest('.amp-select').find('.amp-modal').ampModal('close');
-	},
-
-	checkall: function(checked) {
-		var $ampSelect = $(this).closest('.amp-select');
-		$ampSelect.find('.amp-option input').prop('checked', typeof checked === 'boolean' ? checked : $ampSelect.find('.amp-select-checkall input').is(':checked')).first().change();
-	},
-
-	sortable: function(s) {
-		var $ampSelect = $(this).closest('.amp-select');
-		var o = $ampSelect.getOptions();
-
-		$ampSelect.find('.amp-select-options').sortable(o.sortable || {});
-	},
-
-	assignSelect: function($select) {
-		var $ampSelect = $(this).closest('.amp-select');
-		var $options = $ampSelect.find('.amp-select-options');
-		var o = $ampSelect.getOptions();
-
-		$options.children().remove();
-
-		$select.find('option').each(function(j, o) {
-			var $o = $(o);
-
-			$options.append(
-				$('<label />').addClass('amp-option checkbox')
-					.append($('<input/>').attr('type', 'checkbox').attr('value', $o.attr('value')).prop('checked', $o.is(':selected')))
-					.append($('<span/>').addClass('label').html($o.html()))
-			);
-		});
-
-		$options.find('.amp-option input').change($.ampSelect.update)
-		$select.change($.ampSelect.refresh);
-
-		if (o.sortable) {
-			$ampSelect.ampSelect('sortable', typeof o.sortable === 'object' ? o.sortable : {});
-		}
-
-		$ampSelect.ampSelect('update')
-	},
-
-	update: function(trigger_change) {
-		var $ampSelect = $(this).closest('.amp-select');
-		var o = $ampSelect.getOptions();
-		var value = [], placeholder = '';
-
-		$ampSelect.find('.amp-option input').each(function(i, o) {
-			$o = $(o);
-			if ($o.is(':checked')) {
-				value.push($o.attr('value'));
-				placeholder += (placeholder ? ', ' : '') + $o.siblings('.label').html()
-			}
-		})
-
-		var $select = $ampSelect.find('select').val(value);
-		$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
-
-		if (trigger_change) {
-			$select.change();
-		}
-	},
-
-	refresh: function() {
-		var $ampSelect = $(this).closest('.amp-select');
-		var $options = $ampSelect.find('.amp-select-options');
-		var $select = $ampSelect.find('select');
-
-		$options.find('input').prop('checked', false);
-		var values = $select.val();
-
-		for (var s in values) {
-			$options.find('[value=' + values[s] + ']').prop('checked', true)
-		}
-
-		$ampSelect.ampSelect('update', false);
 	}
 })
 
