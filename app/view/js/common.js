@@ -1333,8 +1333,6 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		options.splice(0,0,{loading: 'Loading...'});
 
-		console.log('setting to', options);
-		
 		$ampSelect.ampSelect('setSelectOptions', options);
 
 		if (typeof source === 'function') {
@@ -1351,7 +1349,6 @@ $.ampExtend($.ampSelect = function() {}, {
 		}
 
 		if (typeof options === 'object') {
-			console.log('loading', $ampSelect, $ampSelect.getOptions());
 			$ampSelect.ampSelect('setSelectOptions', options);
 		}
 
