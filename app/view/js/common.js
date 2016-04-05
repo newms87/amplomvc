@@ -1329,7 +1329,7 @@ $.ampExtend($.ampSelect = function() {}, {
 	loadSourceOptions: function(source) {
 		var $ampSelect = this;
 
-		var options = $ampSelect.getSelectOptions();
+		var options = $ampSelect.ampSelect('getSelectOptions');
 
 		options.splice(0,0,{loading: 'Loading...'});
 
