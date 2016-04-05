@@ -1194,7 +1194,7 @@ $.ampExtend($.ampSelect = function() {}, {
 			if (o.preloadSource) {
 				$ampSelect.ampSelect('loadSourceOptions', o.source || $field);
 			} else {
-				$ampSelect.click(function() {
+				$ampSelect.one('amp-open', function() {
 					var $ampSelect = $(this);
 					var o = $ampSelect.getOptions();
 					if (!$ampSelect.is('.amp-source-loaded')) {
@@ -1231,7 +1231,7 @@ $.ampExtend($.ampSelect = function() {}, {
 				break;
 		}
 
-		return this;
+		return this.trigger('amp-open');
 	},
 
 	close: function() {
@@ -1250,7 +1250,7 @@ $.ampExtend($.ampSelect = function() {}, {
 				break;
 		}
 
-		return this;
+		return this.trigger('amp-close');
 	},
 
 	checkall: function(checked) {
@@ -1326,14 +1326,22 @@ $.ampExtend($.ampSelect = function() {}, {
 		return $ampSelect;
 	},
 
+	startLoading: function() {
+		var $loading = $('<div/>').addClass('amp-loading').html("Loading...");
+		this.find('.amp-select-options').prepend($loading);
+		return this;
+	},
+
+	stopLoading: function() {
+		this.find('.amp-select-options .amp-loading').remove();
+
+		return this;
+	},
+
 	loadSourceOptions: function(source) {
 		var $ampSelect = this;
 
-		var options = $ampSelect.ampSelect('getSelectOptions');
-
-		options.splice(0,0,{loading: 'Loading...'});
-
-		$ampSelect.ampSelect('setSelectOptions', options);
+		$ampSelect.ampSelect('startLoading');
 
 		if (typeof source === 'function') {
 			options = source.call($ampSelect);
@@ -1401,7 +1409,21 @@ $.ampExtend($.ampSelect = function() {}, {
 	setActive: function(value) {
 		var $options = this.find('.amp-select-options');
 		$options.find('.amp-option').removeClass('is-active');
-		$options.find('.amp-option input[value="' + value + '"]').closest('.amp-option').addClass('is-active');
+		var $option = $options.find('.amp-option input[value="' + value + '"]').closest('.amp-option').addClass('is-active');
+
+		var pos = $option.position(),
+			optScroll = $options.scrollTop();
+
+		var optBottom = optScroll + $options.height();
+
+		pos.bottom = pos.top + $option.outerHeight();
+
+		if (pos.top < 0) {
+			$options.scrollTop(optScroll + pos.top);
+		} else if (pos.bottom > optBottom) {
+			$options.scrollTop(pos.bottom);
+		}
+
 		return this;
 	},
 
