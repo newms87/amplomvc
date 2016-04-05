@@ -306,6 +306,10 @@ $.fn.getOptions = function() {
 	return this.data('o');
 }
 
+$.fn.ampNewInstance = function() {
+	return this.setOptions(this.getOptions());
+}
+
 $.ampExtend = function(a, m) {
 	if (typeof a !== 'string') {
 		for (var i in $) {
@@ -1138,9 +1142,12 @@ $.ampExtend($.ampSelect = function() {}, {
 		o = $.extend({
 			style:           null, //modal, inline, checkboxes or null (for auto detect)
 			source:          null, //object (eg: {url: 'http://example-source.com', query:{...}} ) or function
+			preloadSource:   true,
+			selectOptions:   [],
 			selectedValues:  null, //array of values, or null to use <input> / <select> values
 			selectMultiple:  null, //true, false, or null (for auto detect),
-			allowNewOptions: true
+			allowNewOptions: true,
+			onCreateNew:     null
 		}, {}, o);
 
 		return this.use_once('amp-select-enabled').each(function() {
@@ -1153,16 +1160,12 @@ $.ampExtend($.ampSelect = function() {}, {
 
 			o.style = o.style || $field.attr('data-amp-select-style') || ($field.is('input') ? 'inline' : 'modal');
 
-			if (o.selectedValues === null) {
-				o.selectedValues = $field.val();
-			}
-
 			if (o.selectMultiple === null) {
 				o.selectMultiple = o.style !== 'inline';
 			}
 
 			//Save Options to Instance
-			$ampSelect.setOptions($.extend({}, o, {
+			$ampSelect.setOptions($.extend(true, {}, o, {
 				placeholder:     $field.attr('data-placeholder') || 'Select Items...',
 				optionGroupName: 'amp_option_' + $.ampSelect.instanceCount++
 			}));
@@ -1188,7 +1191,21 @@ $.ampExtend($.ampSelect = function() {}, {
 				$(this).closest('.amp-select').ampSelect('setSelected', $(this).val());
 			});
 
-			$ampSelect.ampSelect('loadSourceOptions', o.source || $field);
+			if (o.preloadSource) {
+				$ampSelect.ampSelect('loadSourceOptions', o.source || $field);
+			} else {
+				$ampSelect.click(function() {
+					var $ampSelect = $(this);
+					var o = $ampSelect.getOptions();
+					if (!$ampSelect.is('.amp-source-loaded')) {
+						$ampSelect.ampSelect('loadSourceOptions', o.source);
+					}
+				})
+			}
+
+			if (o.selectedValues) {
+				$ampSelect.ampSelect('setSelected', o.selectedValues);
+			}
 		});
 	},
 
@@ -1248,6 +1265,22 @@ $.ampExtend($.ampSelect = function() {}, {
 		$ampSelect.find('.amp-select-options').sortable(o.sortable || {});
 	},
 
+	isSelected: function(value) {
+		var $field = this.find('.amp-select-field');
+
+		if ($field.is('input')) {
+			if ($field.val() == value) {
+				return true;
+			}
+		} else {
+			return $field.find('option[value="' + value + '"]:selected').length;
+		}
+	},
+
+	getSelected: function() {
+		return this.find('.amp-select-field').val();
+	},
+
 	setSelected: function(values) {
 		var $ampSelect = this;
 		var o = $ampSelect.getOptions(),
@@ -1270,6 +1303,10 @@ $.ampExtend($.ampSelect = function() {}, {
 					o.selectOptions[val] = val;
 					$ampSelect.ampSelect('setSelectOptions', o.selectOptions);
 					$opt = $options.find('[value="' + val + '"]');
+
+					if (o.onCreateNew) {
+						o.onCreateNew.call($ampSelect, val, o.selectOptions);
+					}
 				}
 			}
 
@@ -1280,35 +1317,41 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
 
-		o.selectedValues = values;
-		$field.val(values).data('textValue', values[0]);
+		$field.val(values);
+
+		if ($field.is('input[type=text]')) {
+			$field.data('textValue', $field.val());
+		}
 
 		return $ampSelect;
 	},
 
 	loadSourceOptions: function(source) {
 		var $ampSelect = this;
-		var o = $ampSelect.getOptions(), options;
+
+		var options = $ampSelect.getSelectOptions();
+
+		options.splice(0,0,{loading: 'Loading...'});
+
+		console.log('setting to', options);
+		
+		$ampSelect.ampSelect('setSelectOptions', options);
 
 		if (typeof source === 'function') {
 			options = source.call($ampSelect);
 		} else if (source instanceof jQuery) {
 			options = {};
-			o.selectedValues = [];
 
 			source.find('option').each(function() {
 				var $o = $(this);
 				options[$o.attr('value')] = $o.html();
-
-				if ($o.is(':selected')) {
-					o.selectedValues.push($o.attr('value'))
-				}
 			});
 		} else if (typeof source === 'object') {
 			options = source;
 		}
 
 		if (typeof options === 'object') {
+			console.log('loading', $ampSelect, $ampSelect.getOptions());
 			$ampSelect.ampSelect('setSelectOptions', options);
 		}
 
@@ -1331,7 +1374,7 @@ $.ampExtend($.ampSelect = function() {}, {
 		for (var opt in options) {
 			$options.append(
 				$('<label />').addClass('amp-option ' + (o.selectMultiple ? 'checkbox' : 'radio'))
-					.append($('<input/>').attr('type', o.selectMultiple ? 'checkbox' : 'radio').attr('name', o.optionGroupName).attr('value', opt).prop('checked', o.selectedValues.indexOf(opt) > -1))
+					.append($('<input/>').attr('type', o.selectMultiple ? 'checkbox' : 'radio').attr('name', o.optionGroupName).attr('value', opt).prop('checked', $ampSelect.ampSelect('isSelected', opt)))
 					.append($('<span/>').addClass('label').html(options[opt]))
 			);
 		}
@@ -1351,7 +1394,7 @@ $.ampExtend($.ampSelect = function() {}, {
 			$ampSelect.ampSelect('sortable', typeof o.sortable === 'object' ? o.sortable : {});
 		}
 
-		return $ampSelect.ampSelect('setSelected', o.selectedValues);
+		return $ampSelect.ampSelect('setSelected', $ampSelect.find('.amp-select-field').val());
 	},
 
 	getActive: function() {
@@ -1374,6 +1417,10 @@ $.ampExtend($.ampSelect = function() {}, {
 		var $active = this.ampSelect('getActive');
 		dir || (dir = 1);
 
+		if (!this.find('.amp-select-options').is('.is-active')) {
+			this.ampSelect('open');
+		}
+
 		var $next = dir > 0 ? $active.nextAll(':visible').first() : $active.prevAll(':visible').first();
 
 		if (!$next.length) {
@@ -1384,8 +1431,9 @@ $.ampExtend($.ampSelect = function() {}, {
 	},
 
 	selectActive: function() {
+		var active = this.ampSelect('getActive').find('input').val() || this.find('.amp-select-input').val();
+		this.ampSelect('setSelected', [active]);
 		this.ampSelect('close');
-		this.ampSelect('setSelected', [this.ampSelect('getActive').find('input').val()]);
 		return this;
 	},
 
@@ -1433,15 +1481,23 @@ $.ampExtend($.ampSelect = function() {}, {
 			var k = e.which || e.keyCode || e.charCode;
 
 			switch (k) {
+				//Enter Key
 				case 13:
 					$ampSelect.ampSelect('selectActive');
 					return false;
 
+				//Up Arrow / Down Arrow
 				case 38:
 				case 40:
 					$ampSelect.ampSelect('nextActive', k === 38 ? -1 : 1);
 					return false;
+
+				//Tab
 				case 9:
+					if (!$ampSelect.find('.amp-select-options').is('.is-active')) {
+						return;
+					}
+
 					$ampSelect.ampSelect('nextActive', e.shiftKey ? -1 : 1);
 					return false;
 			}
@@ -1491,8 +1547,12 @@ $.ampExtend($.ampSelect = function() {}, {
 		$checkall.find('input').change($.ampSelect.checkall);
 
 		//Actions
-		$selected.click($.ampSelect.open);
-		$done.click($.ampSelect.close);
+		$selected.click(function() {
+			$(this).closest('.amp-select').ampSelect('open');
+		});
+		$done.click(function() {
+			$(this).closest('.amp-select').ampSelect('close');
+		});
 
 		//Setup Box
 		$box.append($options).append($actions.append($done))
