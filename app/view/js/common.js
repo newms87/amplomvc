@@ -1412,16 +1412,19 @@ $.ampExtend($.ampSelect = function() {}, {
 		var $option = $options.find('.amp-option input[value="' + value + '"]').closest('.amp-option').addClass('is-active');
 
 		var pos = $option.position(),
-			optScroll = $options.scrollTop();
+			box = {top: 0},
+			scrollTop = $options.scrollTop(),
+			optHeight = $option.outerHeight(),
+			boxHeight = $options.height();
 
-		var optBottom = optScroll + $options.height();
+		pos.top = pos.top;
+		pos.bottom = pos.top + optHeight;
+		box.bottom = boxHeight;
 
-		pos.bottom = pos.top + $option.outerHeight();
-
-		if (pos.top < 0) {
-			$options.scrollTop(optScroll + pos.top);
-		} else if (pos.bottom > optBottom) {
-			$options.scrollTop(pos.bottom);
+		if (pos.top < box.top) {
+			$options.scrollTop(scrollTop + Math.ceil(pos.top));
+		} else if (pos.bottom > box.bottom) {
+			$options.scrollTop(scrollTop + Math.floor(pos.bottom) - $options.height());
 		}
 
 		return this;

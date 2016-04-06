@@ -749,12 +749,8 @@ label.select {
 
 	&:after {
 		width: 3em;
-		padding: .5em .8em;
 		height: 100%;
 		content: "";
-		font-size: .9em;
-		font-weight: 600;
-		color: white;
 		border-top-right-radius: 3px;
 		border-bottom-right-radius: 3px;
 		position: absolute;
@@ -770,10 +766,11 @@ label.select {
 		content: "\f078";
 		color: white;
 		position: absolute;
-		top: .6em;
-		right: 1em;
+		top: .7em;
+		right: 1.1em;
 		z-index: 11;
 		line-height: 1em;
+		font-size: .9em;
 	}
 
 	&.large {
@@ -783,35 +780,19 @@ label.select {
 	}
 
 	&.small {
-		select {
-			font-size: .8em;
-		}
+		font-size: .9em;
 
 		&:after {
-			width: 2.5em;
+			width: 2.7em;
 		}
 
 		&:before {
-			font-size: .7em;
-			top: .8em;
+			right: .9em;
 		}
 	}
 
 	&.tiny {
-		select {
-			font-size: .8em;
-			padding: .2em;
-			height: 2.2em;
-			padding-right: 2.5em !important;
-		}
-
-		&:after {
-			width: 2em;
-		}
-
-		&:before {
-			font-size: .6em;
-		}
+		font-size: .8em;
 	}
 
 	&.form-select {
