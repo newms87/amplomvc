@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Invoice extends App_Model_Table
 {
 	protected $table = 'invoice', $primary_key = 'invoice_id';
@@ -45,6 +45,7 @@ class App_Model_Invoice extends App_Model_Table
 		if ($invoice_id) {
 			if (!$orig) {
 				$this->error['orig'] = _l("Original invoice %s was not found", $invoice_id);
+
 				return false;
 			}
 
@@ -58,7 +59,7 @@ class App_Model_Invoice extends App_Model_Table
 							break;
 
 						case self::STATUS_CANCELLED:
-							$invoice['date_paid'] = '';
+							$invoice['date_paid']  = '';
 							$invoice['payment_id'] = 0;
 							break;
 					}
@@ -119,28 +120,22 @@ class App_Model_Invoice extends App_Model_Table
 
 	public function generateNumber()
 	{
-		$number = (int)option('invoice_counter', 219203);
-
-		$number++;
-
-		save_option('invoice_counter', $number);
-
-		return $number;
+		return (int)$this->queryVar("SELECT MAX(number) FROM {$this->t[$this->table]}") + 1;
 	}
 
 	public function getColumns($filter = array(), $merge = array())
 	{
 		$merge += array(
 			'status'   => array(
-				'type'         => 'select',
+				'type'  => 'select',
 				'label' => _l("Status"),
-				'build'        => array(
+				'build' => array(
 					'type' => 'multiselect',
 					'data' => self::$statuses,
 				),
 			),
 			'customer' => array(
-				'type'         => 'text',
+				'type'  => 'text',
 				'label' => _l("Customer"),
 			),
 		);
