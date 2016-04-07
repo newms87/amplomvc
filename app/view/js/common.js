@@ -567,6 +567,104 @@ $.ampExtend($.ampDelay = function() {}, {
 	},
 })
 
+//ampPager jQuery Plugin
+$.ampExtend($.ampPager = function() {}, {
+	init: function(o) {
+		o = $.extend({}, {
+			target:        null,
+			total:         0,
+			limit:         null,
+			page:          1,
+			showPages:     false,
+			visiblePages:  5,
+			listingUrl:    null,
+			listing:       {},
+			beforeLoading: null,
+			afterLoading:  null,
+			requestId:     0
+		}, o);
+
+		if (!o.target) {
+			return $.error("ampPager Error: target is required.");
+		}
+
+		if (!o.listingUrl) {
+			return $.error("ampPager Error: listingUrl is required.");
+		}
+
+		this.setOptions(o).addClass('amp-pager');
+
+		this.ampPager('render');
+
+		return this;
+	},
+
+	getPage: function(page) {
+		var $ampPager = this;
+		var o = $ampPager.getOptions();
+
+		page = page >= 1 ? page : 1;
+
+		var query = $.extend({}, o.listing, {
+			start: (page - 1) * o.limit,
+			limit: o.limit
+		})
+
+		if (o.beforeLoading) {
+			o.beforeLoading.call($ampPager, page);
+		}
+
+		var rid = ++o.requestId;
+
+		$.get(o.listingUrl, query, function(response) {
+			if (rid === o.requestId) {
+				if (typeof o.target === 'function') {
+					o.target.call($ampPager, response);
+				} else {
+					o.target.html(response);
+				}
+
+				if (o.afterLoading) {
+					o.afterLoading.call($ampPager, page);
+				}
+			}
+		})
+
+		o.page = page;
+
+		$ampPager.ampPager('render');
+
+		return $ampPager;
+	},
+
+	render: function() {
+		var $ampPager = this;
+		var o = $ampPager.getOptions();
+
+		var $pageFirst, $pagePrev, $pages, $pageNext, $pageLast,
+			pageCount = Math.ceil(o.total / o.limit);
+
+		($pageFirst = $ampPager.find('.amp-page-first')).length || $ampPager.append($pageFirst = $('<a />').addClass('amp-page amp-page-first').html('<b class="fa fa-chevron-left"></b><b class="fa fa-chevron-left"></b>'));
+		($pagePrev = $ampPager.find('.amp-page-prev')).length || $ampPager.append($pagePrev = $('<a />').addClass('amp-page amp-page-prev').html('<b class="fa fa-chevron-left"></b>'));
+		($pages = $ampPager.find('.amp-page-list')).length || $ampPager.append($pages = $('<div />').addClass('amp-page-list'));
+		($pageNext = $ampPager.find('.amp-page-next')).length || $ampPager.append($pageNext = $('<a />').addClass('amp-page amp-page-next').html('<b class="fa fa-chevron-right"></b>'));
+		($pageLast = $ampPager.find('.amp-page-last')).length || $ampPager.append($pageLast = $('<a />').addClass('amp-page amp-page-last').html('<b class="fa fa-chevron-right"></b><b class="fa fa-chevron-right"></b>'));
+
+		$pageFirst.attr('data-page', 1).toggleClass('hidden', o.page < 2);
+		$pagePrev.attr('data-page', Math.max(o.page - 1, 1)).toggleClass('hidden', o.page < 2);
+		$pageNext.attr('data-page', Math.min(o.page + 1, pageCount)).toggleClass('hidden', o.page >= pageCount);
+		$pageLast.attr('data-page', pageCount).toggleClass('hidden', o.page >= pageCount);
+
+		$pages.html(o.page + ' of ' + pageCount);
+
+		$ampPager.find('.amp-page').use_once().click(function() {
+			$(this).closest('.amp-pager').ampPager('getPage', +$(this).attr('data-page'));
+		})
+
+		return $ampPager;
+	}
+})
+
 //ampToggle jQuery Plugin
 $.ampExtend($.ampToggle = function() {}, {
 	init: function(o) {
@@ -731,13 +829,15 @@ $.ampExtend($.ampYouTube = function() {}, {
 		var firstScriptTag = $('script')[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-		o.unit = o.unit || (typeof o.width === 'string' ? o.width.getUnit() : 'px');
+		if (o.width) {
+			this.width(o.width);
+		}
 
-		o.width = parseFloat(o.width) || this.width();
-		o.height = parseFloat(o.height) || (o.ratio * o.width) || this.height();
+		if (!o.height) {
+			o.height = o.ratio * this.width();
+		}
 
-		this.width(o.width + o.unit);
-		this.height(o.height + o.unit);
+		this.height(o.height);
 
 		o.id = this.attr('id');
 
@@ -747,7 +847,6 @@ $.ampExtend($.ampYouTube = function() {}, {
 				height:    o.height,
 				maxWidth:  o.maxWidth,
 				maxHeight: o.maxHeight,
-				unit:      o.unit,
 				onClose:   function() {
 					$.ampYouTube.getInstance(this.find('iframe').attr('id')).ampYouTube('pause')
 				}
@@ -912,8 +1011,7 @@ $.ampExtend($.ampModal = function() {}, {
 			width:           null,
 			height:          null,
 			maxWidth:        '90vh',
-			maxHeight:       '80vh',
-			unit:            null,
+			maxHeight:       '80vh'
 		}, o);
 
 		o.content = o.content === null ? this : $(o.content);
@@ -922,8 +1020,6 @@ $.ampExtend($.ampModal = function() {}, {
 		if (!(o.context = $(o.context)).length) {
 			o.context = $('body');
 		}
-
-		o.unit = o.unit || (typeof o.width === 'string' ? o.width.getUnit() : 'px');
 
 		return $(o.content).use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
 			var $e = $(e),
@@ -935,8 +1031,8 @@ $.ampExtend($.ampModal = function() {}, {
 			o.context.append($modal);
 
 			$content.css({
-				width:  (o.width + o.unit) || 'auto',
-				height: (o.height + o.unit) || 'auto',
+				width:  o.width || 'auto',
+				height: o.height || 'auto',
 			});
 
 			$contentBox.css({

@@ -69,6 +69,18 @@
 	}
 }
 
+.is-ready {
+	.on-loading {
+		display: none;
+	}
+}
+
+.is-loading {
+	.on-ready {
+		display: none;
+	}
+}
+
 //Size animations
 .animate-hide {
 	overflow: hidden;
@@ -226,6 +238,17 @@
 	}
 }
 
+.amp-loading-screen {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	z-index: 10000;
+	background: rgba(255, 255, 255, .8);
+}
+
 //ampModal
 .amp-modal {
 	position: fixed;
@@ -341,26 +364,45 @@
 		}
 	}
 
+	.messages {
+		margin-top: 1em;
+	}
+
 	&.active {
 		left: 0;
-	}
-
-	&.is-ready {
-		.on-loading {
-			display: none;
-		}
-	}
-
-	&.is-loading {
-		.on-ready {
-			display: none;
-		}
 	}
 }
 
 .amp-confirm, .amp-alert {
 	padding: 1em;
 	font-size: .9em;
+}
+
+//amp-pager
+.amp-pager {
+	.amp-page {
+		.col;
+		.col.auto;
+		.no-ws-hack;
+		padding: .5em;
+
+		.fa {
+			font-size: .7em;
+
+			& + .fa {
+				margin-left: -.2em;
+			}
+		}
+	}
+
+	.amp-page-list {
+		.col;
+		.col.auto;
+		.no-ws-hack;
+		padding: .5em;
+		font-size: .9em;
+		font-weight: bold;
+	}
 }
 
 //ampFilter

@@ -2,34 +2,40 @@
 $.ampExtend($.ampManager = function() {}, {
 	instanceId: 0,
 	init:       function(o) {
-		var $managers = this.use_once().addClass('amp-manager');
+		var $managers = this.use_once().addClass('amp-manager is-ready');
 
 		if (!$managers.length) {
 			return this;
 		}
 
 		o = $.extend({}, {
-			id:             null,
-			input:          null,
-			label:          'record',
-			selected:       null,
-			type:           'amplo',
-			type_id:        'amplo_id',
-			showAddress:    true,
-			template:       null,
-			selectMultiple: false,
-			syncFields:     null,
-			defaults:       {},
-			onResults:      null,
-			onAppend:       null,
-			onChange:       null,
-			onEdit:         null,
-			onReady:        null,
-			url:            $ac.site_url + 'manager/',
-			removeUrl:      null,
-			listingUrl:     null,
-			loadListings:   true,
-			listing:        {}
+			id:              null,
+			input:           null,
+			label:           'record',
+			selected:        null,
+			type:            'amplo',
+			type_id:         'amplo_id',
+			showAddress:     true,
+			template:        null,
+			selectMultiple:  false,
+			syncFields:      null,
+			defaults:        {},
+			onResults:       null,
+			onAppend:        null,
+			onChange:        null,
+			onEdit:          null,
+			onReady:         null,
+			onInitTemplate:  null,
+			url:             $ac.site_url + 'manager/',
+			removeUrl:       null,
+			listingUrl:      null,
+			loadListings:    true,
+			listing:         {},
+			showPagination:  true,
+			paginateOptions: {
+				limit: 10,
+				page:  1,
+			}
 		}, o);
 
 		o.url = o.url.replace(/\/$/, '') + '/';
@@ -206,12 +212,16 @@ $.ampExtend($.ampManager = function() {}, {
 		var $am = this;
 		var o = $am.getOptions();
 
+		$am.addClass('is-loading').removeClass('is-ready');
+
 		$.post(o.listingUrl, $.extend(true, o.listing, listing), function(response) {
 			$am.ampManager('results', response.records, response.total);
 
 			if (!listing) {
 				$am.toggleClass('has-records', !!+response.total).toggleClass('no-records', !+response.total);
 			}
+
+			$am.removeClass('is-loading').addClass('is-ready');
 
 			if (callback) {
 				callback.call($am);
@@ -221,7 +231,7 @@ $.ampExtend($.ampManager = function() {}, {
 		return this;
 	},
 
-	results: function(records, total) {
+	results: function(records, total, updatePager) {
 		var $am = this;
 		var o = $am.getOptions();
 		var $recordList = $am.find('.am-record-list').html(''),
@@ -233,6 +243,25 @@ $.ampExtend($.ampManager = function() {}, {
 			for (var c in records) {
 				var record = records[c];
 				$am.ampManager('append', record);
+			}
+		}
+
+		if (o.showPagination && updatePager !== false) {
+			if (($pager = $am.find('.amp-pager')).length) {
+				$pager.ampPager($.extend({}, {
+					listingUrl:    o.listingUrl,
+					listing:       o.listing,
+					total:         total,
+					beforeLoading: function() {
+						$am.addClass('is-loading').removeClass('is-ready')
+					},
+					afterLoading:  function() {
+						$am.removeClass('is-loading').addClass('is-ready')
+					},
+					target:        function(response) {
+						$am.ampManager('results', response.records, response.total, false)
+					}
+				}, o.paginateOptions));
 			}
 		}
 
@@ -267,7 +296,7 @@ $.ampExtend($.ampManager = function() {}, {
 		$record.attr('data-am-record-id', record.id);
 
 		if (o.selectMultiple) {
-			if (o.selected && this.ampManager('selectedIndex',record.id) !== false) {
+			if (o.selected && this.ampManager('selectedIndex', record.id) !== false) {
 				$record.addClass('is-selected');
 			}
 		} else {
@@ -445,6 +474,10 @@ $.ampExtend($.ampManager = function() {}, {
 		$am.find('.am-record[data-row=__ac_template__]').ac_template(o.template_id);
 
 		$am.addClass('is-empty no-records');
+
+		if (o.onInitTemplate) {
+			o.onInitTemplate.call(this);
+		}
 
 		if (o.loadListings) {
 			$am.ampManager('get', null, o.onReady);
