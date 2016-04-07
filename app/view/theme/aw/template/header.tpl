@@ -69,7 +69,7 @@
 
 			<div class="header-navigation col xs-7 sm-8 md-9 lg-10 xs-right lg-left top">
 				<div class="links-toggle lg-hidden" onclick="$(this).toggleClass('hover')">
-					<b class="amp-sprite si-menu"></b>
+					<b class="fa fa-reorder"></b>
 				</div>
 
 				<nav class="header-nav col xs-12">

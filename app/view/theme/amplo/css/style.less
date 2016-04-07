@@ -271,10 +271,6 @@ a.color-main:hover {
 		border-radius: 5px;
 		cursor: pointer;
 
-		&:after {
-			content: "X";
-		}
-
 		&:hover, &:active {
 			background: @color-lightest;
 		}
@@ -1307,34 +1303,6 @@ section.page {
 		button {
 			width: 100%;
 			max-width: 20em;
-		}
-	}
-}
-
-.collapsible {
-	position: relative;
-
-	&:after {
-		.amp-sprite;
-		.si-chevron-wht;
-		.amp-sprite.rotate-180;
-
-		position: absolute;
-		top: 1em;
-		right: .5em;
-	}
-
-	.collapse {
-		.height-animate-hide;
-	}
-
-	&.hide {
-		&:after {
-			.amp-sprite.rotate-0;
-		}
-
-		.collapse {
-			.height-animate-hide.hide;
 		}
 	}
 }

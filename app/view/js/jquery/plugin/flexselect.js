@@ -119,10 +119,11 @@
 			this.input.blur(function() {
 				if (!self.dropdownMouseover) {
 					self.hide();
-					if (self.settings.allowMismatchBlank && $.trim($(this).val()) == '')
+					if (self.settings.allowMismatchBlank && $.trim($(this).val()) == '') {
 						self.setValue('');
-					if (!self.settings.allowMismatch && !self.picked)
+					} else if (!self.settings.allowMismatch && !self.picked) {
 						self.reset();
+					}
 				}
 				if (self.settings.hideDropdownOnEmptyInput)
 					self.dropdownList.show();
@@ -150,7 +151,12 @@
 			this.dropdownList.mouseleave(function() {
 				self.markSelected(-1);
 			});
-			this.dropdownList.mouseup(function(event) {
+			this.dropdownList.on('mouseup click', function(e) {
+				var $t = $(e.target);
+				if ($t.is('li')) {
+					self.markSelected($(event.target).index());
+				}
+
 				self.pickSelected();
 				self.focusAndHide();
 			});
@@ -178,9 +184,9 @@
 					default:
 						if (self.input.val() === '' && self.settings.hideDropdownOnEmptyInput) {
 							self.setValue('');
-						} else {
-							self.filterResults();
 						}
+
+						self.filterResults();
 						break;
 				}
 				if (self.settings.hideDropdownOnEmptyInput) {
@@ -277,11 +283,10 @@
 			});
 
 			var html = '';
-			var disabledAttribute = '';
+
 			$.each(this.results, function() {
 				if (this.disabled && !showDisabled) return;
-				disabledAttribute = this.disabled ? ' class="disabled"' : '';
-				html += '<li' + disabledAttribute + '>' + this.name + '</li>';
+				html += '<li' + (this.disabled ? ' class="disabled"' : '') + '>' + this.name + '</li>';
 			});
 			this.dropdownList.html(html);
 			this.adjustMaxHeight();

@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Controller_Common extends Controller
 {
 	public function file_upload()
@@ -70,7 +70,7 @@ class App_Controller_Common extends Controller
 					message('error', _l("There was a problem saving your file %s to the server. Please upload again.", $file['name']));
 				}
 			} else {
-				message('error', _l("File upload failed for %s. Please try again.", $file['name']));
+				message('error', _l("Error (%s): File upload failed for %s. Please try again.", $file['error'], $file['name']));
 			}
 		}
 

@@ -53,6 +53,7 @@ $(document)
 			}
 		}
 
+
 		if ($n.is('.expand')) {
 			$n.closest('.on-expand').toggleClass('active');
 			return false;
@@ -305,6 +306,10 @@ $.fn.getOptions = function() {
 	return this.data('o');
 }
 
+$.fn.ampNewInstance = function() {
+	return this.setOptions(this.getOptions());
+}
+
 $.ampExtend = function(a, m) {
 	if (typeof a !== 'string') {
 		for (var i in $) {
@@ -441,33 +446,82 @@ $.ampExtend($.ampNestedForm = function() {}, {
 
 //ampFormat jQuery Plugin
 $.ampExtend($.ampFormat = function() {}, {
+	formats: {
+		'integer':          /^-?[0-9]*$/,
+		'unsigned integer': /^[0-9]*$/,
+		'float':            /^-?[0-9]*\.?[0-9]*$/,
+		'unsigned float':   /^[0-9]*\.?[0-9]*$/
+	},
+
 	init: function(o) {
 		o = $.extend({}, {
-			type:     'float',
-			unsigned: false
+			format:       'float',
+			charMap:      {},
+			defaultValue: '',
+			allowEmpty:   true
 		}, o);
 
+		if (typeof o.format === 'string') {
+			o.format = $.ampFormat.formats[o.format];
+		}
+
+		if (!(o.format instanceof RegExp) && typeof o.format !== 'function') {
+			$.error("Invalid Option (format): Format must be a string of a valid format ('integer', 'float', 'unsigned integer', etc.), a regular expression or a function");
+			return this;
+		}
 		this.setOptions(o);
 
 		this.keypress(function(e) {
 			return $(this).ampFormat('validate', e);
 		})
 
+		if (!o.allowEmpty) {
+			this.keyup(function() {
+				var $input = $(this);
+				var o = $input.getOptions();
+
+				if ($input.val() === '') {
+					$input.val(o.defaultValue);
+				}
+			})
+		}
+
 		return this;
 	},
 
-	validate: function(e, type) {
-		var o = this.getOptions();
+	validate: function(e) {
+		//For incompatible browsers (like IE8 and below) disable formatting
+		if (typeof e.target.selectionStart === 'undefined') {
+			return true;
+		}
 
-		var type = typeof type === 'string' ? type : o.type,
-			char = String.fromCharCode(e.keyCode);
+		var o = this.getOptions(),
+			char = e.key || String.fromCharCode(e.keyCode || e.charCode),
+			string = this.val();
 
-		switch (type) {
-			case 'float':
-				return o.unsigned ? !!char.match(/[0-9\.]/) : !!char.match(/[0-9\.\-]/);
+		var newString = string.slice(0, e.target.selectionStart) + char + string.slice(e.target.selectionEnd);
 
-			case 'integer':
-				return o.unsigned ? !!char.match(/[0-9]/) : !!char.match(/[0-9\-]/);
+		//Mozilla charCode === 0 means not a char (enter key, tab, etc.)
+		if (e.charCode === 0) {
+			return true;
+		}
+
+		if (typeof o.charMap[char] !== 'undefined') {
+			return o.charMap[char];
+		}
+
+		if (typeof o.format === 'function') {
+			return o.format(newString, char, string);
+		} else {
+			if (!newString.match(o.format)) {
+				if (!string.match(o.format)) {
+					this.val(o.defaultValue);
+				}
+
+				return false;
+			}
+
+			return true;
 		}
 	}
 })
@@ -532,6 +586,7 @@ $.ampExtend($.ampToggle = function() {}, {
 			start:               'dormant',
 			acceptParent:        '',
 			blurOnModal:         false,
+			dormantOnBlur:       true,
 			onShow:              null,
 			onHide:              null
 		}, o);
@@ -548,12 +603,24 @@ $.ampExtend($.ampToggle = function() {}, {
 		}
 
 		o.content.click(function(e) {
-			var $target = $(e.target);
+			var $t = $(e.target);
+			var $content = $t.closest('.amp-toggle-content');
 
-			if ($target.closest('.amp-toggle-off').length) {
-				$(this).ampToggle('setDormant');
-			} else if ($target.closest('.amp-toggle-on').length) {
-				$(this).ampToggle('setActive');
+			//Check if the event was for a nested amp-toggle instance
+			if (e.originalEvent) {
+				if (e.originalEvent.ampToggleHandled) {
+					return;
+				}
+
+				e.originalEvent.ampToggleHandled = true;
+			}
+
+			if ($t.closest('.amp-toggle-off').length) {
+				$content.ampToggle('setDormant');
+			} else if ($t.closest('.amp-toggle-on').length) {
+				$content.ampToggle('setActive');
+			} else if ($t.closest('.amp-toggle-void').length) {
+				return;
 			}
 		})
 
@@ -561,8 +628,21 @@ $.ampExtend($.ampToggle = function() {}, {
 			o.content.addClass('amp-toggle-content');
 
 			o.toggle.addClass('amp-toggle').click(function(e) {
-				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.activeClass) ? 'setDormant' : 'setActive');
+				var $t = $(e.target);
+				var $toggle = $t.closest('.amp-toggle');
+				var o = $toggle.getOptions();
+
 				e.stopPropagation();
+
+				if ($t.closest('.amp-toggle-off').length) {
+					$toggle.ampToggle('setDormant');
+				} else if ($t.closest('.amp-toggle-on').length) {
+					$toggle.ampToggle('setActive');
+				} else if ($t.closest('.amp-toggle-void').length) {
+					return;
+				}
+
+				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.activeClass) ? 'setDormant' : 'setActive');
 				return false;
 			})
 
@@ -576,6 +656,10 @@ $.ampExtend($.ampToggle = function() {}, {
 
 	_blur: function(e) {
 		var $t = $(e.target), o = $.ampToggle.active.getOptions();
+
+		if (!o.dormantOnBlur) {
+			return;
+		}
 
 		if ($t.closest(o.content).length || ($t.closest('.amp-modal').length && !o.blurOnModal)) {
 			!o.content.is('.amp-toggle') || ($.ampToggle.skipToggle = true);
@@ -1053,91 +1137,120 @@ $.ampConfirm = $.fn.ampConfirm = function(o) {
 
 //ampSelect jQuery Plugin
 $.ampExtend($.ampSelect = function() {}, {
-	init: function(o) {
-		o = $.extend({}, {}, o);
+	instanceCount: 0,
+	init:          function(o) {
+		o = $.extend({
+			style:           null, //modal, inline, checkboxes or null (for auto detect)
+			source:          null, //object (eg: {url: 'http://example-source.com', query:{...}} ) or function
+			preloadSource:   true,
+			selectOptions:   [],
+			selectedValues:  null, //array of values, or null to use <input> / <select> values
+			selectMultiple:  null, //true, false, or null (for auto detect),
+			allowNewOptions: true,
+			onCreateNew:     null
+		}, {}, o);
 
-		return this.use_once('amp-select-enabled').each(function(i, e) {
-			o.select = $(e).removeClass('amp-select');
+		return this.use_once('amp-select-enabled').each(function() {
+			var $field = $(this).removeClass('amp-select').addClass('amp-select-field'),
+				$ampSelect = $("<div />").addClass('amp-select');
 
-			var $ampSelect = $("<div />").addClass('amp-select');
+			if (o.source === null && !$field.is('select')) {
+				return $.error("ampSelect Error: source not set and instance is not a <select> element");
+			}
 
-			if (o.select.is('.amp-select-checkboxes')) {
-				o.checkboxes = true;
+			o.style = o.style || $field.attr('data-amp-select-style') || ($field.is('input') ? 'inline' : 'modal');
+
+			if (o.selectMultiple === null) {
+				o.selectMultiple = o.style !== 'inline';
 			}
 
 			//Save Options to Instance
-			$ampSelect.setOptions($.extend({}, o, {
-				placeholder: o.select.attr('data-placeholder') || 'Select Items...'
+			$ampSelect.setOptions($.extend(true, {}, o, {
+				placeholder:     $field.attr('data-placeholder') || 'Select Items...',
+				optionGroupName: 'amp_option_' + $.ampSelect.instanceCount++
 			}));
 
 			//Build Template
-			o.select.before($ampSelect);
-			$ampSelect.append(o.select);
+			$field.before($ampSelect);
+			$ampSelect.append($field);
 
-			if (o.checkboxes) {
-				$ampSelect.ampSelect('initCheckboxes');
-			} else {
-				$ampSelect.ampSelect('initSelectModal');
+			switch (o.style) {
+				case 'modal':
+					$ampSelect.ampSelect('initSelectModal');
+					break;
+				case 'checkboxes':
+					$ampSelect.ampSelect('initCheckboxes');
+					break;
+				case 'inline':
+				default:
+					$ampSelect.ampSelect('initInline');
+					break;
 			}
 
-			$ampSelect.ampSelect('assignSelect', o.select);
+			$field.change(function() {
+				$(this).closest('.amp-select').ampSelect('setSelected', $(this).val());
+			});
+
+			if (o.preloadSource) {
+				$ampSelect.ampSelect('loadSourceOptions', o.source || $field);
+			} else {
+				$ampSelect.one('amp-open', function() {
+					var $ampSelect = $(this);
+					var o = $ampSelect.getOptions();
+					if (!$ampSelect.is('.amp-source-loaded')) {
+						$ampSelect.ampSelect('loadSourceOptions', o.source);
+					}
+				})
+			}
+
+			if (o.selectedValues) {
+				$ampSelect.ampSelect('setSelected', o.selectedValues);
+			}
 		});
-	},
-
-	initCheckboxes: function() {
-		var $box = $('<div/>').addClass('amp-select-box amp-select-checkboxes'),
-			$options = $('<div/>').addClass('amp-select-options no-parent-scroll');
-
-		return this.append($box.append($options));
-	},
-
-	initSelectModal: function() {
-		var $ampSelect = this;
-		var o = $ampSelect.getOptions();
-
-		var $selected = $("<div />")
-			.addClass(o.select.attr('class').replace('amp-select-enabled', 'amp-selected'))
-			.append($('<div/>').addClass('align-middle'))
-			.append($('<div/>').addClass('value'))
-			.append($('<div/>').addClass('amp-select-button').append($('<div />').addClass('align-middle no-ws-hack')).append($('<div />').addClass('amp-select-button-icon fa fa-ellipsis-h')));
-
-		var $box = $('<div/>').addClass('amp-select-box amp-select-modal'),
-			$options = $('<div/>').addClass('amp-select-options no-parent-scroll'),
-			$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
-			$actions = $('<div/>').addClass('amp-select-actions'),
-			$done = $('<a/>').addClass('amp-select-done button').html('Done'),
-			$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html(o.select.attr('data-label') || 'Select one or more items'));
-
-		$ampSelect.append($selected);
-
-		//Events
-		$checkall.find('input').change($.ampSelect.checkall);
-
-		//Actions
-		$selected.click($.ampSelect.open);
-		$done.click($.ampSelect.close);
-
-		//Setup Box
-		$box.append($options).append($actions.append($done))
-
-		$box.ampModal({
-			title:   $title.prepend($checkall),
-			context: $ampSelect
-		});
-
-		if ($selected.is(':visible')) {
-			$selected.width($selected.width())
-		}
-
-		return this;
 	},
 
 	open: function() {
-		$(this).closest('.amp-select').find('.amp-modal').ampModal('open');
+		var o = this.getOptions();
+
+		switch (o.style) {
+			case 'modal':
+				this.find('.amp-modal').ampModal('open');
+				break;
+
+			case 'inline':
+				var $options = this.find('.amp-select-options').addClass('is-active').removeClass('is-dormant');
+				var $input = this.find('.amp-select-input');
+				var css = $input.offset();
+				css.top += $input.outerHeight();
+				css.minWidth = $input.outerWidth();
+				$options.css(css)
+				this.ampSelect('setFirstActive');
+				break;
+
+			default:
+				break;
+		}
+
+		return this.trigger('amp-open');
 	},
 
 	close: function() {
-		$(this).closest('.amp-select').find('.amp-modal').ampModal('close');
+		var o = this.getOptions();
+
+		switch (o.style) {
+			case 'modal':
+				this.find('.amp-modal').ampModal('close');
+				break;
+
+			case 'inline':
+				this.find('.amp-select-options').addClass('is-dormant').removeClass('is-active');
+				break;
+
+			default:
+				break;
+		}
+
+		return this.trigger('amp-close');
 	},
 
 	checkall: function(checked) {
@@ -1152,67 +1265,332 @@ $.ampExtend($.ampSelect = function() {}, {
 		$ampSelect.find('.amp-select-options').sortable(o.sortable || {});
 	},
 
-	assignSelect: function($select) {
+	isSelected: function(value) {
+		var $field = this.find('.amp-select-field');
+
+		if ($field.is('input')) {
+			if ($field.val() == value) {
+				return true;
+			}
+		} else {
+			return $field.find('option[value="' + value + '"]:selected').length;
+		}
+	},
+
+	getSelected: function() {
+		return this.find('.amp-select-field').val();
+	},
+
+	setSelected: function(values) {
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions(),
+			$options = $ampSelect.find('.amp-select-options'),
+			$field = $ampSelect.find('.amp-select-field'),
+			placeholder = '';
+
+		$options.find('input').prop('checked', false);
+
+		if (typeof values !== 'object') {
+			values = [values];
+		}
+
+		for (var s in values) {
+			var val = values[s]
+			var $opt = $options.find('[value="' + val + '"]');
+
+			if (o.style === 'inline') {
+				if (o.allowNewOptions && !$opt.length && val) {
+					o.selectOptions[val] = val;
+					$ampSelect.ampSelect('setSelectOptions', o.selectOptions);
+					$opt = $options.find('[value="' + val + '"]');
+
+					if (o.onCreateNew) {
+						o.onCreateNew.call($ampSelect, val, o.selectOptions);
+					}
+				}
+			}
+
+			$opt.prop('checked', true)
+
+			placeholder += (placeholder ? ', ' : '') + $opt.siblings('.label').html();
+		}
+
+		$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
+
+		$field.val(values);
+
+		if ($field.is('input[type=text]')) {
+			$field.data('textValue', $field.val());
+		}
+
+		return $ampSelect;
+	},
+
+	startLoading: function() {
+		var $loading = $('<div/>').addClass('amp-loading').html("Loading...");
+		this.find('.amp-select-options').prepend($loading);
+		return this;
+	},
+
+	stopLoading: function() {
+		this.find('.amp-select-options .amp-loading').remove();
+
+		return this;
+	},
+
+	loadSourceOptions: function(source) {
+		var $ampSelect = this;
+
+		$ampSelect.ampSelect('startLoading');
+
+		if (typeof source === 'function') {
+			options = source.call($ampSelect);
+		} else if (source instanceof jQuery) {
+			options = {};
+
+			source.find('option').each(function() {
+				var $o = $(this);
+				options[$o.attr('value')] = $o.html();
+			});
+		} else if (typeof source === 'object') {
+			options = source;
+		}
+
+		if (typeof options === 'object') {
+			$ampSelect.ampSelect('setSelectOptions', options);
+		}
+
+		return this;
+	},
+
+	getSelectOptions: function() {
+		return this.getOptions().selectOptions;
+	},
+
+	setSelectOptions: function(options) {
 		var $ampSelect = $(this).closest('.amp-select');
 		var $options = $ampSelect.find('.amp-select-options');
 		var o = $ampSelect.getOptions();
 
+		o.selectOptions = options;
+
 		$options.children().remove();
 
-		$select.find('option').each(function(j, o) {
-			var $o = $(o);
-
+		for (var opt in options) {
 			$options.append(
-				$('<label />').addClass('amp-option checkbox')
-					.append($('<input/>').attr('type', 'checkbox').attr('value', $o.attr('value')).prop('checked', $o.is(':selected')))
-					.append($('<span/>').addClass('label').html($o.html()))
+				$('<label />').addClass('amp-option ' + (o.selectMultiple ? 'checkbox' : 'radio'))
+					.append($('<input/>').attr('type', o.selectMultiple ? 'checkbox' : 'radio').attr('name', o.optionGroupName).attr('value', opt).prop('checked', $ampSelect.ampSelect('isSelected', opt)))
+					.append($('<span/>').addClass('label').html(options[opt]))
 			);
-		});
+		}
 
-		$options.find('.amp-option input').change($.ampSelect.update)
-		$select.change($.ampSelect.refresh);
+		$options.find('.amp-option input').change(function() {
+			var $ampSelect = $(this).closest('.amp-select');
+			var values = [], $field = $ampSelect.find('.amp-select-field');
+
+			$ampSelect.find('.amp-option input:checked').each(function() {
+				values.push($(this).val());
+			})
+
+			$field.val($field.is('input') ? values[0] : values).change();
+		})
 
 		if (o.sortable) {
 			$ampSelect.ampSelect('sortable', typeof o.sortable === 'object' ? o.sortable : {});
 		}
 
-		$ampSelect.ampSelect('update')
+		return $ampSelect.ampSelect('setSelected', $ampSelect.find('.amp-select-field').val());
 	},
 
-	update: function(trigger_change) {
-		var $ampSelect = $(this).closest('.amp-select');
-		var o = $ampSelect.getOptions();
-		var value = [], placeholder = '';
+	getActive: function() {
+		return this.find('.amp-option.is-active');
+	},
 
-		$ampSelect.find('.amp-option input').each(function(i, o) {
-			$o = $(o);
-			if ($o.is(':checked')) {
-				value.push($o.attr('value'));
-				placeholder += (placeholder ? ', ' : '') + $o.siblings('.label').html()
+	setActive: function(value) {
+		var $options = this.find('.amp-select-options');
+		$options.find('.amp-option').removeClass('is-active');
+		var $option = $options.find('.amp-option input[value="' + value + '"]').closest('.amp-option').addClass('is-active');
+
+		if ($option.length) {
+			var pos = $option.position(),
+				box = {top: 0},
+				scrollTop = $options.scrollTop(),
+				optHeight = $option.outerHeight(),
+				boxHeight = $options.height();
+
+			pos.top = pos.top;
+			pos.bottom = pos.top + optHeight;
+			box.bottom = boxHeight;
+
+			if (pos.top < box.top) {
+				$options.scrollTop(scrollTop + Math.ceil(pos.top));
+			} else if (pos.bottom > box.bottom) {
+				$options.scrollTop(scrollTop + Math.floor(pos.bottom) - $options.height());
+			}
+		}
+
+		return this;
+	},
+
+	setFirstActive: function() {
+		this.ampSelect('setActive', this.find('.amp-option:visible').first().find('input').val());
+		return this;
+	},
+
+	nextActive: function(dir) {
+		var $active = this.ampSelect('getActive');
+		dir || (dir = 1);
+
+		if (!this.find('.amp-select-options').is('.is-active')) {
+			this.ampSelect('open');
+		}
+
+		var $next = dir > 0 ? $active.nextAll(':visible').first() : $active.prevAll(':visible').first();
+
+		if (!$next.length) {
+			$next = dir > 0 ? this.find('.amp-option:first-child') : this.find('.amp-option:last-child');
+		}
+
+		return this.ampSelect('setActive', $next.find('input').val());
+	},
+
+	selectActive: function() {
+		var active = this.ampSelect('getActive').find('input').val() || this.find('.amp-select-input').val();
+		this.ampSelect('setSelected', [active]);
+		this.ampSelect('close');
+		return this;
+	},
+
+	filter: function(value) {
+		var $ampSelect = this;
+
+		$ampSelect.find('.amp-select-options .amp-option').each(function() {
+			var $this = $(this);
+			var regex = new RegExp('.*' + value + '.*', 'i');
+			var str = $this.find('.label').html();
+			$this.toggleClass('hidden', !str.match(regex));
+		})
+
+		$ampSelect.ampSelect('open');
+
+		return $ampSelect;
+	},
+
+	initInline: function() {
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions(), $field = $ampSelect.find('.amp-select-field');
+
+		var $box = $('<div/>').addClass('amp-select-box amp-select-inline'),
+			$input = $field.is('input') ? $field : $('<input/>').attr('type', 'text'),
+			$options = $('<div/>').addClass('amp-select-options no-parent-scroll is-dormant on-active');
+
+		//Setup Box
+		$box.append($options)
+
+		$box.append($input.addClass('amp-select-input'));
+
+		$input.data('textValue', $input.val());
+
+		$input.focus(function() {
+			$(this).closest('.amp-select').ampSelect('open')
+		})
+
+		$input.blur(function() {
+			$(this).closest('.amp-select').ampSelect('close')
+		})
+
+		$input.keydown(function(e) {
+			var $ampSelect = $(this).closest('.amp-select');
+
+			var k = e.which || e.keyCode || e.charCode;
+
+			switch (k) {
+				//Enter Key
+				case 13:
+					$ampSelect.ampSelect('selectActive');
+					return false;
+
+				//Up Arrow / Down Arrow
+				case 38:
+				case 40:
+					$ampSelect.ampSelect('nextActive', k === 38 ? -1 : 1);
+					return false;
+
+				//Tab
+				case 9:
+					if (!$ampSelect.find('.amp-select-options').is('.is-active')) {
+						return;
+					}
+
+					$ampSelect.ampSelect('nextActive', e.shiftKey ? -1 : 1);
+					return false;
 			}
 		})
 
-		var $select = $ampSelect.find('select').val(value);
-		$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
+		$input.keyup(function() {
+			var $this = $(this);
 
-		if (trigger_change) {
-			$select.change();
-		}
+			if ($this.data('textValue') !== $this.val()) {
+				$this.closest('.amp-select').ampSelect('filter', $this.val())
+				$this.data('textValue', $this.val());
+			}
+		})
+
+		$ampSelect.append($box);
+
+		return this;
 	},
 
-	refresh: function() {
-		var $ampSelect = $(this).closest('.amp-select');
-		var $options = $ampSelect.find('.amp-select-options');
-		var $select = $ampSelect.find('select');
+	initCheckboxes: function() {
+		var $box = $('<div/>').addClass('amp-select-box amp-select-checkboxes'),
+			$options = $('<div/>').addClass('amp-select-options no-parent-scroll');
 
-		$options.find('input').prop('checked', false);
-		var values = $select.val();
+		return this.append($box.append($options));
+	},
 
-		for (var s in values) {
-			$options.find('[value=' + values[s] + ']').prop('checked', true)
+	initSelectModal: function() {
+		var $ampSelect = this;
+		var $field = $ampSelect.find('.amp-select-field');
+
+		var $selected = $("<div />")
+			.addClass($field.attr('class').replace('amp-select-enabled', 'amp-selected'))
+			.append($('<div/>').addClass('align-middle'))
+			.append($('<div/>').addClass('value'))
+			.append($('<div/>').addClass('amp-select-button').append($('<div />').addClass('align-middle no-ws-hack')).append($('<div />').addClass('amp-select-button-icon fa fa-ellipsis-h')));
+
+		var $box = $('<div/>').addClass('amp-select-box amp-select-modal'),
+			$options = $('<div/>').addClass('amp-select-options no-parent-scroll'),
+			$checkall = $('<label/>').addClass('amp-select-checkall checkbox white').append($('<input/>').attr('type', 'checkbox')).append($('<span/>').addClass('label')),
+			$actions = $('<div/>').addClass('amp-select-actions'),
+			$done = $('<a/>').addClass('amp-select-done button').html('Done'),
+			$title = $('<div/>').addClass('amp-select-title').append($('<div/>').addClass('text').html($field.attr('data-label') || 'Select one or more items'));
+
+		$ampSelect.append($selected);
+
+		//Events
+		$checkall.find('input').change($.ampSelect.checkall);
+
+		//Actions
+		$selected.click(function() {
+			$(this).closest('.amp-select').ampSelect('open');
+		});
+		$done.click(function() {
+			$(this).closest('.amp-select').ampSelect('close');
+		});
+
+		//Setup Box
+		$box.append($options).append($actions.append($done))
+
+		$box.ampModal({
+			title:   $title.prepend($checkall),
+			context: $ampSelect
+		});
+
+		if ($selected.is(':visible')) {
+			$selected.width($selected.width())
 		}
 
-		$ampSelect.ampSelect('update', false);
+		return this;
 	}
 })
 
@@ -1486,7 +1864,7 @@ $.fn.show_msg = function(type, msg, o) {
 			$box = $('<div />').addClass('messages ' + type + ' ' + o.style);
 
 			if (o.close) {
-				$box.append($('<div />').addClass('close').click(function() {
+				$box.append($('<div />').addClass('close').append('<b class="fa fa-close"></b>').click(function() {
 					$(this).closest('.messages').find('.message').hide_msg();
 				}));
 			}
@@ -1807,22 +2185,6 @@ function register_colorbox() {
 			$e.colorbox(defaults);
 		});
 	}
-}
-
-$.fn.collapsible = function() {
-	return this.each(function(i, e) {
-		var $c = $(e);
-
-		$c.click(function() {
-			$(this).toggleClass('hide');
-		});
-
-		$c.find('.collapse, input, select, textarea, a').click(stopProp);
-	});
-}
-
-function stopProp(e) {
-	e.stopPropagation();
 }
 
 //ampAccordion jQuery Plugin

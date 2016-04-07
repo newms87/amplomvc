@@ -912,7 +912,13 @@ function build($type, $params = null)
 				$key = $value[$value_key];
 			}
 
-			$value = isset($value[$label_key]) ? $value[$label_key] : '';
+			if ($label_key === false) {
+				$label = $key;
+			} else {
+				$label = isset($value[$label_key]) ? $value[$label_key] : '';
+			}
+		} else {
+			$label = $label_key === false ? $key : $value;
 		}
 
 		//Determine if the value is a selected value.
@@ -935,7 +941,7 @@ function build($type, $params = null)
 
 		if ($readonly) {
 			if ($selected) {
-				$options .= "<div class=\"value\">$value</div>";
+				$options .= "<div class=\"value\">$label</div>";
 			}
 			continue;
 		}
@@ -950,33 +956,33 @@ function build($type, $params = null)
 					if ($opt_group_active) {
 						$options .= "</optgroup>";
 					}
-					$options .= "<optgroup label=\"$value\">";
+					$options .= "<optgroup label=\"$label\">";
 					$opt_group_active = true;
 				} else {
-					$options .= "<option value=\"$key\" $s>$value</option>";
+					$options .= "<option value=\"$key\" $s>$label</option>";
 				}
 				break;
 
 			case 'text-select':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<li><label for=\"text-select-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"text-select-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$value</span></div></label></li>";
+				$options .= "<li><label for=\"text-select-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"text-select-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$label</span></div></label></li>";
 				break;
 
 			case 'radio':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$value</span></div></label>";
+				$options .= "<label for=\"radio-$uniqid\" class=\"$type\"><input type=\"radio\" id=\"radio-$uniqid\" name=\"$name\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$label</span></div></label>";
 				break;
 
 			case 'checkbox':
 				$s = $selected ? 'checked="checked"' : '';
-				$options .= "<label for=\"checkbox-$uniqid\" class=\"checkbox\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" name=\"{$name}[]\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$value</span></div></label>";
+				$options .= "<label for=\"checkbox-$uniqid\" class=\"checkbox\"><input type=\"checkbox\" id=\"checkbox-$uniqid\" name=\"{$name}[]\" value=\"$key\" $s /><div class=\"label\"><span class=\"text\">$label</span></div></label>";
 				break;
 
 			case 'clickable_list':
 				if ($selected) {
-					$selected_options .= "<div onclick=\"clickable_list_remove($(this))\"><span>$value</span><input type=\"hidden\" value=\"$key\" name=\"$key\" /><img src=\"view/theme/default/image/remove.png\" /></div>";
+					$selected_options .= "<div onclick=\"clickable_list_remove($(this))\"><span>$label</span><input type=\"hidden\" value=\"$key\" name=\"$key\" /><img src=\"view/theme/default/image/remove.png\" /></div>";
 				} else {
-					$options .= "<div onclick=\"clickable_list_add($(this), '$key')\"><span>$value</span><img src=\"view/theme/default/image/add.png\" /></div>";
+					$options .= "<div onclick=\"clickable_list_add($(this), '$key')\"><span>$label</span><img src=\"view/theme/default/image/add.png\" /></div>";
 				}
 			default:
 				break;
@@ -1065,9 +1071,8 @@ function build_links($links, $options = array(), $active_url = null, &$is_active
 	$html = '';
 
 	$options += array(
-		'sort'       => null,
-		'class'      => 'vertical',
-		'amp_toggle' => false,
+		'sort'  => null,
+		'class' => 'vertical',
 	);
 
 	$active_url = path_format($active_url === null ? $registry->get('url')->here() : $active_url);

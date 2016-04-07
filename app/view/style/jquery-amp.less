@@ -49,11 +49,23 @@
 	.on-dormant, &.on-dormant {
 		display: none;
 	}
+
+	.is-dormant {
+		.on-dormant, &.on-dormant {
+			display: inline-block;
+		}
+	}
 }
 
 .is-dormant {
 	.on-active, &.on-active {
 		display: none;
+	}
+
+	.is-active {
+		.on-active, &.on-active {
+			display: inline-block;
+		}
 	}
 }
 
@@ -436,6 +448,8 @@ select.amp-select-enabled {
 }
 
 .amp-select-box {
+	position: relative;
+
 	&.amp-select-checkboxes {
 		.amp-option {
 			margin: 0 .5em;
@@ -462,8 +476,7 @@ select.amp-select-enabled {
 				cursor: all-scroll;
 
 				&:before {
-					.amp-sprite;
-					.si-drag-handle-dark-gray-sm;
+					content: "\f142";
 					top: 2px;
 					margin-right: .6em;
 				}
@@ -476,6 +489,39 @@ select.amp-select-enabled {
 			.amp-select-done {
 				text-align: center;
 				width: 100%;
+			}
+		}
+	}
+
+	&.amp-select-inline {
+		.amp-select-options {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			z-index: 1000;
+			background: white;
+			border: 1px solid black;
+			max-height: 20em;
+			overflow: auto;
+
+			.amp-loading {
+				display: block;
+				padding: .3em .5em;
+				font-style: italic;
+			}
+
+			.amp-option {
+				display: block;
+				padding: .3em .5em;
+
+				&.is-active {
+					color: white;
+					background: #0177B5;
+				}
+
+				&:hover {
+					background: @color-lighter;
+				}
 			}
 		}
 	}
@@ -667,16 +713,8 @@ label.checkbox {
 	}
 
 	&.white {
-		input[type="checkbox"] {
-			& + .label:before {
-				.si-checkbox-inactive-wht;
-			}
-
-			&:checked {
-				& + .label:before {
-					.si-checkbox-active-wht;
-				}
-			}
+		input[type="checkbox"] + .label:before {
+			color: white;
 		}
 	}
 }
@@ -711,12 +749,8 @@ label.select {
 
 	&:after {
 		width: 3em;
-		padding: .5em .8em;
 		height: 100%;
 		content: "";
-		font-size: .9em;
-		font-weight: 600;
-		color: white;
 		border-top-right-radius: 3px;
 		border-bottom-right-radius: 3px;
 		position: absolute;
@@ -732,9 +766,11 @@ label.select {
 		content: "\f078";
 		color: white;
 		position: absolute;
-		top: .4em;
-		right: 1em;
+		top: .7em;
+		right: 1.1em;
 		z-index: 11;
+		line-height: 1em;
+		font-size: .9em;
 	}
 
 	&.large {
@@ -744,40 +780,25 @@ label.select {
 	}
 
 	&.small {
-		select {
-			font-size: .8em;
-		}
+		font-size: .9em;
 
 		&:after {
-			width: 2.5em;
+			width: 2.7em;
 		}
 
 		&:before {
-			font-size: .7em;
+			right: .9em;
 		}
 	}
 
 	&.tiny {
-		select {
-			font-size: .8em;
-			padding: .2em;
-			height: 2.2em;
-			padding-right: 2.5em !important;
-		}
-
-		&:after {
-			width: 2em;
-		}
-
-		&:before {
-			font-size: .6em;
-		}
+		font-size: .8em;
 	}
 
 	&.form-select {
 		&:before {
 			font-size: .9em;
-			top: .5em;
+			top: .8em;
 		}
 	}
 }

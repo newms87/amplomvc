@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class Message extends Library
 {
 	protected $messages = array();
@@ -22,7 +22,7 @@ class Message extends Library
 				$_SESSION['message'] = array();
 			}
 
-			$this->messages = & $_SESSION['message'];
+			$this->messages = &$_SESSION['message'];
 		}
 	}
 
@@ -124,7 +124,7 @@ class Message extends Library
 			}
 		}
 
-		$msgs = $this->messages;
+		$msgs           = $this->messages;
 		$this->messages = array();
 
 		return $msgs;
@@ -170,7 +170,7 @@ class Message extends Library
 			}
 
 			if ($close && option('config_allow_close_message', true)) {
-				$html .= "<span class =\"close\" onclick=\"$(this).closest('.messages').find('.message').hide_msg()\"></span>";
+				$html .= "<div class=\"close\" onclick=\"$(this).closest('.messages').find('.message').hide_msg()\"><b class=\"fa fa-close\"></b></div>";
 			}
 
 			$html .= "</div>";
