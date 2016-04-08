@@ -249,6 +249,50 @@
 	background: rgba(255, 255, 255, .8);
 }
 
+.amp-inline-edit {
+	position: relative;
+	display: inline-block;
+
+	input[type="text"] {
+		border-color: transparent;
+		background: none;
+		position: relative;
+	}
+
+	&:after {
+		.fa;
+		content: "\f040";
+		position: absolute;
+		right: 0;
+		top: 0;
+		background: @color-gray-light;
+		padding: .28em;
+		border: 1px solid @color-gray-light;
+		border-left-color: transparent;
+		border-top-right-radius: 3px;
+		border-bottom-right-radius: 3px;
+		box-sizing: border-box;
+		height: 100%;
+		display: none;
+	}
+
+	&:hover {
+		input[type="text"] {
+			border-color: @color-gray-light;
+		}
+
+		&:after {
+			display: inline-block;
+		}
+	}
+
+	&:active, &.is-focus {
+		&:after {
+			display: none;
+		}
+	}
+}
+
 //ampModal
 .amp-modal {
 	position: fixed;

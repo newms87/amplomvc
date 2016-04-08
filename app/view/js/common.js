@@ -39,8 +39,14 @@ $(document)
 			return false;
 		}
 
-		if (($onClick = $n.closest('[data-amp-toggle], .on-click')).length) {
-			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
+		if (($onClick = $n.closest('.amp-inline-edit, [data-amp-toggle], .on-click')).length) {
+			if ($onClick.is('.amp-inline-edit')) {
+				$onClick.addClass('is-focus');
+				document.addEventListener('click', function() {
+					$onClick.removeClass('is-focus');
+					document.removeEventListener('click', arguments.callee, true);
+				}, true);
+			} else if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
 				$onClick.ampToggle({
 					content: $onClick.attr('data-amp-toggle') || $onClick,
 				}).click();
