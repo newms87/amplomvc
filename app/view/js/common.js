@@ -1305,21 +1305,25 @@ $.ampExtend($.ampSelect = function() {}, {
 	},
 
 	open: function() {
-		var o = this.getOptions();
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions();
 
 		switch (o.style) {
 			case 'modal':
-				this.find('.amp-modal').ampModal('open');
+				$ampSelect.find('.amp-modal').ampModal('open');
 				break;
 
 			case 'inline':
-				var $options = this.find('.amp-select-options').addClass('is-active').removeClass('is-dormant');
-				var $input = this.find('.amp-select-input');
+				var $options = $ampSelect.find('.amp-select-options').addClass('is-active').removeClass('is-dormant');
+				var $input = $ampSelect.find('.amp-select-input');
 				var css = $input.offset();
-				css.top += $input.outerHeight();
+				css.top += $input.outerHeight() - $('body').scrollTop();
 				css.minWidth = $input.outerWidth();
 				$options.css(css)
-				this.ampSelect('setFirstActive');
+				$ampSelect.ampSelect('setFirstActive');
+				$(document).one('scroll', function() {
+					$ampSelect.ampSelect('close')
+				})
 				break;
 
 			default:
@@ -1586,7 +1590,7 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		$input.data('textValue', $input.val());
 
-		$input.focus(function() {
+		$input.on('focus click', function() {
 			$(this).closest('.amp-select').ampSelect('open')
 		})
 
