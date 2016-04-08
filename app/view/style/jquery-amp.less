@@ -571,10 +571,10 @@ select.amp-select-enabled {
 
 .amp-selected {
 	position: relative;
-	height: 2.6em;
 	max-width: 100%;
 	border-radius: 3px;
 	padding: .5em 3em .5em .5em;
+	line-height: .8em;
 	border: 1px solid @color-dark;
 	box-sizing: border-box;
 
@@ -776,9 +776,9 @@ label.select {
 		height: auto;
 		padding-right: 3em !important;
 		border-radius: 3px;
-		font-size: 1em;
-		line-height: 1.2em;
-		padding: .5em;
+		font-size: .9em;
+		line-height: 1em;
+		padding: .6em;
 		box-sizing: border-box;
 		-webkit-appearance: none;
 		-moz-appearance: none;
@@ -790,7 +790,7 @@ label.select {
 	}
 
 	&:after {
-		width: 3em;
+		width: 2.6em;
 		height: 100%;
 		content: "";
 		border-top-right-radius: 3px;
@@ -808,11 +808,11 @@ label.select {
 		content: "\f078";
 		color: white;
 		position: absolute;
-		top: .7em;
+		top: .9em;
 		right: 1.1em;
 		z-index: 11;
 		line-height: 1em;
-		font-size: .9em;
+		font-size: .8em;
 	}
 
 	&.large {
@@ -822,26 +822,17 @@ label.select {
 	}
 
 	&.small {
-		font-size: .9em;
-
 		&:after {
 			width: 2.7em;
 		}
 
 		&:before {
-			right: .9em;
+			top: .9em;
 		}
 	}
 
 	&.tiny {
 		font-size: .8em;
-	}
-
-	&.form-select {
-		&:before {
-			font-size: .9em;
-			top: .8em;
-		}
 	}
 }
 

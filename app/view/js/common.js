@@ -736,11 +736,10 @@ $.ampExtend($.ampToggle = function() {}, {
 					$toggle.ampToggle('setDormant');
 				} else if ($t.closest('.amp-toggle-on').length) {
 					$toggle.ampToggle('setActive');
-				} else if ($t.closest('.amp-toggle-void').length) {
-					return;
+				} else if (!$t.closest('.amp-toggle-void').length) {
+					$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.activeClass) ? 'setDormant' : 'setActive');
 				}
 
-				$.ampToggle.skipToggle ? $.ampToggle.skipToggle = false : o.toggle.ampToggle(o.toggle.hasClass(o.activeClass) ? 'setDormant' : 'setActive');
 				return false;
 			})
 
@@ -1650,7 +1649,6 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		var $selected = $("<div />")
 			.addClass($field.attr('class').replace('amp-select-enabled', 'amp-selected'))
-			.append($('<div/>').addClass('align-middle'))
 			.append($('<div/>').addClass('value'))
 			.append($('<div/>').addClass('amp-select-button').append($('<div />').addClass('align-middle no-ws-hack')).append($('<div />').addClass('amp-select-button-icon fa fa-ellipsis-h')));
 
