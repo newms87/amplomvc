@@ -78,13 +78,13 @@ abstract class App_Model_Table extends Model
 
 	}
 
-	public function remove($record_id)
+	public function remove($unit_id)
 	{
-		if ($record_id) {
+		if ($unit_id) {
 			clear_cache($this->table . '.rows');
-			clear_cache($this->table . '.' . $record_id);
+			clear_cache($this->table . '.' . $unit_id);
 
-			return $this->delete($this->table, $record_id);
+			return $this->delete($this->table, $unit_id);
 		}
 	}
 

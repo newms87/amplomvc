@@ -1,7 +1,7 @@
 <?= $is_ajax ? '' : call('admin/header'); ?>
 
 <section class="section table-form-tpl">
-	<form action="<?= site_url($model['path'] . '/save', $model['value'] . '=' . $record[$model['value']]); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save table-form-form">
+	<form action="<?= site_url($model['path'] . '/save', isset($record[$model['value']]) ? $model['value'] . '=' . $record[$model['value']] : ''); ?>" method="post" enctype="multipart/form-data" class="box ctrl-save table-form-form">
 		<div class="row heading left">
 			<div class="breadcrumbs col xs-12 md-6 left">
 				<?= $is_ajax ? '' : breadcrumbs(); ?>
@@ -15,10 +15,10 @@
 		<div class="row left section">
 			<div class="col left top">
 				<? foreach ($columns as $c => $column) { ?>
-					<? if (isset($record[$c]) && $column['type'] !== 'pk-int' && $column['type'] !== 'pk') { ?>
+					<? if ($column['type'] !== 'pk-int' && $column['type'] !== 'pk') { ?>
 						<?
 						$column['#id']    = 'column-' . $c;
-						$column['select'] = $record[$c];
+						$column['select'] = isset($record[$c]) ? $record[$c] : '';
 						$column['name']   = $c;
 						?>
 
@@ -29,7 +29,6 @@
 								<? if (!empty($column['build'])) { ?>
 									<? $column = $column['build'] + $column; ?>
 								<? } ?>
-
 
 								<?= build($column); ?>
 							</div>
