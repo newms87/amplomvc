@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC Dev Plugin
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
@@ -25,12 +25,12 @@ if (empty($_SESSION['user_id'])) {
 }
 
 /**
- * @param mixed $var - The variable to display all data for. Can be any type (int, array, object, etc..)
- * @param string $label - The label for the link to the dump report (which opens in a new window)
- * @param bool $show_type - Show the types for string, int, float and bool data
- * @param int $level - The starting recursive depth for arrays
- * @param int $max - The maximum recursive depth for arrays
- * @param bool $print - print and return the results. False will only return the HTML results.
+ * @param mixed  $var       - The variable to display all data for. Can be any type (int, array, object, etc..)
+ * @param string $label     - The label for the link to the dump report (which opens in a new window)
+ * @param bool   $show_type - Show the types for string, int, float and bool data
+ * @param int    $level     - The starting recursive depth for arrays
+ * @param int    $max       - The maximum recursive depth for arrays
+ * @param bool   $print     - print and return the results. False will only return the HTML results.
  *
  * @return string - The HTML dump output
  */
@@ -84,14 +84,36 @@ HTML;
 			.dump_output .key_value_pair > .key {
 				word-wrap: break-word;
 				max-width: 200px;
-				background: #82E182;
+				background: #BBEFBB;
 				padding: 3px 5px
 			}
 
 			.dump_output .key_value_pair > .value {
-				background: #92ADE3;
+				background: #B8C8E7;
 				max-width: 800px;
-				word-wrap: break-word
+				word-wrap: break-word;
+				color: #28581B;
+				font-weight: bold;
+			}
+
+			.dump_output .key_value_pair > .value.string {
+				font-weight: normal;
+			}
+
+			.dump_output .key_value_pair > .value.integer {
+				color: #813029;
+			}
+
+			.dump_output .key_value_pair > .value.double {
+				color: #813029;
+			}
+
+			.dump_output .key_value_pair > .value.NULL {
+				color: #E10B44;
+			}
+
+			.dump_output .key_value_pair > .value.boolean {
+				color: #19028D;
 			}
 		</style>
 		<span class='html_dump_label'>$label</span>
@@ -141,25 +163,27 @@ function html_dump_r($var, $level, $max, $show_type = false)
 				html_dump_r($v, $level + 1, $max, $show_type);
 				echo "</td>";
 			} else {
+				$val_type = gettype($v);
+
 				if (is_array($v)) {
 					$val = "Array (" . count($v) . ")";
 				} elseif (is_object($v)) {
 					$val = "Object (" . count($v) . ")";
 				} elseif (is_bool($v)) {
-					$val = "Bool (" . ($v ? "true" : "false") . ')';
+					$val = "(bool) " . ($v ? "true" : "false");
 				} elseif (is_string($v) && empty($v) && $v !== '0') {
-					$val = "String (empty)";
+					$val = "(empty string)";
 				} elseif ($v === null) {
 					$val = "NULL";
 				} else {
 					if ($show_type) {
-						$val = '(' . gettype($v) . ')' . $v;
+						$val = "($val_type) $v";
 					} else {
 						$val = $v;
 					}
 				}
 
-				echo "<td class ='value'>$val</td>";
+				echo "<td class=\"value $val_type\">$val</td>";
 			}
 			echo "</tr>";
 		}

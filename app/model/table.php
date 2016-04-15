@@ -115,7 +115,7 @@ abstract class App_Model_Table extends Model
 
 			$record = $this->queryRow("SELECT $select FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
 
-			if ($cache && $record && $select === '*') {
+			if ($record && $select === '*') {
 				self::$records[$this->table][$record_id] = $record;
 			}
 		}
