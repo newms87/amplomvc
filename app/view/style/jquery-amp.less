@@ -67,6 +67,10 @@
 			display: inline-block;
 		}
 	}
+
+	.on-always {
+		display: inline-block;
+	}
 }
 
 .is-ready {
@@ -259,14 +263,12 @@
 		position: relative;
 	}
 
-	&:after {
-		.fa;
-		content: "\f040";
+	.amp-inline-edit-btn {
 		position: absolute;
 		right: 0;
 		top: 0;
 		background: @color-gray-light;
-		padding: .28em;
+		padding: .4em;
 		border: 1px solid @color-gray-light;
 		border-left-color: transparent;
 		border-top-right-radius: 3px;
@@ -276,19 +278,13 @@
 		display: none;
 	}
 
-	&:hover {
+	&.is-dormant:hover {
 		input[type="text"] {
 			border-color: @color-gray-light;
 		}
 
-		&:after {
+		.amp-inline-edit-btn {
 			display: inline-block;
-		}
-	}
-
-	&:active, &.is-focus {
-		&:after {
-			display: none;
 		}
 	}
 }

@@ -39,17 +39,13 @@ $(document)
 			return false;
 		}
 
-		if (($onClick = $n.closest('.amp-inline-edit, [data-amp-toggle], .on-click')).length) {
-			if ($onClick.is('.amp-inline-edit')) {
-				$onClick.addClass('is-focus');
-				document.addEventListener('click', function() {
-					$onClick.removeClass('is-focus');
-					document.removeEventListener('click', arguments.callee, true);
-				}, true);
-			} else if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
+		if (($onClick = $n.closest('[data-amp-toggle], .on-click')).length) {
+			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
 				$onClick.ampToggle({
-					content: $onClick.attr('data-amp-toggle') || $onClick,
-				}).click();
+					content:       $onClick.attr('data-amp-toggle') || $onClick,
+					focusOnActive: $onClick.find('.amp-toggle-focus')
+				})
+				$n.click();
 			} else {
 				$onClick.toggleClass('is-active');
 
@@ -58,7 +54,6 @@ $(document)
 				}
 			}
 		}
-
 
 		if ($n.is('.expand')) {
 			$n.closest('.on-expand').toggleClass('active');
@@ -690,7 +685,9 @@ $.ampExtend($.ampToggle = function() {}, {
 			start:               'dormant',
 			acceptParent:        '',
 			blurOnModal:         false,
+			blurOnDormant:       true,
 			dormantOnBlur:       true,
+			focusOnActive:       null,
 			onShow:              null,
 			onHide:              null
 		}, o);
@@ -704,6 +701,12 @@ $.ampExtend($.ampToggle = function() {}, {
 		//Hide content when dormant if set in options or toggle is not a child of content
 		if (o.hideContent || (o.hideContent === null && !o.content.find(this).length) && !o.content.is('.on-always')) {
 			o.content.addClass('on-active');
+		}
+
+		if (o.focusOnActive){
+			o.focusOnActive.blur(function(){
+				$(this).closest('.amp-toggle').ampToggle('setDormant');
+			})
 		}
 
 		o.content.click(function(e) {
@@ -736,7 +739,14 @@ $.ampExtend($.ampToggle = function() {}, {
 				var $toggle = $t.closest('.amp-toggle');
 				var o = $toggle.getOptions();
 
-				e.stopPropagation();
+				//Check if the event was for a nested amp-toggle instance
+				if (e.originalEvent) {
+					if (e.originalEvent.ampToggleHandled) {
+						return;
+					}
+
+					e.originalEvent.ampToggleHandled = true;
+				}
 
 				if ($t.closest('.amp-toggle-off').length) {
 					$toggle.ampToggle('setDormant');
@@ -786,6 +796,9 @@ $.ampExtend($.ampToggle = function() {}, {
 			document.addEventListener('click', $.ampToggle._blur, true);
 		}, 100);
 
+		if (o.focusOnActive) {
+			o.focusOnActive.focus();
+		}
 
 		if (typeof o.onShow === 'function') {
 			o.onShow.call(this, o);
@@ -800,6 +813,10 @@ $.ampExtend($.ampToggle = function() {}, {
 		o.content.removeClass(o.activeContentClass).addClass(o.dormantContentClass);
 		$.ampToggle.active = null;
 		document.removeEventListener('click', $.ampToggle._blur, true);
+
+		if (o.blurOnDormant) {
+			$(':focus').blur();
+		}
 
 		if (typeof o.onHide === 'function') {
 			o.onHide.call(this, o);
@@ -1563,6 +1580,7 @@ $.ampExtend($.ampSelect = function() {}, {
 		var active = this.ampSelect('getActive').find('input').val() || this.find('.amp-select-input').val();
 		this.ampSelect('setSelected', [active]);
 		this.ampSelect('close');
+		this.find('.amp-select-input').change();
 		return this;
 	},
 
@@ -1613,6 +1631,7 @@ $.ampExtend($.ampSelect = function() {}, {
 				//Enter Key
 				case 13:
 					$ampSelect.ampSelect('selectActive');
+					$(this).blur();
 					return false;
 
 				//Up Arrow / Down Arrow
