@@ -604,6 +604,12 @@ select.amp-select-enabled {
 				&:hover {
 					background: @color-lighter;
 				}
+
+				&.amp-option-new {
+					input[type="radio"] + .label:before {
+						content: "\f067";
+					}
+				}
 			}
 		}
 	}

@@ -703,8 +703,8 @@ $.ampExtend($.ampToggle = function() {}, {
 			o.content.addClass('on-active');
 		}
 
-		if (o.focusOnActive){
-			o.focusOnActive.blur(function(){
+		if (o.focusOnActive) {
+			o.focusOnActive.blur(function() {
 				$(this).closest('.amp-toggle').ampToggle('setDormant');
 			})
 		}
@@ -1258,14 +1258,16 @@ $.ampExtend($.ampSelect = function() {}, {
 	instanceCount: 0,
 	init:          function(o) {
 		o = $.extend({
-			style:           null, //modal, inline, checkboxes or null (for auto detect)
-			source:          null, //object (eg: {url: 'http://example-source.com', query:{...}} ) or function
-			preloadSource:   true,
-			selectOptions:   [],
-			selectedValues:  null, //array of values, or null to use <input> / <select> values
-			selectMultiple:  null, //true, false, or null (for auto detect),
-			allowNewOptions: true,
-			onCreateNew:     null
+			style:            null, //modal, inline, checkboxes or null (for auto detect)
+			source:           null, //object (eg: {url: 'http://example-source.com', query:{...}} ) or function
+			preloadSource:    true,
+			selectOptions:    [],
+			selectedValues:   null, //array of values, or null to use <input> / <select> values
+			selectMultiple:   null, //true, false, or null (for auto detect),
+			allowNewOptions:  true,
+			showNewAsOption:  true,
+			showNoneAsOption: true,
+			onCreateNew:      null
 		}, {}, o);
 
 		return this.use_once('amp-select-enabled').each(function() {
@@ -1485,6 +1487,20 @@ $.ampExtend($.ampSelect = function() {}, {
 		return this;
 	},
 
+	addSelectOption: function(option) {
+		var $ampSelect = $(this).closest('.amp-select');
+		var $options = $ampSelect.find('.amp-select-options');
+		var o = $ampSelect.getOptions();
+
+		var $option = $('<label />').addClass('amp-option ' + (o.selectMultiple ? 'checkbox' : 'radio'))
+			.append($('<input/>').attr('type', o.selectMultiple ? 'checkbox' : 'radio').attr('name', o.optionGroupName).attr('value', option.value).prop('checked', $ampSelect.ampSelect('isSelected', option.value)))
+			.append($('<span/>').addClass('label').html(option.label));
+
+		$options.append($option.attr('data-sort-order', option.sortOrder || 0).addClass(option.class || ''));
+
+		return $option;
+	},
+
 	getSelectOptions: function() {
 		return this.getOptions().selectOptions;
 	},
@@ -1494,16 +1510,43 @@ $.ampExtend($.ampSelect = function() {}, {
 		var $options = $ampSelect.find('.amp-select-options');
 		var o = $ampSelect.getOptions();
 
-		o.selectOptions = options;
-
 		$options.children().remove();
 
+		o.selectOptions = options;
+
+		if (o.showNewAsOption) {
+			$ampSelect.ampSelect('addSelectOption', {
+				label: "New",
+				value: "",
+				class: "amp-option-new hidden",
+			})
+		}
+
+		if (o.showNoneAsOption) {
+			$ampSelect.ampSelect('addSelectOption', {
+				label: "(None)",
+				value: "",
+				class: "amp-option-none hidden",
+			})
+		}
+
+		var s = 1;
+
 		for (var opt in options) {
-			$options.append(
-				$('<label />').addClass('amp-option ' + (o.selectMultiple ? 'checkbox' : 'radio'))
-					.append($('<input/>').attr('type', o.selectMultiple ? 'checkbox' : 'radio').attr('name', o.optionGroupName).attr('value', opt).prop('checked', $ampSelect.ampSelect('isSelected', opt)))
-					.append($('<span/>').addClass('label').html(options[opt]))
-			);
+			var option = options[opt];
+
+			if (typeof option === 'string') {
+				option = {
+					label:     option,
+					value:     opt,
+					sortOrder: s++
+				}
+			} else {
+				option.value = option.value || opt;
+				s++
+			}
+
+			$ampSelect.ampSelect('addSelectOption', option);
 		}
 
 		$options.find('.amp-option input').change(function() {
@@ -1585,14 +1628,21 @@ $.ampExtend($.ampSelect = function() {}, {
 	},
 
 	filter: function(value) {
-		var $ampSelect = this;
+		var $ampSelect = this, exactMatch = false;
+		var $options = $ampSelect.find('.amp-select-options'),
+			regex = new RegExp('.*' + value + '.*', 'i');
 
-		$ampSelect.find('.amp-select-options .amp-option').each(function() {
+		$options.find('.amp-option-none').toggleClass('hidden', !!value);
+
+		$options.find('.amp-option').not('.amp-option-new, .amp-option-none').each(function() {
 			var $this = $(this);
-			var regex = new RegExp('.*' + value + '.*', 'i');
 			var str = $this.find('.label').html();
 			$this.toggleClass('hidden', !str.match(regex));
+			exactMatch = exactMatch || str === value;
 		})
+
+		var isNew = !value || exactMatch;
+		$options.find('.amp-option-new').toggleClass('hidden', isNew).find('.label').html(value);
 
 		$ampSelect.ampSelect('open');
 
