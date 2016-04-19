@@ -40,7 +40,7 @@
 						</div>
 
 						<? if ($allow_delete) { ?>
-							<a class="am-remove-record amp-click-void">
+							<a class="am-remove-record amp-select-cancel">
 								<i class="fa fa-trash-o"></i>
 							</a>
 						<? } ?>

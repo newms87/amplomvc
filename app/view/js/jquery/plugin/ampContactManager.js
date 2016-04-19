@@ -355,7 +355,7 @@ $.ampExtend($.ampContactManager = function() {}, {
 		})
 
 		$acm.find('.acm-contact').click(function(e) {
-			var $acm = $(e.target).closest('.amp-contact-manager, .amp-click-void');
+			var $acm = $(e.target).closest('.amp-contact-manager, .amp-select-cancel');
 			if ($acm.is('.amp-contact-manager')) {
 				$acm.ampContactManager('select', $(this));
 			}
