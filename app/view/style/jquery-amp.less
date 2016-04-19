@@ -532,6 +532,11 @@ select.amp-select-enabled {
 .amp-select-box {
 	position: relative;
 
+	.amp-option-remove {
+		position: absolute;
+		right: 1em;
+	}
+
 	&.amp-select-checkboxes {
 		.amp-option {
 			margin: 0 .5em;
@@ -545,6 +550,7 @@ select.amp-select-enabled {
 		}
 
 		.amp-option {
+			position: relative;
 			display: block;
 			padding: .5em .7em;
 			text-align: left;

@@ -1267,6 +1267,8 @@ $.ampExtend($.ampSelect = function() {}, {
 			allowNewOptions:  true,
 			showNewAsOption:  true,
 			showNoneAsOption: true,
+			allowRemove:      false,
+			onRemove:         null,
 			onCreateNew:      null
 		}, {}, o);
 
@@ -1492,13 +1494,53 @@ $.ampExtend($.ampSelect = function() {}, {
 		var $options = $ampSelect.find('.amp-select-options');
 		var o = $ampSelect.getOptions();
 
-		var $option = $('<label />').addClass('amp-option ' + (o.selectMultiple ? 'checkbox' : 'radio'))
+		option = $.extend({}, {
+			isRemovable: true
+		}, option)
+
+		var $option = $('<label />').addClass('amp-option ' + (o.selectMultiple ? 'checkbox' : 'radio')).attr('data-value', option.value)
 			.append($('<input/>').attr('type', o.selectMultiple ? 'checkbox' : 'radio').attr('name', o.optionGroupName).attr('value', option.value).prop('checked', $ampSelect.ampSelect('isSelected', option.value)))
 			.append($('<span/>').addClass('label').html(option.label));
+
+		if (o.allowRemove && option.isRemovable) {
+			var $remove = $('<a/>').addClass('amp-option-remove').append($('<b />').addClass('fa fa-trash-o'));
+			$remove.click(function() {
+				$(this).closest('.amp-select').ampSelect('removeSelectOption', $(this).closest('.amp-option'));
+			});
+			$option.append($remove);
+		}
 
 		$options.append($option.attr('data-sort-order', option.sortOrder || 0).addClass(option.class || ''));
 
 		return $option;
+	},
+
+	removeSelectOption: function($option, force) {
+		var $ampSelect = this;
+		var o = $ampSelect.getOptions(),
+			$field = $ampSelect.find('.amp-select-field');
+
+		if (typeof $option !== 'object') {
+			$option = $ampSelect.find('.amp-select-options .amp-option[data-value="' + $option + '"]');
+		}
+
+		if (!force && o.onRemove) {
+			if (o.onRemove.call($ampSelect, $option) === false) {
+				return this;
+			}
+		}
+
+		var val = $option.attr('data-value');
+
+		delete o.selectOptions[val]
+		$option.remove();
+
+		if ($field.val() === val) {
+			$field.val('');
+			$ampSelect.ampSelect('selectActive');
+		}
+
+		return this;
 	},
 
 	getSelectOptions: function() {
@@ -1516,17 +1558,19 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		if (o.showNewAsOption) {
 			$ampSelect.ampSelect('addSelectOption', {
-				label: "New",
-				value: "",
-				class: "amp-option-new hidden",
+				label:       "New",
+				value:       "",
+				class:       "amp-option-new hidden",
+				isRemovable: false
 			})
 		}
 
 		if (o.showNoneAsOption) {
 			$ampSelect.ampSelect('addSelectOption', {
-				label: "(None)",
-				value: "",
-				class: "amp-option-none hidden",
+				label:       "(None)",
+				value:       "",
+				class:       "amp-option-none",
+				isRemovable: false
 			})
 		}
 
