@@ -18,6 +18,7 @@ $.ampExtend($.ampManager = function() {}, {
 			showAddress:     true,
 			template:        null,
 			selectMultiple:  false,
+			deselectOnClick: true,
 			syncFields:      null,
 			defaults:        {},
 			onResults:       null,
@@ -137,8 +138,13 @@ $.ampExtend($.ampManager = function() {}, {
 				is_changed = true;
 			}
 		} else {
+			var isSelected = o.deselectOnClick ? !$record.hasClass('is-selected') : true;
+
 			$am.find('.am-record').removeClass('is-selected');
-			selected = $record.addClass('is-selected').attr('data-am-record-id');
+			$record.toggleClass('is-selected', isSelected);
+			isSelected || ($record = $('body'));
+			selected = $record.attr('data-am-record-id');
+
 			is_changed = o.selected !== selected;
 		}
 

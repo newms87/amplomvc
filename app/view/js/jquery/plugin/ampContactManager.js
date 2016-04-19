@@ -9,24 +9,25 @@ $.ampExtend($.ampContactManager = function() {}, {
 		}
 
 		o = $.extend({}, {
-			contact_id:     null,
-			input:          null,
-			selected:       null,
-			type:           'contact',
-			showAddress:    true,
-			template:       null,
-			selectMultiple: false,
-			syncFields:     null,
-			onChange:       null,
-			onEdit:         null,
-			onOpenEditor:   null,
-			onResults:      null,
-			onSync:         null,
-			url:            $ac.site_url + 'manager/contact/',
-			removeUrl:      null,
-			listingUrl:     null,
-			loadListings:   true,
-			listing:        {}
+			contact_id:      null,
+			input:           null,
+			selected:        null,
+			type:            'contact',
+			showAddress:     true,
+			template:        null,
+			selectMultiple:  false,
+			deselectOnClick: true,
+			syncFields:      null,
+			onChange:        null,
+			onEdit:          null,
+			onOpenEditor:    null,
+			onResults:       null,
+			onSync:          null,
+			url:             $ac.site_url + 'manager/contact/',
+			removeUrl:       null,
+			listingUrl:      null,
+			loadListings:    true,
+			listing:         {}
 		}, o);
 
 		o.removeUrl = o.removeUrl || o.url + 'remove';
@@ -117,8 +118,12 @@ $.ampExtend($.ampContactManager = function() {}, {
 
 			is_changed = o.selected.toString() === selected.toString();
 		} else {
+			var isSelected = o.deselectOnClick ? !$contact.hasClass('is-selected') : true;
+
 			$acm.find('.acm-contact').removeClass('is-selected');
-			selected = $contact.addClass('is-selected').attr('data-contact-id');
+			$contact.toggleClass('is-selected', isSelected);
+			isSelected || ($contact = $('body'));
+			selected = $contact.attr('data-contact-id') || '';
 			is_changed = o.selected !== selected;
 		}
 
@@ -349,8 +354,11 @@ $.ampExtend($.ampContactManager = function() {}, {
 			return false;
 		})
 
-		$acm.find('.acm-contact').click(function() {
-			$(this).closest('.amp-contact-manager').ampContactManager('select', $(this));
+		$acm.find('.acm-contact').click(function(e) {
+			var $acm = $(e.target).closest('.amp-contact-manager, .amp-click-void');
+			if ($acm.is('.amp-contact-manager')) {
+				$acm.ampContactManager('select', $(this));
+			}
 		})
 
 		$acm.find('.acm-contact .acm-edit-contact-form').ampNestedForm('onDone', function(response) {

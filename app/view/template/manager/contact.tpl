@@ -70,7 +70,7 @@
 								</label>
 							</div>
 
-							<div class="form-buttons row left">
+							<div class="form-buttons row left amp-click-void">
 								<div class="col auto spacing"></div>
 
 								<div class="col auto left">
@@ -85,11 +85,11 @@
 								</div>
 							</div>
 
-							<div class="acm-form-box">
+							<div class="acm-form-box amp-click-void">
 								<div data-action="<?= site_url('manager/contact/save', 'contact_id=__ac_template__'); ?>" class="row left form acm-edit-contact-form amp-nested-form"></div>
 							</div>
 
-							<a class="acm-remove-contact">
+							<a class="acm-remove-contact amp-click-void">
 								<i class="fa fa-trash-o"></i>
 							</a>
 						</div>
