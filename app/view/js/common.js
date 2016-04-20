@@ -1260,13 +1260,15 @@ $.ampExtend($.ampSelect = function() {}, {
 		o = $.extend({
 			style:            null, //modal, inline, checkboxes or null (for auto detect)
 			source:           null, //object (eg: {url: 'http://example-source.com', query:{...}} ) or function
+			sourceLabel:      null,
+			sourceValue:      null,
 			preloadSource:    true,
 			selectOptions:    [],
 			selectedValues:   null, //array of values, or null to use <input> / <select> values
 			selectMultiple:   null, //true, false, or null (for auto detect),
 			allowNewOptions:  true,
 			showNewAsOption:  true,
-			showNoneAsOption: true,
+			showNoneAsOption: null,
 			allowRemove:      false,
 			onRemove:         null,
 			onCreateNew:      null
@@ -1284,6 +1286,10 @@ $.ampExtend($.ampSelect = function() {}, {
 
 			if (o.selectMultiple === null) {
 				o.selectMultiple = o.style !== 'inline';
+			}
+
+			if (o.showNoneAsOption === null) {
+				o.showNoneAsOption = o.style === 'inline'
 			}
 
 			//Save Options to Instance
@@ -1310,6 +1316,7 @@ $.ampExtend($.ampSelect = function() {}, {
 			}
 
 			$field.change(function() {
+				console.log('field change', $(this).val());
 				$(this).closest('.amp-select').ampSelect('setSelected', $(this).val());
 			});
 
@@ -1416,32 +1423,47 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		$options.find('input').prop('checked', false);
 
-		if (typeof values !== 'object') {
-			values = [values];
-		}
+		console.log('setSElected', values);
 
-		for (var s in values) {
-			var val = values[s]
-			var $opt = $options.find('[value="' + val + '"]');
-
-			if (o.style === 'inline') {
-				if (o.allowNewOptions && !$opt.length && val) {
-					o.selectOptions[val] = val;
-					$ampSelect.ampSelect('setSelectOptions', o.selectOptions);
-					$opt = $options.find('[value="' + val + '"]');
-
-					if (o.onCreateNew) {
-						o.onCreateNew.call($ampSelect, val, o.selectOptions);
-					}
-				}
+		if (values === null) {
+			var $opt = $options.find('.amp-option-none');
+			$opt.find('input').prop('checked', true);
+		} else {
+			if (typeof values !== 'object') {
+				values = [values];
 			}
 
-			$opt.prop('checked', true)
+			for (var s in values) {
+				var val = values[s]
+				var $opt = $options.find('[data-value="' + val + '"]').not('.amp-option-new');
 
-			placeholder += (placeholder ? ', ' : '') + $opt.siblings('.label').html();
+				if (o.style === 'inline') {
+					if (o.allowNewOptions && !$opt.length && val) {
+						o.selectOptions[val] = val;
+						$ampSelect.ampSelect('setSelectOptions', o.selectOptions);
+						$opt = $options.find('[data-value="' + val + '"]');
+
+						if (o.onCreateNew) {
+							o.onCreateNew.call($ampSelect, val, o.selectOptions);
+						}
+					}
+				}
+
+				$opt.find('input').prop('checked', true)
+
+				placeholder += (placeholder ? ', ' : '') + $opt.find('.label').html();
+			}
 		}
 
-		$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
+		switch (o.style) {
+			case 'inline':
+				$ampSelect.find('.amp-select-input').val(placeholder);
+				break;
+
+			case 'modal':
+				$ampSelect.find('.amp-selected .value').html(placeholder || o.placeholder);
+				break;
+		}
 
 		$field.val(values);
 
@@ -1466,6 +1488,7 @@ $.ampExtend($.ampSelect = function() {}, {
 
 	loadSourceOptions: function(source) {
 		var $ampSelect = this;
+		var o = this.getOptions();
 
 		$ampSelect.ampSelect('startLoading');
 
@@ -1480,6 +1503,18 @@ $.ampExtend($.ampSelect = function() {}, {
 			});
 		} else if (typeof source === 'object') {
 			options = source;
+		}
+
+		if (o.sourceLabel || o.sourceValue) {
+			for (var i in options) {
+				if (o.sourceLabel) {
+					options[i].label = options[i][o.sourceLabel]
+				}
+
+				if (o.sourceValue) {
+					options[i].value = options[i][o.sourceValue]
+				}
+			}
 		}
 
 		if (typeof options === 'object') {
@@ -1558,7 +1593,7 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		if (o.showNewAsOption) {
 			$ampSelect.ampSelect('addSelectOption', {
-				label:       "New",
+				label:       "+ New Record",
 				value:       "",
 				class:       "amp-option-new hidden",
 				isRemovable: false
@@ -1566,12 +1601,18 @@ $.ampExtend($.ampSelect = function() {}, {
 		}
 
 		if (o.showNoneAsOption) {
-			$ampSelect.ampSelect('addSelectOption', {
-				label:       "(None)",
+			var noneOpt = {
+				label:       typeof o.showNoneAsOption === 'string' ? o.showNoneAsOption : "(None)",
 				value:       "",
 				class:       "amp-option-none",
 				isRemovable: false
-			})
+			};
+
+			if (options['']) {
+				noneOpt.label = typeof options[''] === 'string' ? options[''] : options[''].label
+			}
+
+			$ampSelect.ampSelect('addSelectOption', noneOpt)
 		}
 
 		var s = 1;
@@ -1712,8 +1753,10 @@ $.ampExtend($.ampSelect = function() {}, {
 			$(this).closest('.amp-select').ampSelect('open')
 		})
 
-		$input.blur(function() {
-			$(this).closest('.amp-select').ampSelect('close')
+		$input.blur(function(e) {
+			var $ampSelect = $(this).closest('.amp-select');
+			//XXX: use timeout to allow change events to fire first!
+			setTimeout(function() {$ampSelect.ampSelect('close')}, 100);
 		})
 
 		$input.keydown(function(e) {
@@ -1768,7 +1811,11 @@ $.ampExtend($.ampSelect = function() {}, {
 
 	initSelectModal: function() {
 		var $ampSelect = this;
+		var o = $ampSelect.getOptions();
 		var $field = $ampSelect.find('.amp-select-field');
+
+		o.allowNewOptions = false;
+		o.showNewAsOption = false;
 
 		var $selected = $("<div />")
 			.addClass($field.attr('class').replace('amp-select-enabled', 'amp-selected'))
