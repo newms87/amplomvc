@@ -1077,7 +1077,7 @@ $.ampExtend($.ampModal = function() {}, {
 					}
 
 					var $btn = $('<button/>')
-						.addClass('amp-modal-button ' + b)
+						.addClass('amp-modal-button ' + b + ' ' + o.buttons[b].class)
 						.attr('data-action', b)
 						.data('action-callback', btn.action)
 						.append(btn.label || b)

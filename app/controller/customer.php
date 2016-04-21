@@ -25,7 +25,8 @@ class App_Controller_Customer extends Controller
 			default:
 				if (is_logged()) {
 					if ($this->is_ajax) {
-						echo json_encode(array('success' => _l("You have been logged into your account.")));
+						output_json(array('success' => _l("You have been logged into your account.")));
+						output_flush();
 						exit;
 					} else {
 						redirect('account');
@@ -112,7 +113,8 @@ class App_Controller_Customer extends Controller
 			message('error', $this->customer->fetchError());
 		}
 
-		if ($this->is_ajax && !$this->request->hasRedirect()) {
+		if ($this->is_ajax) {
+			message('data', array('redirect' => $this->request->getRedirect()));
 			output_message();
 		} else {
 			if ($this->message->has('error')) {

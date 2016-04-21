@@ -10,7 +10,7 @@
 		</header>
 
 		<div class="login-form-row row">
-			<form action="<?= site_url('admin/user/authenticate') ?>" method="post" enctype="multipart/form-data" class="form" data-if-ajax="#admin-login">
+			<form action="<?= site_url('admin/user/authenticate') ?>" method="post" enctype="multipart/form-data" class="form">
 				<div class="form-item username">
 					<input type="text" name="username" placeholder="{{Username / Email}}" value="<?= $username; ?>"/>
 				</div>
