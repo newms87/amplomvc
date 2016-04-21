@@ -160,6 +160,7 @@ $js_autoload = array(
 		'app/view/js/jquery/plugin/codemirror/wrapper.js',
 	),
 	'ampListing'        => 'app/view/js/jquery/plugin/listings.js',
+	'ampSelect'         => 'app/view/js/jquery/plugin/ampSelect.js',
 	'listview'          => 'app/view/js/jquery/plugin/listings.js',
 	'ampFilter'         => 'app/view/js/jquery/plugin/listings.js',
 	'ampUpload'         => 'app/view/js/jquery/plugin/ampUpload.js',
