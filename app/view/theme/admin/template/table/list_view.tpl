@@ -246,6 +246,8 @@
 												?>
 												<?= $c_data[$column['build']['label']]; ?>
 												<?
+											} elseif ($key) {
+												echo "[$key]";
 											}
 										}
 										break;
