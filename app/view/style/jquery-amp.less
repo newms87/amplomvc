@@ -77,11 +77,23 @@
 	.on-loading {
 		display: none;
 	}
+
+	.is-loading {
+		.on-loading {
+			display: inline-block;
+		}
+	}
 }
 
 .is-loading {
 	.on-ready {
 		display: none;
+	}
+
+	.is-ready {
+		.on-ready {
+			display: inline-block;
+		}
 	}
 }
 
