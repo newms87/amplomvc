@@ -249,7 +249,7 @@
 											}
 										}
 
-										echo $display_value ? $display_value : $value;
+										echo $display_value ? $display_value : "[" . $value . "]";
 										break;
 
 									case 'multiselect':
