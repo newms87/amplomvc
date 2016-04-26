@@ -21,7 +21,7 @@
 				<div class="login-box box">
 					<h2>{{Log In}}</h2>
 
-					<form action="<?= site_url('customer/authenticate'); ?>" class="login-form form" method="post" enctype="multipart/form-data" <?= $redirect === null ? '' : 'data-if-ajax="#customer-login"'; ?>>
+					<form action="<?= site_url('customer/authenticate'); ?>" class="login-form form" method="post" enctype="multipart/form-data">
 						<div class="form-item">
 							<input type="text" autocomplete="username" placeholder="{{email}}" name="username" value="<?= $username; ?>"/>
 						</div>
@@ -58,7 +58,7 @@
 				<div class="register-box box">
 					<h2>{{Create My Account}}</h2>
 
-					<form action="<?= site_url('customer/register'); ?>" class="register-form form" method="post" enctype="multipart/form-data" <?= $redirect === null ? '' : 'data-if-ajax="#customer-login"'; ?>>
+					<form action="<?= site_url('customer/register'); ?>" class="register-form form" method="post" enctype="multipart/form-data">
 						<div class="form-item">
 							<input type="text" autocomplete="name" placeholder="{{name}}" name="name" value="<?= _post('name'); ?>"/>
 						</div>

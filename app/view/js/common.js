@@ -1822,7 +1822,7 @@ function register_ajax_calls(is_ajax) {
 		$this.find('.has-error').removeClass('has-error');
 	});
 
-	$((is_ajax ? '[data-if-ajax],' : '') + '[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-modal]').amplo_ajax();
+	$('[data-ajax]').use_once('ajax-call').not('[data-confirm], [data-confirm-modal]').amplo_ajax();
 }
 
 function register_colorbox() {
@@ -2005,7 +2005,7 @@ var amplo_ajax_cb = function() {
 		return false;
 	}
 
-	var ajax_cb = $this.attr('data-if-ajax') || $this.attr('data-ajax');
+	var ajax_cb = $this.attr('data-ajax');
 
 	if (typeof window[ajax_cb] !== 'function') {
 		var $replace = ajax_cb !== 'iframe' ? $(ajax_cb) : null;
