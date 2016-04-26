@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
  */
-
 class Table extends Library
 {
 	private $file;
@@ -92,12 +92,13 @@ class Table extends Library
 		//Normalize Columns
 		foreach ($this->columns as $slug => &$column) {
 			$column += array(
-				'type'     => 'text',
-				'label'    => isset($column['display_name']) ? $column['display_name'] : $slug,
-				'sort'     => false,
-				'filter'   => false,
-				'align'    => 'center',
-				'editable' => null,
+				'type'         => 'text',
+				'label'        => isset($column['display_name']) ? $column['display_name'] : $slug,
+				'sort'         => false,
+				'filter'       => false,
+				'align'        => 'center',
+				'editable'     => null,
+				'filter_blank' => null,
 			);
 
 			//Set Class
@@ -124,16 +125,12 @@ class Table extends Library
 
 			//This sets a blank option in a dropdown by default
 			if ($column['filter']) {
-				if (in_array($column['type'], array(
-						'select',
-						'multiselect'
-					)) && !isset($column['filter_blank'])
-				) {
-					$column['filter_blank'] = true;
-				}
-
 				if ($column['filter'] === true) {
 					$column['filter'] = $column['type'];
+				}
+
+				if ($column['filter'] === 'select' && !isset($column['filter_blank'])) {
+					$column['filter_blank'] = true;
 				}
 
 				if (!isset($column['filter_key'])) {

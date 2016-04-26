@@ -251,9 +251,12 @@ $.ampExtend($.ampSelect = function() {}, {
 		} else if (source instanceof jQuery) {
 			options = {};
 
-			source.find('option').each(function() {
+			source.find('option').each(function(i) {
 				var $o = $(this);
-				options[$o.attr('value')] = $o.html();
+				options[i] = {
+					label: $o.html(),
+					value: $o.attr('value')
+				}
 			});
 		} else if (typeof source === 'object') {
 			options = source;
@@ -368,6 +371,10 @@ $.ampExtend($.ampSelect = function() {}, {
 
 			$ampSelect.ampSelect('addSelectOption', noneOpt)
 			delete options['']
+		}
+
+		if (options[2].value == 174) {
+			console.log(options);
 		}
 
 		var s = 1;

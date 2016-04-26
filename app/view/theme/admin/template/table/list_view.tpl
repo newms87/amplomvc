@@ -241,13 +241,15 @@
 										<? break;
 
 									case 'select':
+										$display_value = '';
+
 										foreach ($column['build']['data'] as $key => $c_data) {
 											if (isset($c_data[$column['build']['value']]) && $c_data[$column['build']['value']] == $value) {
-												?>
-												<?= $c_data[$column['build']['label']]; ?>
-												<?
+												$display_value .= $c_data[$column['build']['label']];
 											}
 										}
+
+										echo $display_value ? $display_value : "[" . $value . "]";
 										break;
 
 									case 'multiselect':
