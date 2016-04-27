@@ -373,10 +373,6 @@ $.ampExtend($.ampSelect = function() {}, {
 			delete options['']
 		}
 
-		if (options[2].value == 174) {
-			console.log(options);
-		}
-
 		var s = 1;
 
 		for (var opt in options) {

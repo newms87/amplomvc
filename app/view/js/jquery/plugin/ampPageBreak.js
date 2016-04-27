@@ -56,6 +56,11 @@ $.ampExtend($.ampPageBreak = function() {}, {
 				o.contentHeight = o.height - o.margin.bottom - o.margin.top;
 			}
 
+			$e.find('.amp-dynamic-height').each(function(){
+				var $t = $(this);
+				$t.height($t.height());
+			})
+
 			$pages.each(function(p, page) {
 				var $p = $(page), top = 0, bottom = 0;
 
