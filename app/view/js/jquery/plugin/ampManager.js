@@ -419,7 +419,7 @@ $.ampExtend($.ampManager = function() {}, {
 		$am.find('.am-record').click(function(e) {
 			var $t = $(e.target);
 
-			var $acm = $(e.target).closest('.amp-manager, .amp-select-cancel');
+			var $acm = $t.closest('.amp-manager, .amp-select-cancel');
 			if ($acm.is('.amp-manager')) {
 				$acm.ampManager('select', $(this));
 			}
@@ -458,9 +458,15 @@ $.ampExtend($.ampManager = function() {}, {
 		})
 
 		var $searchForm = $am.find('.am-search-form');
-
+		
 		$searchForm.ampNestedForm('onSubmit', function() {
-			this.closest('.amp-manager').ampManager('get', $(this).find('[name]').serializeObject());
+			var $am = this.closest('.amp-manager');
+
+			$am.ampDelay({
+				callback: function() {
+					this.ampManager('get', this.find('[name]').serializeObject());
+				}
+			})
 
 			return false;
 		})

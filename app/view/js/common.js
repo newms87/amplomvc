@@ -376,7 +376,7 @@ $.ampExtend($.ampNestedForm = function() {}, {
 
 			$form
 				.setOptions(o)
-				.keyup(function(e) {
+				.keydown(function(e) {
 					if (e.keyCode === 13) {
 						$(this).closest('.amp-nested-form').submit();
 						e.stopPropagation();
