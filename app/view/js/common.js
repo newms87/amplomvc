@@ -2154,7 +2154,7 @@ function content_loaded(is_ajax) {
 	}
 
 	if ($ac.show_msg_delay) {
-		if (($msgs = $('.messages .message')).length) {
+		if (($msgs = $('.messages').not('.no-auto-hide').find('.message')).length) {
 			setTimeout(function() {
 				$msgs.hide_msg()
 			}, $ac.show_msg_delay);

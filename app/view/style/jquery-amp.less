@@ -430,6 +430,52 @@
 	font-size: .9em;
 }
 
+//amp-msg
+.amp-msg {
+	&.amp-msg-success {
+		background: #F4FDE8;
+		border-color: #638733;
+		color: #638733;
+	}
+
+	&.amp-msg-warning, &.amp-msg-error {
+		background: #F9DCDC;
+		border-color: #C11F1F;
+		color: #C11F1F;
+	}
+
+	&.amp-msg-attention {
+		background: #FFFBE9;
+		border-color: #E1CA34;
+		color: #E1CA34;
+	}
+
+	&.amp-msg-notify {
+		background: #E6F1FB;
+		border-color: #4F80AD;
+		color: #4F80AD;
+	}
+
+	.amp-msg-item {
+		padding: .5em 1em;
+	}
+
+	.amp-msg-actions {
+		a {
+			color: @color-main;
+			text-decoration: underline;
+
+			&:hover {
+				text-decoration: none;
+			}
+
+			& + a {
+				margin-left: .7em;
+			}
+		}
+	}
+}
+
 //amp-pager
 .amp-pager {
 	.amp-page {
