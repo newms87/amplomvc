@@ -21,6 +21,7 @@ $.ampExtend($.ampManager = function() {}, {
 			deselectOnClick: true,
 			syncFields:      null,
 			defaults:        {},
+			allowRemove:     true,
 			onResults:       null,
 			onAppend:        null,
 			onChange:        null,
@@ -293,7 +294,7 @@ $.ampExtend($.ampManager = function() {}, {
 
 		$record.data('record', record);
 
-		if (!record.can_access) {
+		if (!record.can_access || !o.allowRemove) {
 			$record.find('.am-remove-record').addClass('hidden');
 		}
 
@@ -322,21 +323,25 @@ $.ampExtend($.ampManager = function() {}, {
 		var $am = this;
 		var o = $am.getOptions(), data = {};
 
-		$.ampConfirm({
-			title:     "Remove " + o.label,
-			text:      "Are you sure you want to remove this " + o.label + "?",
-			onConfirm: function() {
-				data[o.type_id] = $record.attr('data-am-record-id');
+		if (o.allowRemove) {
+			$.ampConfirm({
+				title:     "Remove " + o.label,
+				text:      "Are you sure you want to remove this " + o.label + "?",
+				onConfirm: function() {
+					data[o.type_id] = $record.attr('data-am-record-id');
 
-				$.get(o.removeUrl, data, function(response) {
-					if (response.success) {
-						$record.remove();
-					}
+					$.get(o.removeUrl, data, function(response) {
+						if (response.success) {
+							$record.remove();
+						}
 
-					$am.show_msg(response);
-				})
-			}
-		})
+						$am.show_msg(response);
+					})
+				}
+			})
+		} else {
+			$.ampAlert("Removing records is not allowed.");
+		}
 
 		return $am;
 	},
@@ -438,10 +443,12 @@ $.ampExtend($.ampManager = function() {}, {
 			$record.show_msg(response);
 		})
 
-		$am.find('.am-remove-record').click(function() {
-			$(this).closest('.amp-manager').ampManager('remove', $(this).closest('.am-record'));
-			return false;
-		})
+		if (o.allowRemove) {
+			$am.find('.am-remove-record').click(function() {
+				$(this).closest('.amp-manager').ampManager('remove', $(this).closest('.am-record'));
+				return false;
+			})
+		}
 
 		$am.find('.am-new-record-form').ampNestedForm('onDone', function(response) {
 			var $form = $(this);
@@ -458,7 +465,7 @@ $.ampExtend($.ampManager = function() {}, {
 		})
 
 		var $searchForm = $am.find('.am-search-form');
-		
+
 		$searchForm.ampNestedForm('onSubmit', function() {
 			var $am = this.closest('.amp-manager');
 
