@@ -18,9 +18,14 @@ final class Registry
 		return $this->get($key);
 	}
 
+	private function formatKey($key)
+	{
+		return str_replace('app_model_', 'model_', strtolower($key));
+	}
+
 	public function get($key, $return_instance = true)
 	{
-		$lcase_key = strtolower($key);
+		$lcase_key = $this->formatKey($key);
 
 		if (!isset($this->data[$lcase_key])) {
 			if (AMPLO_PROFILE) {
@@ -43,12 +48,12 @@ final class Registry
 
 	public function set($key, $value)
 	{
-		$this->data[strtolower($key)] = $value;
+		$this->data[$this->formatKey($key)] = $value;
 	}
 
 	public function has($key)
 	{
-		$key = strtolower($key);
+		$key = $this->formatKey($key);
 		return isset($this->data[$key]);
 	}
 

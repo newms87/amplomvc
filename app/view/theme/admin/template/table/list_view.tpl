@@ -72,8 +72,11 @@
 									<input placeholder="{{Search}} <?= $column['label']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= $column['filter_value']; ?>"/>
 									<? break;
 
+								case 'key':
 								case 'pk':
-								case 'pk-int':
+								case 'pk-int': ?>
+									<input placeholder="{{Find}} <?= $column['label']; ?>" type="text" name="filter[<?= $column['filter_key']; ?>]" value="<?= is_array($column['filter_value']) ? current($column['filter_value']) : $column['filter_value']; ?>"/>
+									<? break;
 								case 'int':
 								case 'float':
 								case 'decimal':

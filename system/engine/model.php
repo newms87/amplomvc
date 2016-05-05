@@ -619,7 +619,7 @@ abstract class Model
 				$join_table = isset($join['table']) ? $join['table'] : $join_table;
 				$j          = isset($join['alias']) ? $join['alias'] : '';
 
-				$from .= " $join_type `{$this->t[$join_table]}` $j " . (strpos($join['on'], '=') ? 'ON' : 'USING') . " (" . $this->escape($join['on']) . ")";
+				$from .= " $join_type `{$this->t[$join_table]}` $j " . (strpos($join['on'], '=') ? 'ON' : 'USING') . " (" . $join['on'] . ")";
 			}
 		}
 

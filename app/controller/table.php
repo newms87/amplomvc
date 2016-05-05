@@ -37,11 +37,16 @@ abstract class App_Controller_Table extends Controller
 
 		parent::__construct();
 
-		$this->instance = new $this->model['class']();
-
 		$this->model += array(
-			'title' => '',
+			'title'             => '',
+			'listing_path'      => $this->model['path'] . '/listing',
+			'form_path'         => $this->model['path'] . '/form',
+			'save_path'         => $this->model['path'] . '/save',
+			'remove_path'       => $this->model['path'] . '/remove',
+			'batch_action_path' => $this->model['path'] . '/batch_action',
 		);
+
+		$this->instance = $this->registry->get($this->model['class']);
 	}
 
 	public function index($options = array())
@@ -66,7 +71,7 @@ abstract class App_Controller_Table extends Controller
 		);
 
 		if (!empty($options['batch_action']) && empty($options['batch_action']['url'])) {
-			$options['batch_action']['url'] = site_url($this->model['path'] . '/batch-action');
+			$options['batch_action']['url'] = site_url($this->model['batch_action_path']);
 		}
 
 		//Response
@@ -119,15 +124,15 @@ abstract class App_Controller_Table extends Controller
 		$options['actions'] += array(
 			'edit'   => array(
 				'text' => _l("Edit"),
-				'path' => $this->model['path'] . '/form',
+				'path' => $this->model['form_path'],
 			),
 			'delete' => array(
 				'text' => _l("Delete"),
-				'path' => $this->model['path'] . '/remove',
+				'path' => $this->model['remove_path'],
 			),
 		);
 
-		$options['columns'] += $this->instance->getColumns((array)_request('columns'));
+		$options['columns'] = $this->instance->getColumns($options['columns'] + (array)_request('columns')) + $options['columns'];
 
 		if (!empty($options['sort'])) {
 			$sort = $options['sort'] + $sort;
@@ -167,8 +172,8 @@ abstract class App_Controller_Table extends Controller
 		//Default Values
 		$listing += $options + array(
 				'pagination'   => true,
-				'listing_path' => $this->model['path'] . '/listing',
-				'save_path'    => $this->model['path'] . '/save',
+				'listing_path' => $this->model['listing_path'],
+				'save_path'    => $this->model['save_path'],
 			);
 
 		if (!isset($listing['extra_cols']) && empty($_REQUEST['columns'])) {
@@ -203,7 +208,7 @@ abstract class App_Controller_Table extends Controller
 		//Breadcrumbs
 		breadcrumb(_l("Home"), site_url(IS_ADMIN ? 'admin' : ''));
 		breadcrumb(_l("%s List", $this->model['title']), site_url($this->model['path']));
-		breadcrumb($record_id ? _l("Update") : _l("New"), site_url($this->model['path'] . '/form', $this->model['value'] . '=' . $record_id));
+		breadcrumb($record_id ? _l("Update") : _l("New"), site_url($this->model['form_path'], $this->model['value'] . '=' . $record_id));
 
 		//The Data
 		$record = $_POST;
@@ -237,9 +242,9 @@ abstract class App_Controller_Table extends Controller
 		if ($this->is_ajax) {
 			output_message();
 		} elseif ($this->message->has('error') && method_exists($this, 'form')) {
-			post_redirect($this->model['path'] . '/form', $_GET);
+			post_redirect($this->model['form_path'], $_GET);
 		} else {
-			redirect($this->model['path'] . '/form', $_GET);
+			redirect($this->model['form_path'], $_GET);
 		}
 	}
 

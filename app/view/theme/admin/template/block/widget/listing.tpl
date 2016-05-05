@@ -27,8 +27,9 @@
 
 			<div class="view-config" data-listing="#<?= $id; ?>">
 				<div class="view-tabs htabs">
-					<a href=".col-tab">{{Columns}}</a>
-					<a href=".group-tab">{{Groups / Aggregate}}</a>
+					<? if (!empty($extra_cols)) { ?>
+						<a href=".col-tab">{{Columns}}</a>
+					<? } ?>
 					<? if (user_can('w', 'admin/views')) { ?>
 						<a href=".view-listing-tab">{{Settings}}</a>
 					<? } ?>
@@ -54,10 +55,6 @@
 						</div>
 					</div>
 				<? } ?>
-
-				<div class="group-tab tab-content">
-					Group By / Aggregate... Waiting to be implemented.
-				</div>
 
 				<? if (user_can('w', 'admin/views')) { ?>
 					<div class="view-listing-tab tab-content form">
