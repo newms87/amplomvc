@@ -225,9 +225,6 @@ class App_Model_Page extends App_Model_Table
 				'alias' => 'pc',
 				'on'    => 'page_id',
 			);
-
-			//TODO: should be handled by default
-			//$filter['#category_id'] = " AND " . $this->extractWhere('page_category pc', $filter);
 		}
 
 		return parent::getRecords($sort, $filter, $options, $total);

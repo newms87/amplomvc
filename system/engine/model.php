@@ -867,14 +867,14 @@ abstract class Model
 		return $order;
 	}
 
-	protected function extractLimit($data)
+	protected function extractLimit($options)
 	{
-		if (!empty($data['limit']) && $data['limit'] > 0) {
-			if (!empty($data['page'])) {
-				$data['start'] = (max(1, (int)$data['page']) - 1) * (int)$data['limit'];
+		if (!empty($options['limit']) && $options['limit'] > 0) {
+			if (!empty($options['page'])) {
+				$options['start'] = (max(1, (int)$options['page']) - 1) * (int)$options['limit'];
 			}
 
-			return max(0, isset($data['start']) ? $data['start'] : 0) . ',' . (int)$data['limit'];
+			return max(0, isset($options['start']) ? $options['start'] : 0) . ',' . (int)$options['limit'];
 		}
 	}
 
