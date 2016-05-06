@@ -88,7 +88,7 @@ class App_Model_Meta extends App_Model_Table
 		$filter = array(
 			'type'   => $type,
 			'key'    => $key,
-			'#value' => "AND `value` = '" . $this->escape($value) . "'",
+			'#value' => "`value` = '" . $this->escape($value) . "'",
 		);
 
 		$where = $this->extractWhere('meta', $filter);

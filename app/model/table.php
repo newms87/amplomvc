@@ -136,10 +136,13 @@ abstract class App_Model_Table extends Model
 	public function getRecords($sort = array(), $filter = array(), $options = array(), $total = false)
 	{
 		$cache = !empty($options['cache']) ? $this->getCacheName($sort, $filter, $options, $total) : false;
-		$tbl   = $this->table[0];
+
+		if (!isset($options['alias'])) {
+			$options['alias'] = $this->table[0];
+		}
 
 		//Select
-		$fields = $this->extractSelect($this->table . ' ' . $tbl, $options);
+		$fields = $this->extractSelect($this->table, $options);
 
 		if ($cache) {
 			$records = cache($cache);
@@ -150,16 +153,13 @@ abstract class App_Model_Table extends Model
 		}
 
 		//From
-		$from = $this->extractFrom($this->table . ' ' . $tbl, $options);
+		$from = $this->extractFrom($this->table, $options);
 
 		//Where
-		$where = $this->extractWhere($this->table . ' ' . $tbl, $filter, $options);
-
-		$group_by = !empty($options['group_by']) ? "GROUP BY " . $options['group_by'] : '';
-		$having   = !empty($options['having']) ? "HAVING " . $options['having'] : '';
+		$where = $this->extractWhere($this->table, $filter, $options);
 
 		//Order
-		$order = $this->extractOrder($sort, $tbl);
+		$order = $this->extractOrder($this->table, $sort, $options);
 
 		//Limit
 		$limit = $this->extractLimit($options);
@@ -167,7 +167,7 @@ abstract class App_Model_Table extends Model
 		$sql_calc_found_rows = isset($options['sql_calc_found_rows']) ? $options['sql_calc_found_rows'] : null;
 
 		//The Query
-		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where $group_by $having $order $limit", !empty($options['index']) ? $options['index'] : null, $total, $sql_calc_found_rows);
+		$records = $this->queryRows("SELECT $fields FROM $from WHERE $where" . ($order ? " ORDER BY $order" : '') . ($limit ? " LIMIT $limit" : ''), !empty($options['index']) ? $options['index'] : null, $total, $sql_calc_found_rows);
 
 		//Get Meta Data
 		if (!empty($options['meta'])) {

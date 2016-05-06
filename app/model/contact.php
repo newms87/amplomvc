@@ -103,7 +103,7 @@ class App_Model_Contact extends App_Model_Table
 			$keywords = $this->escape($filter['keywords']);
 			$phone    = preg_replace("/[^\\d]/", '', $keywords);
 
-			$filter['#search'] = "AND (first_name like '%$keywords%' OR last_name like '%$keywords%' OR company like '%$keywords%' " . ($phone ? "OR phone like '%$phone%'" : '') . " OR email like '%$keywords%')";
+			$filter['#search'] = "(first_name like '%$keywords%' OR last_name like '%$keywords%' OR company like '%$keywords%' " . ($phone ? "OR phone like '%$phone%'" : '') . " OR email like '%$keywords%')";
 		}
 
 		return parent::getRecords($sort, $filter, $options, $total);

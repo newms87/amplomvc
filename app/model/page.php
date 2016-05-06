@@ -226,7 +226,8 @@ class App_Model_Page extends App_Model_Table
 				'on'    => 'page_id',
 			);
 
-			$filter['#category_id'] = " AND " . $this->extractWhere('page_category pc', $filter);
+			//TODO: should be handled by default
+			//$filter['#category_id'] = " AND " . $this->extractWhere('page_category pc', $filter);
 		}
 
 		return parent::getRecords($sort, $filter, $options, $total);
@@ -238,7 +239,7 @@ class App_Model_Page extends App_Model_Table
 
 		if (isset($filter['keywords'])) {
 			$keywords            = $this->escape($filter['keywords']);
-			$filter['#keywords'] = " AND (content LIKE '%$keywords%' OR excerpt LIKE '%$keywords%' OR title LIKE '%$keywords%')";
+			$filter['#keywords'] = "(content LIKE '%$keywords%' OR excerpt LIKE '%$keywords%' OR title LIKE '%$keywords%')";
 		}
 
 		$records = $this->getRecords($sort, $filter, $options, $total);

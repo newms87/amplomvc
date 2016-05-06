@@ -63,9 +63,9 @@ class App_Model_ApiUser extends App_Model_Table
 			);
 
 			if (is_string($filter['user_role'])) {
-				$filter['#user_role'] = "AND ur.`name` like '%" . $this->escape($filter['user_role']) . "%'";
+				$filter['#user_role'] = "ur.`name` like '%" . $this->escape($filter['user_role']) . "%'";
 			} else {
-				$filter['#user_role'] = "AND ur.`name` IN ('" . implode("','", $this->escape($filter['user_role'])) . "')";
+				$filter['#user_role'] = "ur.`name` IN ('" . implode("','", $this->escape($filter['user_role'])) . "')";
 			}
 		}
 

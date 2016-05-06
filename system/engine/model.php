@@ -27,6 +27,19 @@ abstract class Model
 		AUTO_INCREMENT = 'ai',
 		AUTO_INCREMENT_PK = 'pk';
 
+	static $type_map = array(
+		self::NO_ESCAPE           => 'equals',
+		self::TEXTAREA            => 'like',
+		self::TEXT                => 'like',
+		self::AUTO_INCREMENT      => 'int',
+		self::AUTO_INCREMENT_PK   => 'int',
+		self::PRIMARY_KEY_INTEGER => 'int',
+		self::FLOAT               => 'float',
+		self::INTEGER             => 'int',
+		self::DATETIME            => 'date',
+		self::IMAGE               => 'equals',
+	);
+
 	public function __construct()
 	{
 		global $registry;
@@ -177,30 +190,20 @@ abstract class Model
 
 	protected function queryTotal($sql, $index = null, $use_calc_found_rows = null)
 	{
-		if (!$this->query->parse($sql)) {
-			return false;
-		}
-
-		$select   = $this->query->getClause('select', false);
-		$the_rest = substr($sql, $this->query->getOffset('from'));
-
 		if ($use_calc_found_rows === null) {
 			$use_calc_found_rows = $this->useCalcFoundRows($sql);
 		}
 
 		if ($use_calc_found_rows) {
-			$query = "SELECT SQL_CALC_FOUND_ROWS $select $the_rest";
-		} else {
-			$query = $sql;
+			$sql = preg_replace("/^SELECT/i", "SELECT SQL_CALC_FOUND_ROWS", $sql);
 		}
 
-		$rows = $this->queryRows($query, $index);
+		$rows = $this->queryRows($sql, $index);
 
 		if ($use_calc_found_rows) {
 			$total = $this->queryVar("SELECT FOUND_ROWS()");
 		} else {
-			$the_rest = $this->query->getClauses('from', 'where', 'group by', 'having');
-			$total    = $this->queryVar("SELECT COUNT(*) $the_rest");
+			$total = $this->queryVar(preg_replace("/^SELECT/i", "SELECT COUNT(*), ", $sql));
 		}
 
 		return array(
@@ -512,66 +515,111 @@ abstract class Model
 		return $data;
 	}
 
-	protected function extractSelect($table, $options)
+	protected function extractColumns($table, $options)
 	{
-		$t = '';
+		$table_list = !empty($options['join']) ? $options['join'] : array();
+		$columns    = array();
 
-		if (strpos($table, ' ')) {
-			list($table, $t) = explode(' ', $table, 2);
+		//Check for $options columns
+		if (!empty($options['columns'])) {
+
+			//TODO: This is for compatibility testing. Remove when safe
+			if (!is_array($options['columns'])) {
+				trigger_error("options[columns] was not an array! Please fix");
+				exit;
+			}
+
+			$columns = $options['columns'];
+
+			//Convert all columns to array
+			foreach ($columns as $c => &$col) {
+				if (!is_array($col)) {
+					if (is_string($col)) {
+						if (strpos($c, '#') === 0) {
+							$col = array(
+								'type'  => 'text',
+								'field' => $col,
+							);
+						} else {
+							$col = array('type' => $col);
+						}
+					} else {
+						$col = array();
+					}
+				}
+
+				$col['show'] = true;
+			}
+			unset($col);
 		}
 
+		//Parse $table alias and add to table list
+		if ($table) {
+			$table_list[$table] = array(
+				'alias' => !empty($options['alias']) ? $options['alias'] : $this->t[$table],
+			);
+		}
+
+		//Map columns to a table alias
+		foreach ($table_list as $name => $data) {
+			$alias = !empty($data['alias']) ? $data['alias'] : $this->t[$name];
+
+			$cols = (array)$this->getTableColumns($name);
+
+			foreach ($cols as $c => $col) {
+				if (isset($columns[$c])) {
+					$columns[$c] += $col;
+				} else {
+					$columns[$c]         = $col;
+					$columns[$c]['show'] = empty($options['columns']);
+				}
+
+				$columns[$c]['table_alias'] = $alias;
+			}
+		}
+
+		return $columns;
+	}
+
+	protected function extractSelect($table, $options)
+	{
 		if (!isset($this->t[$table])) {
 			trigger_error(_l("Table %s does not exist!", $table));
 
 			return false;
 		}
 
-		$table = $this->t[$table];
-		$t     = $t ?: $table;
-
 		if (!$options || $options === '*') {
-			return "`$t`.*";
+			return "`{$this->t[$table]}`.*";
 		}
 
 		if (is_string($options)) {
 			return $options;
 		}
 
-		if (empty($t)) {
-			$t = isset($options['alias']) ? $options['alias'] : $table;
+		$columns = $this->extractColumns($table, $options);
+
+		//If no columns were resolved, hopefully the dev specified exactly which columns, or there was likely a mistake
+		if (!$columns) {
+			return (!empty($options['columns']) && is_string($options['columns'])) ? $options['columns'] : '*';
 		}
 
 		$select = '';
 
-		if (!empty($options['columns'])) {
-			if (is_string($options['columns'])) {
-				$select .= ' ' . $options['columns'];
-			} else {
-				$table_columns = $this->getTableColumns($table);
-
-				foreach ($options['columns'] as $col => $data) {
-					if (strpos($col, '#') === 0) {
-						$select .= ($select ? ',' : '') . $data;
-					} elseif (!empty($data['field'])) {
-						$select .= ($select ? ',' : '') . $data['field'] . ' as ' . $col;
-					} elseif (isset($table_columns[$col])) {
-						$select .= ($select ? ',' : '') . "`$t`.`$col`";
-					}
+		foreach ($columns as $c => $col) {
+			if (!empty($col['show'])) {
+				if (strpos($c, '#') === 0) {
+					$str = $col['field'];
+				} elseif (!empty($col['field'])) {
+					$str = "{$col['field']} as `$c`";
+				} elseif (!empty($col['table_alias'])) {
+					$str = "`{$col['table_alias']}`.`$c`";
+				} else {
+					//Column is not in any tables and field is not specified, so this column should not be included
+					continue;
 				}
-			}
-		} else {
-			$select = "`$t`.*";
-		}
 
-		if (!empty($options['join'])) {
-			foreach ($options['join'] as $join_table => $join_data) {
-				if (strpos($join_table, '#') !== 0 && isset($join_data['columns'])) {
-					if (isset($join_data['alias'])) {
-						$join_table .= ' ' . $join_data['alias'];
-					}
-
-					$select .= ($select ? ',' : '') . $this->extractSelect($join_table, $join_data);
-				}
+				$select .= ($select ? ',' : '') . $str;
 			}
 		}
 
@@ -592,14 +640,7 @@ abstract class Model
 
 	protected function extractFrom($table, $options)
 	{
-		//Extract FROM clause
-		if (strpos($table, ' ')) {
-			list($table, $t) = explode(' ', $table, 2);
-		} else {
-			$t = $this->t[$table];
-		}
-
-		$from = $this->t[$table] . ' ' . $t;
+		$from = $this->t[$table] . (!empty($options['alias']) ? " `{$options['alias']}`" : '');
 
 		//Extract JOIN Clauses
 		if (!empty($options['join'])) {
@@ -628,189 +669,172 @@ abstract class Model
 
 	protected function extractWhere($table, $filter, $options = array())
 	{
-		$where = '';
-
-		if (!$filter) {
-			return '1';
-		}
+		$where    = '';
+		$having   = !empty($options['having']) ? $options['having'] : '';
+		$group_by = !empty($options['group_by']) ? $options['group_by'] : '';
 
 		if (is_string($filter)) {
-			return $filter;
-		}
+			$where = $filter;
+		} elseif ($filter) {
+			$columns = $this->extractColumns($table, $options);
 
-		$method = array(
-			self::NO_ESCAPE           => 'equals',
-			self::TEXTAREA            => 'like',
-			self::TEXT                => 'like',
-			self::AUTO_INCREMENT      => 'int',
-			self::AUTO_INCREMENT_PK   => 'int',
-			self::PRIMARY_KEY_INTEGER => 'int',
-			self::FLOAT               => 'float',
-			self::INTEGER             => 'int',
-			self::DATETIME            => 'date',
-			self::IMAGE               => 'equals',
-		);
-
-		if (strpos($table, ' ')) {
-			list($table, $t) = explode(' ', $table, 2);
-		} else {
-			$t = $this->t[$table];
-		}
-
-		$columns = $this->getTableColumns($table);
-
-		foreach ($filter as $key => $value) {
-			if (strpos($key, '#') === 0) {
-				$where .= ' ' . $value;
-			} elseif (strpos($key, '!') === 0) {
-				$key = substr($key, 1);
-				$not = true;
-			} else {
+			//Build WHERE statement from $filter
+			foreach ($filter as $key => $value) {
 				$not = false;
-			}
 
-			if (!isset($columns[$key])) {
-				continue;
-			}
+				if (strpos($key, '#') === 0) {
+					$where .= ($where ? ' AND ' : '') . $value;
+					continue;
+				} elseif (strpos($key, '!') === 0) {
+					$key = substr($key, 1);
+					$not = true;
+				}
 
-			if (is_array($columns[$key])) {
-				$type = isset($method[$columns[$key]['type']]) ? $method[$columns[$key]['type']] : 'text';
-			} else {
-				$type = $columns[$key];
-			}
+				if (!isset($columns[$key])) {
+					continue;
+				}
 
-			switch ($type) {
-				case 'like':
-					if (!$value) {
-						$where .= " AND `$t`.`$key` " . ($not ? '!=' : '=') . " ''";
-					} elseif (is_array($value)) {
-						$likes = array();
+				$column = $columns[$key];
 
-						foreach ($value as $v) {
-							$likes[] = "`$t`.`$key` " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($v) . "%'";
-						}
+				$is_table_col = !empty($column['table_alias']);
 
-						$where .= " AND (" . implode(($not ? ' AND ' : ' OR '), $likes) . ")";
-					} else {
-						$where .= " AND `$t`.`$key` " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($value) . "%'";
-					}
-					break;
+				$tc = $is_table_col ? "`{$column['table_alias']}`.`$key`" : "`$key`";
 
-				case 'number':
-				case 'float':
-				case 'int':
-					if (is_array($value)) {
-						$low  = (isset($value['gte']) && $value['gte'] !== '') ? ($type === 'int' ? (int)$value['gte'] : (float)$value['gte']) : false;
-						$high = (isset($value['lte']) && $value['lte'] !== '') ? ($type === 'int' ? (int)$value['lte'] : (float)$value['lte']) : false;
+				if (!empty($column['compare_type'])) {
+					$type = $column['compare_type'];
+				} elseif (isset(self::$type_map[$column['type']])) {
+					$type = self::$type_map[$column['type']];
+				} else {
+					$type = 'text';
+				}
 
-						if ($low !== false && $high !== false) {
-							if ($high < $low) {
-								$temp = $low;
-								$low  = $high;
-								$high = $temp;
+				$expression = '';
+
+				switch ($type) {
+					case 'like':
+						if (!$value) {
+							$expression .= "$tc " . ($not ? '!=' : '=') . " ''";
+						} elseif (is_array($value)) {
+							$likes = array();
+
+							foreach ($value as $v) {
+								$likes[] = "$tc " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($v) . "%'";
 							}
 
-							$where .= " AND `$t`.`$key` " . ($not ? 'NOT' : '') . " BETWEEN $low AND $high";
-						} elseif ($low !== false) {
-							$where .= " AND `$t`.`$key` " . ($not ? '<' : '>=') . " " . $low;
-						} elseif ($high !== false) {
-							$where .= " AND `$t`.`$key` " . ($not ? '>' : '<=') . " " . $high;
-						} elseif (!empty($value)) {
-							array_walk($value, function (&$a) use ($type) {
-								$a = $type === 'int' ? (int)$a : (float)$a;
-							});
-
-							$where .= " AND `$t`.`$key` " . ($not ? 'NOT' : '') . " IN (" . implode(',', $value) . ")";
-						}
-					} elseif ($value) {
-						$value = $type === 'int' ? (int)$value : (float)$value;
-						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " " . $value;
-					} else {
-						$where .= " AND (`$t`.`$key` " . ($not ? 'NOT' : '') . " IN (0,'') " . ($not ? 'AND' : 'OR') . " `$t`.`$key` " . ($not ? 'IS NOT NULL' : 'IS NULL') . ")";
-					}
-					break;
-
-				case 'date':
-				case 'datetime':
-				case 'timestamp':
-				case 'time':
-					if (is_array($value)) {
-						$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
-						$end   = !empty($value['lte']) ? format('date', $value['lte']) : false;
-
-						if (!$start && !$end) {
-							if (isset($value['gte']) || isset($value['lte'])) {
-								break;
-							}
-
-							array_walk($value, function (&$a) use ($type) {
-								$a = format('date', $a);
-							});
-
-							$where .= " AND `$t`.`$key` " . ($not ? 'NOT' : '') . " IN ('" . implode("','", $value) . "')";
+							$expression .= "(" . implode(($not ? ' AND ' : ' OR '), $likes) . ")";
 						} else {
-							if ($start && $end) {
-								if (date_compare($start, '>', $end)) {
-									$temp  = $end;
-									$end   = $start;
-									$start = $temp;
+							$expression .= "$tc " . ($not ? 'NOT LIKE' : 'LIKE') . " '%" . $this->escape($value) . "%'";
+						}
+						break;
+
+					case 'number':
+					case 'float':
+					case 'int':
+						if (is_array($value)) {
+							$low  = (isset($value['gte']) && $value['gte'] !== '') ? ($type === 'int' ? (int)$value['gte'] : (float)$value['gte']) : false;
+							$high = (isset($value['lte']) && $value['lte'] !== '') ? ($type === 'int' ? (int)$value['lte'] : (float)$value['lte']) : false;
+
+							if ($low !== false && $high !== false) {
+								if ($high < $low) {
+									$temp = $low;
+									$low  = $high;
+									$high = $temp;
 								}
 
-								$where .= " AND `$t`.`$key` BETWEEN '$start' AND '$end'";
-							} elseif ($start) {
-								$where .= " AND `$t`.`$key` >= '$start'";
-							} else {
-								$where .= " AND `$t`.`$key` <= '$end'";
-							}
-						}
-					} elseif ($value) {
-						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . format('date', $value) . "'";
-					} else {
-						$where .= " AND (`$t`.`$key` IS NULL OR `$t`.`$key` = '')";
-					}
-					break;
+								$expression .= "$tc " . ($not ? 'NOT' : '') . " BETWEEN $low AND $high";
+							} elseif ($low !== false) {
+								$expression .= "$tc " . ($not ? '<' : '>=') . " " . $low;
+							} elseif ($high !== false) {
+								$expression .= "$tc " . ($not ? '>' : '<=') . " " . $high;
+							} elseif (!empty($value)) {
+								array_walk($value, function (&$a) use ($type) {
+									$a = $type === 'int' ? (int)$a : (float)$a;
+								});
 
-				case 'text':
-				default:
-					if (is_array($value)) {
-						$where .= " AND `$t`.`$key` " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $this->escape($value)) . "')";
-					} else {
-						$where .= " AND `$t`.`$key` " . ($not ? "!=" : "=") . " '" . $this->escape($value) . "'";
-					}
-					break;
+								$expression .= "$tc " . ($not ? 'NOT' : '') . " IN (" . implode(',', $value) . ")";
+							}
+						} elseif ($value) {
+							$value = $type === 'int' ? (int)$value : (float)$value;
+							$expression .= "$tc " . ($not ? "!=" : "=") . " " . $value;
+						} else {
+							$expression .= "($tc " . ($not ? 'NOT' : '') . " IN (0,'') " . ($not ? 'AND' : 'OR') . " $tc " . ($not ? 'IS NOT NULL' : 'IS NULL') . ")";
+						}
+						break;
+
+					case 'date':
+					case 'datetime':
+					case 'timestamp':
+					case 'time':
+						if (is_array($value)) {
+							$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
+							$end   = !empty($value['lte']) ? format('date', $value['lte']) : false;
+
+							if (!$start && !$end) {
+								if (isset($value['gte']) || isset($value['lte'])) {
+									break;
+								}
+
+								array_walk($value, function (&$a) use ($type) {
+									$a = format('date', $a);
+								});
+
+								$expression .= "$tc " . ($not ? 'NOT' : '') . " IN ('" . implode("','", $value) . "')";
+							} else {
+								if ($start && $end) {
+									if (date_compare($start, '>', $end)) {
+										$temp  = $end;
+										$end   = $start;
+										$start = $temp;
+									}
+
+									$expression .= "$tc BETWEEN '$start' AND '$end'";
+								} elseif ($start) {
+									$expression .= "$tc >= '$start'";
+								} else {
+									$expression .= "$tc <= '$end'";
+								}
+							}
+						} elseif ($value) {
+							$expression .= "$tc " . ($not ? "!=" : "=") . " '" . format('date', $value) . "'";
+						} else {
+							$expression .= "($tc IS NULL OR $tc = '')";
+						}
+						break;
+
+					case 'text':
+					default:
+						if (is_array($value)) {
+							$expression .= "$tc " . ($not ? "NOT IN" : "IN") . " ('" . implode("','", $this->escape($value)) . "')";
+						} else {
+							$expression .= "$tc " . ($not ? "!=" : "=") . " '" . $this->escape($value) . "'";
+						}
+						break;
+				}
+
+				if ($is_table_col) {
+					$where .= ($where ? ' AND ' : '') . $expression;
+				} else {
+					$having .= ($having ? ' AND ' : '') . $expression;
+				}
 			}
 		}
 
-		$where = $where ? preg_replace("/^\\s*(AND|OR)/", '', $where) : '1';
+		if (!$where) {
+			$where = '1';
+		}
 
-		if (!empty($options['join'])) {
-			$prev_join_table = false;
-			$join_filter     = $filter;
+		if ($group_by) {
+			$where .= " GROUP BY $group_by";
+		}
 
-			foreach ($join_filter as $key => $f) {
-				if (strpos($key, '#') === 0) {
-					unset($join_filter[$key]);
-				}
-			}
-
-			foreach ($options['join'] as $join_table => $join_data) {
-				$join_filter = array_diff_key($join_filter, $prev_join_table ? (array)$this->getTableColumns($prev_join_table) : $columns);
-				$alias       = isset($join_data['alias']) ? ' ' . $join_data['alias'] : '';
-
-				$join_where = $this->extractWhere($join_table . $alias, $join_filter);
-
-				if ($join_where !== '1') {
-					$where .= " AND " . $join_where;
-				}
-
-				$prev_join_table = $join_table;
-			}
+		if ($having) {
+			$where .= " HAVING $having";
 		}
 
 		return $where;
 	}
 
-	protected function extractOrder($sort, $table = null)
+	protected function extractOrder($table, $sort, $options = array())
 	{
 		if (empty($sort)) {
 			return '';
@@ -821,7 +845,8 @@ abstract class Model
 		}
 
 		//Order
-		$order = '';
+		$order   = '';
+		$columns = $this->extractColumns($table, $options);
 
 		foreach ($sort as $col => $ord) {
 			if (strpos($col, '#') === 0) {
@@ -829,32 +854,17 @@ abstract class Model
 				continue;
 			}
 
-			$col = $this->escape($col);
-			$t   = '';
-
-			if ($table) {
-				if (is_array($table)) {
-					foreach ($table as $tbl => $name) {
-						if ($this->hasColumn($tbl, $col)) {
-							$t = is_string($name) ? $name : $name['alias'];
-							break;
-						}
-					}
-				} else {
-					$t = $table;
-				}
-			}
-
 			if (strpos($col, '.') === false) {
-				$col = ($t ? "`$t`." : '') . "`$col`";
+				$alias = !empty($columns[$col]['table_alias']) ? $columns[$col]['table_alias'] : '';
+				$col   = ($alias ? "`$alias`." : '') . "`$col`";
 			}
 
 			$ord = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';
 
-			$order .= ($order ? ',' : '') . "$col $ord";
+			$order .= ($order ? ',' : '') . $this->escape($col) . ' ' . $ord;
 		}
 
-		return $order ? "ORDER BY $order" : '';
+		return $order;
 	}
 
 	protected function extractLimit($data)
@@ -864,7 +874,7 @@ abstract class Model
 				$data['start'] = (max(1, (int)$data['page']) - 1) * (int)$data['limit'];
 			}
 
-			return "LIMIT " . max(0, isset($data['start']) ? $data['start'] : 0) . ',' . (int)$data['limit'];
+			return max(0, isset($data['start']) ? $data['start'] : 0) . ',' . (int)$data['limit'];
 		}
 	}
 
@@ -907,7 +917,7 @@ abstract class Model
 	{
 		//Use EXPLAIN to determine optimal performance
 		if (!$sort && !$filter) {
-			if (preg_match("/GROUP BY /i", $table)) {
+			if (preg_match("/( GROUP BY | HAVING )/i", $table)) {
 				return true;
 			}
 
