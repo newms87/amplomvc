@@ -13,7 +13,11 @@ abstract class Model
 {
 	static $model = array();
 
-	protected $t, $db, $error = array();
+	protected
+		$t,
+		$db,
+		$error = array(),
+		$related_tables = array();
 
 	const
 		TEXT = 'text',
@@ -517,68 +521,76 @@ abstract class Model
 
 	protected function extractColumns($table, $options)
 	{
-		$table_list = !empty($options['join']) ? $options['join'] : array();
-		$columns    = array();
+		static $column_cache = array();
 
-		//Check for $options columns
-		if (!empty($options['columns'])) {
+		$key = $table . serialize($options);
 
-			//TODO: This is for compatibility testing. Remove when safe
-			if (!is_array($options['columns'])) {
-				trigger_error("options[columns] was not an array! Please fix");
-				exit;
-			}
+		if (!isset($column_cache[$key])) {
+			$table_list = !empty($options['join']) ? $options['join'] : array();
+			$columns    = array();
 
-			$columns = $options['columns'];
+			//Check for $options columns
+			if (!empty($options['columns'])) {
 
-			//Convert all columns to array
-			foreach ($columns as $c => &$col) {
-				if (!is_array($col)) {
-					if (is_string($col)) {
-						if (strpos($c, '#') === 0) {
-							$col = array(
-								'type'  => 'text',
-								'field' => $col,
-							);
+				//TODO: This is for compatibility testing. Remove when safe
+				if (!is_array($options['columns'])) {
+					trigger_error("options[columns] was not an array! Please fix");
+					exit;
+				}
+
+				$columns = $options['columns'];
+
+				//Convert all columns to array
+				foreach ($columns as $c => &$col) {
+					if (!is_array($col)) {
+						if (is_string($col)) {
+							if (strpos($c, '#') === 0) {
+								$col = array(
+									'type'  => 'text',
+									'field' => $col,
+								);
+							} else {
+								$col = array('type' => $col);
+							}
 						} else {
-							$col = array('type' => $col);
+							$col = array();
 						}
-					} else {
-						$col = array();
 					}
+
+					$col['show'] = true;
 				}
-
-				$col['show'] = true;
+				unset($col);
 			}
-			unset($col);
-		}
 
-		//Parse $table alias and add to table list
-		if ($table) {
-			$table_list[$table] = array(
-				'alias' => !empty($options['alias']) ? $options['alias'] : $this->t[$table],
-			);
-		}
+			//Parse $table alias and add to table list
+			if ($table) {
+				$table_list[$table] = array(
+					'alias' => !empty($options['alias']) ? $options['alias'] : $this->t[$table],
+				);
+			}
 
-		//Map columns to a table alias
-		foreach ($table_list as $name => $data) {
-			$alias = !empty($data['alias']) ? $data['alias'] : $this->t[$name];
+			//Map columns to a table alias
+			foreach ($table_list as $name => $data) {
+				$alias = !empty($data['alias']) ? $data['alias'] : $this->t[$name];
 
-			$cols = (array)$this->getTableColumns($name);
+				$cols = (array)$this->getTableColumns($name);
 
-			foreach ($cols as $c => $col) {
-				if (isset($columns[$c])) {
-					$columns[$c] += $col;
-				} else {
-					$columns[$c]         = $col;
-					$columns[$c]['show'] = empty($options['columns']);
+				foreach ($cols as $c => $col) {
+					if (isset($columns[$c])) {
+						$columns[$c] += $col;
+					} else {
+						$columns[$c]         = $col;
+						$columns[$c]['show'] = empty($options['columns']);
+					}
+
+					$columns[$c]['table_alias'] = $alias;
 				}
-
-				$columns[$c]['table_alias'] = $alias;
 			}
+
+			$column_cache[$key] = $columns;
 		}
 
-		return $columns;
+		return $column_cache[$key];
 	}
 
 	protected function extractSelect($table, $options)
@@ -626,21 +638,11 @@ abstract class Model
 		return $select;
 	}
 
-	/**
-	 * Builds the WHERE string for the mysql statement based on the $table columns,
-	 * and the values set in $filter. You can override the way the values are filtered
-	 * using the $columns to specify the data type for columns.
-	 *
-	 * @param string $table   - The table to reference the columns to build the WHERE string
-	 * @param array  $filter  - The values to filter (based on data types in the table columns)
-	 * @param array  $columns - The overridden table columns, to change data types
-	 *
-	 * @return string - The mysql WHERE clause for the table $table
-	 */
-
 	protected function extractFrom($table, $options)
 	{
 		$from = $this->t[$table] . (!empty($options['alias']) ? " `{$options['alias']}`" : '');
+
+		$columns = $this->extractColumns($table, $options);
 
 		//Extract JOIN Clauses
 		if (!empty($options['join'])) {
@@ -1164,6 +1166,7 @@ abstract class Model
 				if ($primary_key) {
 					return null;
 				}
+
 				$primary_key = $key;
 			}
 		}

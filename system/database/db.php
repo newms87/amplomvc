@@ -216,6 +216,11 @@ class DB
 		return $this->t->schema;
 	}
 
+	public function getName()
+	{
+		return $this->t->schema;
+	}
+
 	public function getProfile()
 	{
 		return self::$profile;
