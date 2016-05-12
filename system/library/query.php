@@ -72,7 +72,9 @@ class Query extends Library
 			'start'          => 0,
 		);
 
-		$this->setDb($init['db']);
+		if ($init['db']) {
+			$this->setDb($init['db']);
+		}
 
 		parent::__construct();
 
@@ -147,34 +149,28 @@ class Query extends Library
 
 	public function setRelatedTables($tables)
 	{
-		foreach ($tables as $table => $join) {
-			if (isset($this->t[$table])) {
-				if (is_string($join)) {
-					$join = array(
-						'type'    => '',
-						'table'   => $this->t[$join],
-						'alias'   => '',
-						'require' => true,
-					);
-				} else {
-					if (empty($join['on'])) {
-						trigger_error(_l("Must specify join 'on' for the related table %s", $table));
-						continue;
-					}
+		foreach ($tables as $name => $join) {
+			if (empty($join['table'])) {
+				$join['table'] = $name;
+			}
 
-					$table = $this->t[$table];
-
-					$join += array(
-						'type'    => "LEFT JOIN",
-						'table'   => $table,
-						'alias'   => false,
-						'require' => false,
-					);
+			if (isset($this->t[$join['table']])) {
+				if (empty($join['on'])) {
+					trigger_error(_l("Must specify join 'on' for the related table %s", $name));
+					continue;
 				}
 
-				$this->related_tables[$table] = $join;
+				$join['table'] = $this->t[$join['table']];
+
+				$join += array(
+					'type'    => "LEFT JOIN",
+					'alias'   => false,
+					'require' => false,
+				);
+
+				$this->related_tables[$name] = $join;
 			} else {
-				trigger_error(_l("The table %s does not exist in the database %s . Unable to add related table . ", $table, $this->db->getName()));
+				trigger_error(_l("The table %s does not exist in the database %s . Unable to add related table . ", $join['table'], $this->db->getName()));
 			}
 		}
 
@@ -215,14 +211,17 @@ class Query extends Library
 			$table_list = array();
 
 			if ($this->table) {
-				$table_list[$this->table] = array('alias' => $this->alias);
+				$table_list[$this->table] = array(
+					'table' => $this->table,
+					'alias' => $this->alias
+				);
 			}
 
 			$table_list += $this->related_tables;
 
 			//Map columns to a table / alias, and fill additional data
-			foreach ($table_list as $name => $data) {
-				$table = $this->t[$name];
+			foreach ($table_list as $data) {
+				$table = $this->t[$data['table']];
 				$alias = !empty($data['alias']) ? $data['alias'] : $table;
 
 				$table_columns = (array)$this->getTableColumns($table);
@@ -239,7 +238,7 @@ class Query extends Library
 						$columns[$c]['table'] = $table;
 					}
 
-					if (!isset($column[$c]['table_alias'])) {
+					if (!isset($columns[$c]['table_alias'])) {
 						$columns[$c]['table_alias'] = $alias;
 					}
 				}
@@ -280,6 +279,17 @@ class Query extends Library
 		}
 	}
 
+	public function requireTable($require_table)
+	{
+		$require_tables = (array)$require_table;
+
+		foreach ($require_tables as $table) {
+			if (isset($this->related_tables[$table])) {
+				$this->related_tables[$table]['require'] = true;
+			}
+		}
+	}
+
 	public function select()
 	{
 		if ($this->select === null) {
@@ -316,20 +326,12 @@ class Query extends Library
 
 			foreach ($this->columns as $column) {
 				if ($column['show'] && !empty($column['require_table'])) {
-					$column['require_table'] = (array)$column['require_table'];
-
-					foreach ($column['require_table'] as $table) {
-						$table = $this->t[$table];
-
-						if (isset($this->related_tables[$table])) {
-							$this->related_tables[$table]['require'] = true;
-						}
-					}
+					$this->requireTable($column['require_table']);
 				}
 			}
 
 			//Extract JOIN Clauses
-			foreach ($this->related_tables as $table => $join) {
+			foreach ($this->related_tables as $join) {
 				if ($join['require']) {
 					if ($join['type']) {
 						$this->from .= ($join['type'] ? " {$join['type']}" : '') . " `{$join['table']}`" . ($join['alias'] ? " `{$join['alias']}`" : '') . (strpos($join['on'], '=') ? ' ON' : ' USING') . " (" . $join['on'] . ")";
@@ -545,7 +547,17 @@ class Query extends Library
 				$this->order_by .= ($this->order_by ? ',' : '') . $ord;
 			} else {
 				if (strpos($col, '.') === false) {
-					$col = (!empty($this->columns[$col]['table_alias']) ? "`{$this->columns[$col]['table_alias']}`." : '') . "`$col`";
+					$column = !empty($this->columns[$col]) ? $this->columns[$col] : false;
+
+					html_dump($column, 'col');
+
+					if ($column) {
+						$col = (!empty($column['table_alias']) ? "`{$column['table_alias']}`." : '') . "`$col`";
+
+						if (!empty($column['require_table'])) {
+							$this->requireTable($column['require_table']);
+						}
+					}
 				}
 
 				$ord = strtoupper($ord) === 'DESC' ? 'DESC' : 'ASC';

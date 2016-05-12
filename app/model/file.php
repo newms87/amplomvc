@@ -73,7 +73,7 @@ class App_Model_File extends App_Model_Table
 		$user_id     = (int)user_info('user_id');
 
 		foreach ($records as &$record) {
-			$record['user_id'] = empty($record['user_id']) ? false : $record['user_id'];
+			$record['user_id']     = empty($record['user_id']) ? false : $record['user_id'];
 			$record['customer_id'] = empty($record['customer_id']) ? false : $record['customer_id'];
 
 			$record['is_owner'] = $customer_id === $record['customer_id'] || $user_id === $record['user_id'];
@@ -238,7 +238,7 @@ class App_Model_File extends App_Model_Table
 			}
 		}
 
-		$path = ltrim(rtrim($options['path'], '/') . '/' . preg_replace("/\\.zip$/", '', $options['name']), '/') . '.zip';
+		$path = ltrim(rtrim($options['path'], '/') . '/' . preg_replace("/\\.zip$/", '', sanitize_filename($options['name'])), '/') . '.zip';
 
 		if (!_is_writable(dirname(DIR_SITE . 'system/temp/' . $path))) {
 			$this->error['temp_dir'] = _l("The system temp directory was not writable");

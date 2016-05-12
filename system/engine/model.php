@@ -521,76 +521,69 @@ abstract class Model
 
 	protected function extractColumns($table, $options)
 	{
-		static $column_cache = array();
 
-		$key = $table . serialize($options);
+		$table_list = !empty($options['join']) ? $options['join'] : array();
+		$columns    = array();
 
-		if (!isset($column_cache[$key])) {
-			$table_list = !empty($options['join']) ? $options['join'] : array();
-			$columns    = array();
+		//Check for $options columns
+		if (!empty($options['columns'])) {
 
-			//Check for $options columns
-			if (!empty($options['columns'])) {
+			//TODO: This is for compatibility testing. Remove when safe
+			if (!is_array($options['columns'])) {
+				trigger_error("options[columns] was not an array! Please fix");
+				exit;
+			}
 
-				//TODO: This is for compatibility testing. Remove when safe
-				if (!is_array($options['columns'])) {
-					trigger_error("options[columns] was not an array! Please fix");
-					exit;
-				}
+			$columns = $options['columns'];
 
-				$columns = $options['columns'];
-
-				//Convert all columns to array
-				foreach ($columns as $c => &$col) {
-					if (!is_array($col)) {
-						if (is_string($col)) {
-							if (strpos($c, '#') === 0) {
-								$col = array(
-									'type'  => 'text',
-									'field' => $col,
-								);
-							} else {
-								$col = array('type' => $col);
-							}
+			//Convert all columns to array
+			foreach ($columns as $c => &$col) {
+				if (!is_array($col)) {
+					if (is_string($col)) {
+						if (strpos($c, '#') === 0) {
+							$col = array(
+								'type'  => 'text',
+								'field' => $col,
+							);
 						} else {
-							$col = array();
+							$col = array('type' => $col);
 						}
-					}
-
-					$col['show'] = true;
-				}
-				unset($col);
-			}
-
-			//Parse $table alias and add to table list
-			if ($table) {
-				$table_list[$table] = array(
-					'alias' => !empty($options['alias']) ? $options['alias'] : $this->t[$table],
-				);
-			}
-
-			//Map columns to a table alias
-			foreach ($table_list as $name => $data) {
-				$alias = !empty($data['alias']) ? $data['alias'] : $this->t[$name];
-
-				$cols = (array)$this->getTableColumns($name);
-
-				foreach ($cols as $c => $col) {
-					if (isset($columns[$c])) {
-						$columns[$c] += $col;
 					} else {
-						$columns[$c]         = $col;
-						$columns[$c]['show'] = empty($options['columns']);
+						$col = array();
 					}
-
-					$columns[$c]['table_alias'] = $alias;
 				}
-			}
 
-			$column_cache[$key] = $columns;
+				$col['show'] = true;
+			}
+			unset($col);
 		}
 
-		return $column_cache[$key];
+		//Parse $table alias and add to table list
+		if ($table) {
+			$table_list[$table] = array(
+				'alias' => !empty($options['alias']) ? $options['alias'] : $this->t[$table],
+			);
+		}
+
+		//Map columns to a table alias
+		foreach ($table_list as $name => $data) {
+			$alias = !empty($data['alias']) ? $data['alias'] : $this->t[$name];
+
+			$cols = (array)$this->getTableColumns($name);
+
+			foreach ($cols as $c => $col) {
+				if (isset($columns[$c])) {
+					$columns[$c] += $col;
+				} else {
+					$columns[$c]         = $col;
+					$columns[$c]['show'] = empty($options['columns']);
+				}
+
+				$columns[$c]['table_alias'] = $alias;
+			}
+		}
+
+		return $columns;
 	}
 
 	protected function extractSelect($table, $options)

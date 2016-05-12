@@ -441,9 +441,18 @@ function post_redirect($path = '', $query = null, $ssl = null, $status = null)
 	redirect($path, $query, $ssl, $status);
 }
 
-function slug($name, $sep = '_', $allow = 'a-z0-9._-')
+function slug($name, $sep = '_', $allow = 'a-z0-9._-', $lowercase = true)
 {
-	return preg_replace("/[$sep]+/", $sep, preg_replace("/[^$allow]/", $sep, strtolower(trim($name))));
+	if ($lowercase) {
+		$name = strtolower($name);
+	}
+
+	return preg_replace("/[$sep]+/", $sep, preg_replace("/[^$allow]/", $sep, trim($name)));
+}
+
+function sanitize_filename($name, $sep = '-')
+{
+	return slug($name, $sep, 'a-zA-Z0-9.,_\-!@$^()+=~', false);
 }
 
 function cast_title($name)
@@ -679,6 +688,12 @@ function date_compare($date1, $op, $date2 = null)
 	$date = $registry->get('date');
 
 	switch ($op) {
+		case'in past':
+			return $date->isInPast($date1);
+
+		case 'in future':
+			return $date->isInFuture($date1);
+
 		case '<':
 		case 'before':
 			return $date->isBefore($date1, $date2);
