@@ -72,7 +72,7 @@ class Query extends Library
 			'start'          => 0,
 		);
 
-		$this->db = $init['db'];
+		$this->setDb($init['db']);
 
 		parent::__construct();
 
