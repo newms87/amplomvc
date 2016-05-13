@@ -23,7 +23,7 @@
 			<?=
 			block('widget/views', null, array(
 				'path'  => $model['listing_path'],
-				'group' => slug($model['path']),
+				'group' => $model['listing_group'],
 			)); ?>
 		</div>
 	</div>

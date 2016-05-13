@@ -6,7 +6,7 @@
  * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
- * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ * See COPYING.txt and LICENSE.txt files in the root directory.
  */
 
 // Check PHP Version

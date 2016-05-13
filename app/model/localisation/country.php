@@ -6,13 +6,13 @@
  * @link http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
- * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ * See COPYING.txt and LICENSE.txt files in the root directory.
  */
 
 class App_Model_Localisation_Country extends App_Model_Table
 {
 	protected $table = 'country', $primary_key = 'country_id';
-	
+
 	public function addCountry($country)
 	{
 		clear_cache('country');

@@ -7,7 +7,7 @@
  * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
- * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ * See COPYING.txt and LICENSE.txt files in the root directory.
  */
 abstract class App_Controller_Table extends Controller
 {
@@ -21,6 +21,7 @@ abstract class App_Controller_Table extends Controller
 
 		//Optional
 		'title' => 'Client',
+		'listing_group' => 'Client List',
 	);
 
 	*/
@@ -39,6 +40,7 @@ abstract class App_Controller_Table extends Controller
 
 		$this->model += array(
 			'title'             => '',
+			'listing_group'     => slug($this->model['path']),
 			'listing_path'      => $this->model['path'] . '/listing',
 			'form_path'         => $this->model['path'] . '/form',
 			'save_path'         => $this->model['path'] . '/save',
@@ -121,16 +123,18 @@ abstract class App_Controller_Table extends Controller
 			'callback' => null,
 		);
 
-		$options['actions'] += array(
-			'edit'   => array(
-				'text' => _l("Edit"),
-				'path' => $this->model['form_path'],
-			),
-			'delete' => array(
-				'text' => _l("Delete"),
-				'path' => $this->model['remove_path'],
-			),
-		);
+		if (!isset($options['actions']) || $options['actions'] !== false) {
+			$options['actions'] += array(
+				'edit'   => array(
+					'text' => _l("Edit"),
+					'path' => $this->model['form_path'],
+				),
+				'delete' => array(
+					'text' => _l("Delete"),
+					'path' => $this->model['remove_path'],
+				),
+			);
+		}
 
 		$options['columns'] = $this->instance->getColumns($options['columns'] + (array)_request('columns')) + $options['columns'];
 
@@ -146,7 +150,7 @@ abstract class App_Controller_Table extends Controller
 
 		foreach ($records as &$record) {
 			if (isset($record[$this->model['value']])) {
-				foreach ($options['actions'] as $name => $action) {
+				foreach ((array)$options['actions'] as $name => $action) {
 					if ($action && (isset($action['user_can']) ? $action['user_can'] : user_can('w', $action['path']))) {
 						$action['href'] = site_url($action['path'], $this->model['value'] . '=' . $record[$this->model['value']]);
 

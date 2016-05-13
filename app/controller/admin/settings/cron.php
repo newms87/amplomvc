@@ -11,7 +11,7 @@
  * Order: 12
  *
  * All Amplo MVC code is released under the GNU General Public License.
- * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ * See COPYING.txt and LICENSE.txt files in the root directory.
  */
 class App_Controller_Admin_Settings_Cron extends Controller
 {

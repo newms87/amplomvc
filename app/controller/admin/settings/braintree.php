@@ -9,7 +9,7 @@
  * Title: Braintree Settings
  * Icon: admin.png
  * All Amplo MVC code is released under the GNU General Public License.
- * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ * See COPYING.txt and LICENSE.txt files in the root directory.
  */
 class App_Controller_Admin_Settings_Braintree extends Controller
 {

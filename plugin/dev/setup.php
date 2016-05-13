@@ -14,7 +14,7 @@
  * @package Amplo MVC Dev Plugin
  *
  * All Amplo MVC code is released under the GNU General Public License.
- * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ * See COPYING.txt and LICENSE.txt files in the root directory.
  */
 class Plugin_Dev_Setup extends Plugin_Setup
 {

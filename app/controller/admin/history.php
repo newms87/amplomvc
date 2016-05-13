@@ -7,54 +7,50 @@
  * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
- * See COPYRIGHT.txt and LICENSE.txt files in the root directory.
+ * See COPYING.txt and LICENSE.txt files in the root directory.
  */
-class App_Controller_Admin_History extends Controller
+class App_Controller_Admin_History extends App_Controller_Table
 {
-	public function index()
+	protected $model = array(
+		'class'         => 'App_Model_History',
+		'path'          => 'admin/history',
+		'label'         => 'message',
+		'value'         => 'history_id',
+		'title'         => 'History',
+		'listing_group' => 'DB History',
+		'save_path'     => false,
+		'form_path'     => false,
+	);
+
+	public function index($options = array())
 	{
-		//Page Head
-		set_page_info('title', _l("DB History"));
+		$options['batch_action'] = array();
 
-		//Breadcrumbs
-		breadcrumb(_l("Home"), site_url('admin'));
-		breadcrumb(_l("History"), site_url('admin/history'));
-
-		//Response
-		output($this->render('history'));
+		return parent::index($options);
 	}
 
-	public function listing()
+	public function listing($options = array())
 	{
-		$sort    = (array)_get('sort', array('history_id' => 'DESC'));
-		$filter  = (array)_get('filter');
-		$options = array(
-			'index'   => 'history_id',
-			'page'    => _get('page'),
-			'limit'   => _get('limit', option('admin_list_limit', 20)),
-			'columns' => $this->Model_History->getColumns((array)_request('columns')),
+		$options += array(
+			'sort_default' => array('history_id' => 'DESC'),
+			'actions'      => false,
 		);
 
+		return parent::listing($options);
+	}
 
-		list($entries, $total) = $this->Model_History->getRecords($sort, $filter, $options, true);
+	public function save($options = array())
+	{
+		trigger_error(_l("Attempt to modify the history table! This is not a valid action."));
+	}
 
-		$listing = array(
-			'extra_cols'   => $this->Model_History->getColumns(false),
-			'records'      => $entries,
-			'sort'         => $sort,
-			'filter_value' => $filter,
-			'pagination'   => true,
-			'total'        => $total,
-			'listing_path' => 'admin/history/listing',
-		);
+	public function remove($options = array())
+	{
+		trigger_error(_l("Attempt to remove an entry from the history table! This is not a valid action."));
+	}
 
-		$output = block('widget/listing', null, $listing + $options);
-
-		//Response
-		if ($this->is_ajax) {
-			output($output);
-		}
-
-		return $output;
+	public function batch_action($options = array())
+	{
+		trigger_error(_l("Attempt to apply a batch action on the history table! This is not a valid action."));
 	}
 }
