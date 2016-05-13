@@ -549,8 +549,6 @@ class Query extends Library
 				if (strpos($col, '.') === false) {
 					$column = !empty($this->columns[$col]) ? $this->columns[$col] : false;
 
-					html_dump($column, 'col');
-
 					if ($column) {
 						$col = (!empty($column['table_alias']) ? "`{$column['table_alias']}`." : '') . "`$col`";
 
