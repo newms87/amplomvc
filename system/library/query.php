@@ -163,9 +163,9 @@ class Query extends Library
 				$join['table'] = $this->t[$join['table']];
 
 				$join += array(
-					'type'    => "LEFT JOIN",
-					'alias'   => false,
-					'require' => false,
+					'type'        => "LEFT JOIN",
+					'alias'       => false,
+					'is_required' => false,
 				);
 
 				$this->related_tables[$name] = $join;
@@ -200,7 +200,8 @@ class Query extends Library
 			$col['table'] = !empty($col['table']) ? $this->t[$col['table']] : null;
 
 			$col += array(
-				'show'        => true,
+				'is_selected' => true,
+				'is_required' => true,
 				'alias'       => $c,
 				'table_alias' => $col['table'] ? $this->getAlias($col['table']) : null,
 			);
@@ -230,8 +231,9 @@ class Query extends Library
 					if (isset($columns[$c])) {
 						$columns[$c] += $col;
 					} else {
-						$columns[$c]         = $col;
-						$columns[$c]['show'] = !$merge;
+						$columns[$c]                = $col;
+						$columns[$c]['is_selected'] = !$merge;
+						$columns[$c]['is_required'] = !$merge;
 					}
 
 					if (!isset($columns[$c]['table'])) {
@@ -285,7 +287,15 @@ class Query extends Library
 
 		foreach ($require_tables as $table) {
 			if (isset($this->related_tables[$table])) {
-				$this->related_tables[$table]['require'] = true;
+				$this->related_tables[$table]['is_required'] = true;
+			} else {
+				foreach ($this->related_tables as $t => &$data) {
+					if ($data['table'] === $table) {
+						$data['is_required'] = true;
+						break;
+					}
+				}
+				unset($data);
 			}
 		}
 	}
@@ -296,7 +306,7 @@ class Query extends Library
 			$this->select = '';
 
 			foreach ($this->columns as $c => $col) {
-				if (!empty($col['show'])) {
+				if (!empty($col['is_selected'])) {
 					if (!empty($col['field'])) {
 						$str = $col['field'] . ($col['alias'] ? " as `$col[alias]`" : '');
 					} elseif (!empty($col['table_alias'])) {
@@ -324,15 +334,25 @@ class Query extends Library
 		if ($this->from === null) {
 			$this->from = "`$this->table`" . ($this->alias ? " `{$this->alias}`" : '');
 
+			foreach ($this->sort + $this->filter as $col => $c) {
+				if (isset($this->columns[$col])) {
+					$this->columns[$col]['is_required'] = true;
+				}
+			}
+
 			foreach ($this->columns as $column) {
-				if ($column['show'] && !empty($column['require_table'])) {
-					$this->requireTable($column['require_table']);
+				if ($column['is_required']) {
+					if (!empty($column['require_table'])) {
+						$this->requireTable($column['require_table']);
+					} elseif ($column['table'] !== $this->table) {
+						$this->requireTable($column['table']);
+					}
 				}
 			}
 
 			//Extract JOIN Clauses
 			foreach ($this->related_tables as $join) {
-				if ($join['require']) {
+				if ($join['is_required']) {
 					if ($join['type']) {
 						$this->from .= ($join['type'] ? " {$join['type']}" : '') . " `{$join['table']}`" . ($join['alias'] ? " `{$join['alias']}`" : '') . (strpos($join['on'], '=') ? ' ON' : ' USING') . " (" . $join['on'] . ")";
 					} else {
@@ -551,10 +571,6 @@ class Query extends Library
 
 					if ($column) {
 						$col = (!empty($column['table_alias']) ? "`{$column['table_alias']}`." : '') . "`$col`";
-
-						if (!empty($column['require_table'])) {
-							$this->requireTable($column['require_table']);
-						}
 					}
 				}
 
