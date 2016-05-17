@@ -223,6 +223,8 @@ function update_list_widget() {
 		return false;
 	}
 
+	var scrollToTop = typeof $this.attr('data-listing-scroll-top') !== 'undefined';
+
 	$this.closest('.amp-modal').ampModal('close');
 
 	var $list_widget = $this.is('.widget-listing') ? $this : $this.closest('.widget-listing');
@@ -249,7 +251,10 @@ function update_list_widget() {
 		$list_widget.siblings('.messages').remove();
 		$list_widget.replaceWith(response);
 		$parent.trigger('loaded');
-		$('body, html').scrollTo($list_widget);
+
+		if (scrollToTop) {
+			$('body, html').scrollTo($parent);
+		}
 	});
 
 	return false;
