@@ -249,6 +249,7 @@ function update_list_widget() {
 		$list_widget.siblings('.messages').remove();
 		$list_widget.replaceWith(response);
 		$parent.trigger('loaded');
+		$('body, html').scrollTo($list_widget);
 	});
 
 	return false;

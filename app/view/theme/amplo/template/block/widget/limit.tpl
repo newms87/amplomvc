@@ -6,11 +6,7 @@
 	<div class="limit-text md-visible"><?= $limit_text; ?></div>
 	<div class="limit-items md-visible">
 		<? foreach ($limits as $value => $text) { ?>
-			<? if ((int)$value === (int)$limit) { ?>
-				<a class="limit-item selected"><?= $text; ?></a>
-			<? } else { ?>
-				<a class="limit-item" href="<?= $limit_url . $value; ?>"><?= $text; ?></a>
-			<? } ?>
+			<a class="limit-item <?= 'limit-' . $value . ((int)$value === (int)$limit ? ' selected' : ''); ?>" data-limit="<?= $value; ?>" href="<?= $limit_url . $value; ?>"><?= $text; ?></a>
 		<? } ?>
 	</div>
 </div>
