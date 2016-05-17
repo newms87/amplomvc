@@ -570,7 +570,11 @@ class Query extends Library
 					$column = !empty($this->columns[$col]) ? $this->columns[$col] : false;
 
 					if ($column) {
-						$col = (!empty($column['table_alias']) ? "`{$column['table_alias']}`." : '') . "`$col`";
+						if (!empty($column['sort_key'])) {
+							$col = $column['sort_key'];
+						} else {
+							$col = (!empty($column['table_alias']) ? "`{$column['table_alias']}`." : '') . "`$col`";
+						}
 					}
 				}
 
