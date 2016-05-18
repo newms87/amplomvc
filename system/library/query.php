@@ -350,16 +350,23 @@ class Query extends Library
 		$require_tables = (array)$require_table;
 
 		foreach ($require_tables as $table) {
-			if (isset($this->related_tables[$table])) {
-				$this->related_tables[$table]['is_required'] = true;
-			} else {
-				foreach ($this->related_tables as $t => &$data) {
+			$t = isset($this->related_tables[$table]) ? $table : null;
+
+			if (!$t) {
+				foreach ($this->related_tables as $name => $data) {
 					if ($data['table'] === $table) {
-						$data['is_required'] = true;
+						$t = $name;
 						break;
 					}
 				}
-				unset($data);
+			}
+
+			if ($t) {
+				$this->related_tables[$t]['is_required'] = true;
+
+				if (!empty($this->related_tables[$t]['require_table'])) {
+					$this->requireTable($this->related_tables[$t]['require_table']);
+				}
 			}
 		}
 	}
