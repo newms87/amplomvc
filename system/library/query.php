@@ -569,10 +569,8 @@ class Query extends Library
 		$where = $this->having;
 
 		foreach ($this->columns as $c => $col) {
-			if (!empty($col['is_selected']) && empty($col['table_alias'])) {
-				if (!$filter || isset($filter[$c])) {
-					$where = str_replace("`{$col['alias']}`", $col['field'], $where);
-				}
+			if (!empty($col['is_selected']) && empty($col['table_alias']) && !empty($col['field']) && (!$filter || isset($filter[$c]))) {
+				$where = str_replace("`{$col['alias']}`", $col['field'], $where);
 			}
 		}
 
