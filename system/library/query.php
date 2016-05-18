@@ -61,19 +61,19 @@ class Query extends Library
 	public function __construct($init = array())
 	{
 		$init += array(
-			'db'               => null,
-			'table'            => null,
-			'pk'               => null,
-			'alias'            => null,
-			'related_tables'   => array(),
-			'columns'          => array(),
+			'db'              => null,
+			'table'           => null,
+			'pk'              => null,
+			'alias'           => null,
+			'related_tables'  => array(),
+			'columns'         => array(),
 			'require_columns' => array(),
-			'sort'             => array(),
-			'filter'           => array(),
-			'limit'            => 0,
-			'page'             => 1,
-			'start'            => 0,
-			'index'            => null,
+			'sort'            => array(),
+			'filter'          => array(),
+			'limit'           => 0,
+			'page'            => 1,
+			'start'           => 0,
+			'index'           => null,
 		);
 
 		if ($init['db']) {
@@ -555,6 +555,33 @@ class Query extends Library
 		}
 	}
 
+	/**
+	 * This builds a select statement with all selected fields that do not belong to a table.
+	 * This is most commonly used to allow filtering by calculated fields (eg: in the HAVING clause)
+	 *
+	 * @return string
+	 */
+
+	public function selectCalculatedFields()
+	{
+		$select = '';
+
+		foreach ($this->columns as $c => $col) {
+			if (!empty($col['is_selected']) && empty($col['table_alias'])) {
+				if (!empty($col['field'])) {
+					$str = $col['field'] . ($col['alias'] ? " as `$col[alias]`" : '');
+				} else {
+					//Column is not in any tables and field is not specified, so this column should not be included
+					continue;
+				}
+
+				$select .= ($select ? ',' : '') . $str;
+			}
+		}
+
+		return $select;
+	}
+
 	public function select()
 	{
 		if ($this->select === null) {
@@ -696,7 +723,8 @@ class Query extends Library
 				$total        = $this->queryVar("SELECT FOUND_ROWS()");
 			} else {
 				$rows           = $this->queryRows($this->buildQuery(), $this->index);
-				$this->select   = "COUNT(*)";
+				$calculated     = $this->selectCalculatedFields();
+				$this->select   = "COUNT(*)" . ($calculated ? ',' . $calculated : '');
 				$this->order_by = '';
 				$this->limit    = '';
 				$total          = $this->queryVar($this->buildQuery());
