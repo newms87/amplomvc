@@ -11,7 +11,7 @@
  */
 class Query extends Library
 {
-	private $clauses, $clauses_pos, $query;
+	private $clauses, $clauses_pos;
 
 	protected
 		$table = null,
@@ -20,7 +20,9 @@ class Query extends Library
 		$related_tables = array(),
 		$columns = array(),
 		$sort = array(),
-		$filter = array();
+		$filter = array(),
+		$query = null,
+		$index = null;
 
 	public
 		$select,
@@ -70,6 +72,7 @@ class Query extends Library
 			'limit'          => 0,
 			'page'           => 1,
 			'start'          => 0,
+			'index'          => null,
 		);
 
 		if ($init['db']) {
@@ -84,6 +87,7 @@ class Query extends Library
 		$this->setSort($init['sort']);
 		$this->setFilter($init['filter']);
 		$this->setLimit($init['limit'], $init['page'], $init['start']);
+		$this->setIndex($init['index']);
 	}
 
 	public function reset()
@@ -130,6 +134,16 @@ class Query extends Library
 	public function getColumns()
 	{
 		return $this->columns;
+	}
+
+	public function getIndex()
+	{
+		return $this->index;
+	}
+
+	public function getQuery()
+	{
+		return $this->query;
 	}
 
 	public function setTable($table, $alias = null, $pk = null)
@@ -281,6 +295,11 @@ class Query extends Library
 		}
 	}
 
+	public function setIndex($index)
+	{
+		$this->index = $index;
+	}
+
 	public function requireTable($require_table)
 	{
 		$require_tables = (array)$require_table;
@@ -300,110 +319,12 @@ class Query extends Library
 		}
 	}
 
-	public function select()
+	public function applyFilter($filter = null)
 	{
-		if ($this->select === null) {
-			$this->select = '';
-
-			foreach ($this->columns as $c => $col) {
-				if (!empty($col['is_selected'])) {
-					if (!empty($col['field'])) {
-						$str = $col['field'] . ($col['alias'] ? " as `$col[alias]`" : '');
-					} elseif (!empty($col['table_alias'])) {
-						$str = "`{$col['table_alias']}`.`$c`";
-					} else {
-						//Column is not in any tables and field is not specified, so this column should not be included
-						continue;
-					}
-
-					$this->select .= ($this->select ? ',' : '') . $str;
-				}
-			}
-
-			//If no select was resolved, default to select all columns
-			if (!$this->select) {
-				$this->select = '*';
-			}
+		if ($filter) {
+			$this->setFilter($filter);
 		}
 
-		return $this->select;
-	}
-
-	public function from()
-	{
-		if ($this->from === null) {
-			$this->from = "`$this->table`" . ($this->alias ? " `{$this->alias}`" : '');
-
-			foreach ($this->sort + $this->filter as $col => $c) {
-				if (isset($this->columns[$col])) {
-					$this->columns[$col]['is_required'] = true;
-				}
-			}
-
-			foreach ($this->columns as $column) {
-				if ($column['is_required']) {
-					if (!empty($column['require_table'])) {
-						$this->requireTable($column['require_table']);
-					} elseif ($column['table'] !== $this->table) {
-						$this->requireTable($column['table']);
-					}
-				}
-			}
-
-			//Extract JOIN Clauses
-			foreach ($this->related_tables as $join) {
-				if ($join['is_required']) {
-					if ($join['type']) {
-						$this->from .= ($join['type'] ? " {$join['type']}" : '') . " `{$join['table']}`" . ($join['alias'] ? " `{$join['alias']}`" : '') . (strpos($join['on'], '=') ? ' ON' : ' USING') . " (" . $join['on'] . ")";
-					} else {
-						$this->from .= ' ' . $join['table'];
-					}
-				}
-			}
-		}
-
-		return $this->from;
-	}
-
-	public function where()
-	{
-		if ($this->where === null) {
-			$this->applyFilter();
-		}
-
-		return $this->where;
-	}
-
-	public function groupBy()
-	{
-		return $this->group_by;
-	}
-
-	public function having()
-	{
-		if ($this->having === null) {
-			$this->applyFilter();
-		}
-
-		return $this->having;
-	}
-
-	public function orderBy()
-	{
-		if ($this->order_by === null) {
-			$this->applySort();
-		}
-
-		return $this->order_by;
-	}
-
-	public function limit()
-	{
-		return $this->limit;
-	}
-
-	public function applyFilter()
-	{
 		if (!$this->columns) {
 			trigger_error(_l("Please set columns first before apply filter."));
 
@@ -557,8 +478,12 @@ class Query extends Library
 		$this->having = $having;
 	}
 
-	protected function applySort()
+	public function applySort($sort = null)
 	{
+		if ($sort) {
+			$this->setSort($sort);
+		}
+
 		//Order
 		$this->order_by = '';
 
@@ -585,7 +510,109 @@ class Query extends Library
 		}
 	}
 
-	public function build()
+	public function select()
+	{
+		if ($this->select === null) {
+			$this->select = '';
+
+			foreach ($this->columns as $c => $col) {
+				if (!empty($col['is_selected'])) {
+					if (!empty($col['field'])) {
+						$str = $col['field'] . ($col['alias'] ? " as `$col[alias]`" : '');
+					} elseif (!empty($col['table_alias'])) {
+						$str = "`{$col['table_alias']}`.`$c`";
+					} else {
+						//Column is not in any tables and field is not specified, so this column should not be included
+						continue;
+					}
+
+					$this->select .= ($this->select ? ',' : '') . $str;
+				}
+			}
+
+			//If no select was resolved, default to select all columns
+			if (!$this->select) {
+				$this->select = '*';
+			}
+		}
+
+		return $this->select;
+	}
+
+	public function from()
+	{
+		if ($this->from === null) {
+			$this->from = "`$this->table`" . ($this->alias ? " `{$this->alias}`" : '');
+
+			foreach ($this->sort + $this->filter as $col => $c) {
+				if (isset($this->columns[$col])) {
+					$this->columns[$col]['is_required'] = true;
+				}
+			}
+
+			foreach ($this->columns as $column) {
+				if ($column['is_required']) {
+					if (!empty($column['require_table'])) {
+						$this->requireTable($column['require_table']);
+					} elseif ($column['table'] !== $this->table) {
+						$this->requireTable($column['table']);
+					}
+				}
+			}
+
+			//Extract JOIN Clauses
+			foreach ($this->related_tables as $join) {
+				if ($join['is_required']) {
+					if ($join['type']) {
+						$this->from .= ($join['type'] ? " {$join['type']}" : '') . " `{$join['table']}`" . ($join['alias'] ? " `{$join['alias']}`" : '') . (strpos($join['on'], '=') ? ' ON' : ' USING') . " (" . $join['on'] . ")";
+					} else {
+						$this->from .= ' ' . $join['table'];
+					}
+				}
+			}
+		}
+
+		return $this->from;
+	}
+
+	public function where()
+	{
+		if ($this->where === null) {
+			$this->applyFilter();
+		}
+
+		return $this->where;
+	}
+
+	public function groupBy()
+	{
+		return $this->group_by;
+	}
+
+	public function having()
+	{
+		if ($this->having === null) {
+			$this->applyFilter();
+		}
+
+		return $this->having;
+	}
+
+	public function orderBy()
+	{
+		if ($this->order_by === null) {
+			$this->applySort();
+		}
+
+		return $this->order_by;
+	}
+
+	public function limit()
+	{
+		return $this->limit;
+	}
+
+	public function buildClauses()
 	{
 		$this->select();
 		$this->from();
@@ -594,164 +621,48 @@ class Query extends Library
 		$this->having();
 		$this->orderBy();
 		$this->limit();
-
-		return "SELECT $this->select FROM $this->from" .
-		($this->where ? " WHERE $this->where" : '') .
-		($this->group_by ? " GROUP BY $this->group_by" : '') .
-		($this->having ? " HAVING $this->having" : '') .
-		($this->order_by ? " ORDER BY $this->order_by" : '') .
-		($this->limit ? " LIMIT $this->limit" : '');
 	}
 
-
-	public function getQuery()
+	public function buildQuery()
 	{
-		return $this->query;
+		return $this->query = "SELECT $this->select FROM $this->from" .
+			($this->where ? " WHERE $this->where" : '') .
+			($this->group_by ? " GROUP BY $this->group_by" : '') .
+			($this->having ? " HAVING $this->having" : '') .
+			($this->order_by ? " ORDER BY $this->order_by" : '') .
+			($this->limit ? " LIMIT $this->limit" : '');
 	}
 
-	public function getOffset($key)
+	public function build()
 	{
-		return isset($this->clauses_pos[$key]) ? $this->clauses_pos[$key] : null;
+		$this->buildClauses();
+
+		return $this->buildQuery();
 	}
 
-	public function getClause($key, $prefix = true)
+	public function execute($calc_total = false, $sql_calc_found_rows = false)
 	{
-		if ($this->clauses_pos) {
-			if (!isset($this->clauses[$key])) {
-				$this->clauses[$key] = false;
+		if ($calc_total) {
+			$this->buildClauses();
 
-				if (!empty($this->clauses_pos[$key]) || $key === 'select') {
-					$from = $this->clauses_pos[$key];
-
-					if ($from !== false) {
-						foreach ($this->clauses_pos as $to) {
-							if ($to > $from) {
-								$this->clauses[$key] = substr($this->query, $from, $to - $from);
-								break;
-							}
-						}
-
-						if ($to <= $from) {
-							$this->clauses[$key] = substr($this->query, $from);
-						}
-					}
-				}
+			if ($sql_calc_found_rows) {
+				$this->select = "SQL_CALC_FOUND_ROWS " . $this->select;
+				$rows = $this->queryRows($this->buildQuery(), $this->index);
+				$total = $this->queryVar("SELECT FOUND_ROWS()");
+			} else {
+				$rows = $this->queryRows($this->buildQuery(), $this->index);
+				$this->select   = "COUNT(*)";
+				$this->order_by = '';
+				$this->limit    = '';
+				$total          = $this->queryVar($this->buildQuery());
 			}
 
-			return $prefix ? $this->clauses[$key] : substr($this->clauses[$key], strlen($key));
+			return array(
+				$rows,
+				$total,
+			);
+		} else {
+			return $this->queryRows($this->build(), $this->index);
 		}
-	}
-
-	public function getClauses($clauses)
-	{
-		if (!is_array($clauses)) {
-			$clauses = func_get_args();
-		}
-
-		$sql = '';
-
-		foreach ($clauses as $clause) {
-			$sql .= $this->getClause($clause);
-		}
-
-		return $sql;
-	}
-
-	public function parse($sql)
-	{
-		if (!preg_match(" /^SELECT / i", $sql)) {
-			return false;
-		}
-
-		$this->query   = $sql;
-		$this->clauses = array();
-
-		$this->clauses_pos = array(
-			'select'   => 0,
-			'from'     => false,
-			'where'    => false,
-			'group by' => false,
-			'having'   => false,
-			'order by' => false,
-			'limit'    => false,
-		);
-
-		$targets = array_keys($this->clauses_pos);
-
-		$target_firsts = array();
-
-		foreach ($targets as $k => $t) {
-			$target_firsts[$t[0]] = $k;
-		}
-
-		$target_index = 0;
-		$target_last  = 0;
-		$word_index   = 0;
-
-		$escape = false;
-		$quote  = '';
-		$paren  = 0;
-
-		for ($i = 7; $i < strlen($sql); $i++) {
-			$c = $sql[$i];
-
-			switch ($c) {
-				case '\\':
-					$escape = !$escape;
-					break;
-
-				case '`':
-				case '"':
-				case '\'':
-					if ($quote === $c) {
-						if (!$escape) {
-							$quote = '';
-						}
-					} elseif (!$quote) {
-						$quote = $c;
-					}
-					break;
-
-				case '(':
-				case ')':
-					if (!$quote) {
-						if ($paren && $c === ')') {
-							$paren--;
-						} elseif ($c === '(') {
-							$paren++;
-						}
-					}
-					break;
-
-
-				//Parse out the $this->query clause targets (eg: from, where, etc...)
-				default:
-					if (!$quote && !$paren) {
-						$l = strtolower($c);
-
-						if ($target_index) {
-							if ($targets[$target_index][$word_index] === $l) {
-								$word_index++;
-
-								if ($target_last === $word_index) {
-									$this->clauses_pos[$targets[$target_index]] = $i - $target_last;
-									unset($target_firsts[$targets[$target_index][0]]);
-									$target_index = 0;
-								}
-							} else {
-								$target_index = 0;
-							}
-						} elseif (isset($target_firsts[$l]) && preg_match("/[^a-z\\d_\\-\\.]/i", $sql[$i - 1])) {
-							$target_index = $target_firsts[$l];
-							$word_index   = 1;
-							$target_last  = strlen($targets[$target_index]);
-						}
-					}
-
-					break;
-			}
-		}
-
-		return true;
 	}
 }

@@ -162,7 +162,7 @@ abstract class Model
 		return $this->db->queryRow($sql);
 	}
 
-	protected function queryRows($sql, $index = null, $total = false, $sql_calc_found_rows = null)
+	protected function queryRows($sql, $index = null, $total = false, $sql_calc_found_rows = false)
 	{
 		if ($total) {
 			return $this->queryTotal($sql, $index, $sql_calc_found_rows);
@@ -186,25 +186,21 @@ abstract class Model
 	 * @param string $sql                 - The query string without any sub queries (no guarantee it will work on sub
 	 *                                    queries).
 	 * @param string $index               - the index field to use for the rows returned
-	 * @param bool   $use_calc_found_rows - force the query to either use or not use the SQL_CALC_FOUND_ROWS statement.
+	 * @param bool   $sql_calc_found_rows - force the query to either use or not use the SQL_CALC_FOUND_ROWS statement.
 	 *
 	 * @return array - an array with array( 0 => rows, 1 => total ). USAGE HINT: list($rows, $total) =
 	 *               $this->queryTotal(...);
 	 */
 
-	protected function queryTotal($sql, $index = null, $use_calc_found_rows = null)
+	protected function queryTotal($sql, $index = null, $sql_calc_found_rows = false)
 	{
-		if ($use_calc_found_rows === null) {
-			$use_calc_found_rows = $this->useCalcFoundRows($sql);
-		}
-
-		if ($use_calc_found_rows) {
+		if ($sql_calc_found_rows) {
 			$sql = preg_replace("/^SELECT/i", "SELECT SQL_CALC_FOUND_ROWS", $sql);
 		}
 
 		$rows = $this->queryRows($sql, $index);
 
-		if ($use_calc_found_rows) {
+		if ($sql_calc_found_rows) {
 			$total = $this->queryVar("SELECT FOUND_ROWS()");
 		} else {
 			$total = $this->queryVar(preg_replace("/^SELECT/i", "SELECT COUNT(*), ", preg_replace("/LIMIT\\s*\\d+[,\\d\\s]*$/i", '', $sql)));
@@ -894,67 +890,6 @@ abstract class Model
 		}
 
 		return false;
-	}
-
-	/**
-	 * Be careful using this method! It may cause performance problems if not used properly.
-	 * Note that $table can either be a query string or a table name. If it is a table name you must provide $sort and
-	 * $filter. If $table is a query, this method uses EXPLAIN and can sometimes take as long as the original query to
-	 * determine the optimal query.
-	 *
-	 * @param string $table  - either the table name or a sql query string. If it is a query string, $sort and $filter
-	 *                       MUST be empty.
-	 * @param array  $sort   - the fields the query will sort on (ORDER BY clause).
-	 * @param array  $filter - the fields the query will filter on (WHERE clause).
-	 * @return bool - if true, it is recommended to use SQL_CALC_FOUND_ROWS in the SELECT clause.
-	 */
-	protected function useCalcFoundRows($table, $sort = array(), $filter = array())
-	{
-		//Use EXPLAIN to determine optimal performance
-		if (!$sort && !$filter) {
-			if (preg_match("/( GROUP BY | HAVING )/i", $table)) {
-				return true;
-			}
-
-			$results = $this->queryRows("EXPLAIN $table");
-
-			$fast_types = array(
-				'system',
-				'const',
-				'eq_ref',
-				'index',
-				'range',
-			);
-
-			foreach ($results as $r) {
-				if (empty($r['key']) || !in_array($r['type'], $fast_types)) {
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		//Guess optimal performance based on indexes used
-		if (!$sort && !$filter) {
-			return true;
-		}
-
-		$table_model = $this->getTableModel($table);
-
-		if ($table_model['table_type'] === 'VIEW') {
-			return true;
-		}
-
-		$indexed = $this->hasIndex($table, $sort);
-
-		if ($indexed) {
-			if (isset($filter[$indexed])) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	public function getTableColumns($table, $filter = array(), $merge = array(), $sort = true)
