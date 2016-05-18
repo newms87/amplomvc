@@ -203,7 +203,7 @@ abstract class Model
 		if ($sql_calc_found_rows) {
 			$total = $this->queryVar("SELECT FOUND_ROWS()");
 		} else {
-			$total = $this->queryVar(preg_replace("/SELECT COUNT(\\*),\\s*\\*/", "SELECT COUNT(*)", preg_replace("/^SELECT/i", "SELECT COUNT(*), ", preg_replace("/LIMIT\\s*\\d+[,\\d\\s]*$/i", '', $sql))));
+			$total = $this->queryVar(str_replace(", * ", " ", preg_replace("/^SELECT/i", "SELECT COUNT(*), ", preg_replace("/LIMIT\\s*\\d+[,\\d\\s]*$/i", '', $sql))));
 		}
 
 		return array(
