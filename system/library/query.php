@@ -61,18 +61,19 @@ class Query extends Library
 	public function __construct($init = array())
 	{
 		$init += array(
-			'db'             => null,
-			'table'          => null,
-			'pk'             => null,
-			'alias'          => null,
-			'related_tables' => array(),
-			'columns'        => array(),
-			'sort'           => array(),
-			'filter'         => array(),
-			'limit'          => 0,
-			'page'           => 1,
-			'start'          => 0,
-			'index'          => null,
+			'db'               => null,
+			'table'            => null,
+			'pk'               => null,
+			'alias'            => null,
+			'related_tables'   => array(),
+			'columns'          => array(),
+			'required_columns' => array(),
+			'sort'             => array(),
+			'filter'           => array(),
+			'limit'            => 0,
+			'page'             => 1,
+			'start'            => 0,
+			'index'            => null,
 		);
 
 		if ($init['db']) {
@@ -84,6 +85,7 @@ class Query extends Library
 		$this->setTable($init['table'], $init['alias'], $init['pk']);
 		$this->setRelatedTables($init['related_tables']);
 		$this->setColumns($init['columns']);
+		$this->requireColumns($init['required_columns']);
 		$this->setSort($init['sort']);
 		$this->setFilter($init['filter']);
 		$this->setLimit($init['limit'], $init['page'], $init['start']);
@@ -100,12 +102,14 @@ class Query extends Library
 		return $this->table;
 	}
 
-	public function getAlias($table = null)
+	public function getTableAlias($table = null)
 	{
-		$table = $this->t[$table];
+		if ($table) {
+			$table = $this->t[$table];
 
-		if ($table && $table !== $this->table) {
-			return isset($this->related_tables[$table]) ? $this->related_tables[$table]['alias'] : '';
+			if ($table && $table !== $this->table) {
+				return isset($this->related_tables[$table]) ? $this->related_tables[$table]['alias'] : '';
+			}
 		}
 
 		return $this->alias;
@@ -195,75 +199,100 @@ class Query extends Library
 	{
 		//Convert all columns to column array format
 		foreach ($columns as $c => &$col) {
-			if (!is_array($col)) {
-				if (is_string($col)) {
-					if (strpos($c, '#') === 0) {
-						$col = array(
-							'type'  => 'text',
-							'field' => $col,
-							'alias' => false,
-						);
-					} else {
-						$col = array('type' => $col);
-					}
-				} else {
-					$col = array();
-				}
-			}
-
-			$col['table'] = !empty($col['table']) ? $this->t[$col['table']] : null;
-
-			$col += array(
-				'is_selected' => true,
-				'is_required' => true,
-				'alias'       => $c,
-				'table_alias' => $col['table'] ? $this->getAlias($col['table']) : null,
-			);
+			$this->addColumn(!empty($col['alias']) ? $col['alias'] : $c, $col);
 		}
 		unset($col);
 
 		if ($merge) {
-			$table_list = array();
+			$this->mergeColumns();
+		}
 
-			if ($this->table) {
-				$table_list[$this->table] = array(
-					'table' => $this->table,
-					'alias' => $this->alias
-				);
-			}
+		$this->reset();
+	}
 
-			$table_list += $this->related_tables;
-
-			//Map columns to a table / alias, and fill additional data
-			foreach ($table_list as $data) {
-				$table = $this->t[$data['table']];
-				$alias = !empty($data['alias']) ? $data['alias'] : $table;
-
-				$table_columns = (array)$this->getTableColumns($table);
-
-				foreach ($table_columns as $c => $col) {
-					if (isset($columns[$c])) {
-						$columns[$c] += $col;
-					} else {
-						$columns[$c]                = $col;
-						$columns[$c]['is_selected'] = !$merge;
-						$columns[$c]['is_required'] = !$merge;
-					}
-
-					if (!isset($columns[$c]['table'])) {
-						$columns[$c]['table'] = $table;
-					}
-
-					if (!isset($columns[$c]['table_alias'])) {
-						$columns[$c]['table_alias'] = $alias;
-					}
+	public function addColumn($name, $column)
+	{
+		if (!is_array($column)) {
+			if (is_string($column)) {
+				if (strpos($name, '#') === 0) {
+					$column = array(
+						'type'  => 'text',
+						'field' => $column,
+						'alias' => false,
+					);
+				} else {
+					$column = array('type' => $column);
 				}
+			} else {
+				$column = array();
 			}
 		}
 
-		$this->columns = $columns;
+		$column['table'] = !empty($column['table']) ? $this->t[$column['table']] : null;
 
-		$this->reset();
+		$column += array(
+			'is_selected' => true,
+			'is_required' => true,
+			'alias'       => $name,
+			'table_alias' => $column['table'] ? $this->getTableAlias($column['table']) : null,
+		);
+
+		$this->columns[$name] = $column;
+	}
+
+	public function requireColumn($name)
+	{
+		if (isset($this->columns[$name])) {
+			$this->columns[$name]['is_required'] = true;
+			$this->columns[$name]['is_selected'] = true;
+		}
+	}
+
+	public function requireColumns($columns)
+	{
+		foreach ($columns as $c => $col) {
+			$this->requireColumn(is_numeric($c) ? $col : $c);
+		}
+	}
+
+	public function mergeColumns()
+	{
+		$table_list = array();
+
+		if ($this->table) {
+			$table_list[$this->table] = array(
+				'table' => $this->table,
+				'alias' => $this->alias
+			);
+		}
+
+		$table_list += $this->related_tables;
+
+		//Map columns to a table / alias, and fill additional data
+		foreach ($table_list as $data) {
+			$table = $this->t[$data['table']];
+			$alias = !empty($data['alias']) ? $data['alias'] : $table;
+
+			$table_columns = (array)$this->getTableColumns($table);
+
+			foreach ($table_columns as $c => $col) {
+				if (isset($this->columns[$c])) {
+					$this->columns[$c] += $col;
+				} else {
+					$this->columns[$c]                = $col;
+					$this->columns[$c]['is_selected'] = false;
+					$this->columns[$c]['is_required'] = false;
+				}
+
+				if (!isset($this->columns[$c]['table'])) {
+					$this->columns[$c]['table'] = $table;
+				}
+
+				if (!isset($this->columns[$c]['table_alias'])) {
+					$this->columns[$c]['table_alias'] = $alias;
+				}
+			}
+		}
 	}
 
 	public function setSort($sort)
@@ -647,10 +676,10 @@ class Query extends Library
 
 			if ($sql_calc_found_rows) {
 				$this->select = "SQL_CALC_FOUND_ROWS " . $this->select;
-				$rows = $this->queryRows($this->buildQuery(), $this->index);
-				$total = $this->queryVar("SELECT FOUND_ROWS()");
+				$rows         = $this->queryRows($this->buildQuery(), $this->index);
+				$total        = $this->queryVar("SELECT FOUND_ROWS()");
 			} else {
-				$rows = $this->queryRows($this->buildQuery(), $this->index);
+				$rows           = $this->queryRows($this->buildQuery(), $this->index);
 				$this->select   = "COUNT(*)";
 				$this->order_by = '';
 				$this->limit    = '';
