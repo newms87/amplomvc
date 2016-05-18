@@ -559,23 +559,26 @@ class Query extends Library
 	 * This builds a select statement with all selected fields that do not belong to a table.
 	 * This is most commonly used to allow filtering by calculated fields (eg: in the HAVING clause)
 	 *
+	 * @param $filter - First check if the column is being filtered by before including (eg: for HAVING clause)
 	 * @return string
 	 */
 
-	public function selectCalculatedFields()
+	public function selectCalculatedFields($filter = array())
 	{
 		$select = '';
 
 		foreach ($this->columns as $c => $col) {
 			if (!empty($col['is_selected']) && empty($col['table_alias'])) {
-				if (!empty($col['field'])) {
-					$str = $col['field'] . ($col['alias'] ? " as `$col[alias]`" : '');
-				} else {
-					//Column is not in any tables and field is not specified, so this column should not be included
-					continue;
-				}
+				if (!$filter || isset($filter[$c])) {
+					if (!empty($col['field'])) {
+						$str = $col['field'] . ($col['alias'] ? " as `$col[alias]`" : '');
+					} else {
+						//Column is not in any tables and field is not specified, so this column should not be included
+						continue;
+					}
 
-				$select .= ($select ? ',' : '') . $str;
+					$select .= ($select ? ',' : '') . $str;
+				}
 			}
 		}
 
@@ -723,7 +726,7 @@ class Query extends Library
 				$total        = $this->queryVar("SELECT FOUND_ROWS()");
 			} else {
 				$rows           = $this->queryRows($this->buildQuery(), $this->index);
-				$calculated     = $this->selectCalculatedFields();
+				$calculated     = $this->selectCalculatedFields($this->filter);
 				$this->select   = "COUNT(*)" . ($calculated ? ',' . $calculated : '');
 				$this->order_by = '';
 				$this->limit    = '';
