@@ -556,8 +556,9 @@ class Query extends Library
 	}
 
 	/**
-	 * This rewrites the HAVING clause so it can be used directly in the WHERE clause (eg: replaces aliases with their calculated expression)
-	 * This is most commonly used to allow filtering by calculated fields while using COUNT(*) to count total # of filtered rows
+	 * This rewrites the HAVING clause so it can be used directly in the WHERE clause (eg: replaces aliases with their
+	 * calculated expression) This is most commonly used to allow filtering by calculated fields while using COUNT(*) to
+	 * count total # of filtered rows
 	 *
 	 * @param $filter - First check if the column is being filtered by before including (eg: for HAVING clause)
 	 * @return string
@@ -724,6 +725,7 @@ class Query extends Library
 				$this->limit    = '';
 				$calculated     = $this->filterCalculatedFields();
 				$this->where .= ($calculated ? ' AND ' . $calculated : '');
+				$this->having = '';
 
 				$total = (int)$this->queryVar($this->buildQuery());
 			}
