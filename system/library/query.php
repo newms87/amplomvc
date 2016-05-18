@@ -556,33 +556,26 @@ class Query extends Library
 	}
 
 	/**
-	 * This builds a select statement with all selected fields that do not belong to a table.
-	 * This is most commonly used to allow filtering by calculated fields (eg: in the HAVING clause)
+	 * This rewrites the HAVING clause so it can be used directly in the WHERE clause (eg: replaces aliases with their calculated expression)
+	 * This is most commonly used to allow filtering by calculated fields while using COUNT(*) to count total # of filtered rows
 	 *
 	 * @param $filter - First check if the column is being filtered by before including (eg: for HAVING clause)
 	 * @return string
 	 */
 
-	public function selectCalculatedFields($filter = array())
+	public function filterCalculatedFields($filter = array())
 	{
-		$select = '';
+		$where = $this->having;
 
 		foreach ($this->columns as $c => $col) {
 			if (!empty($col['is_selected']) && empty($col['table_alias'])) {
 				if (!$filter || isset($filter[$c])) {
-					if (!empty($col['field'])) {
-						$str = $col['field'] . ($col['alias'] ? " as `$col[alias]`" : '');
-					} else {
-						//Column is not in any tables and field is not specified, so this column should not be included
-						continue;
-					}
-
-					$select .= ($select ? ',' : '') . $str;
+					$where = str_replace("`{$col['alias']}`", $col['field'], $where);
 				}
 			}
 		}
 
-		return $select;
+		return $where;
 	}
 
 	public function select()
@@ -723,14 +716,16 @@ class Query extends Library
 			if ($sql_calc_found_rows) {
 				$this->select = "SQL_CALC_FOUND_ROWS " . $this->select;
 				$rows         = $this->queryRows($this->buildQuery(), $this->index);
-				$total        = $this->queryVar("SELECT FOUND_ROWS()");
+				$total        = (int)$this->queryVar("SELECT FOUND_ROWS()");
 			} else {
 				$rows           = $this->queryRows($this->buildQuery(), $this->index);
-				$calculated     = $this->selectCalculatedFields($this->filter);
-				$this->select   = "COUNT(*)" . ($calculated ? ',' . $calculated : '');
+				$this->select   = "COUNT(*)";
 				$this->order_by = '';
 				$this->limit    = '';
-				$total          = $this->queryVar($this->buildQuery());
+				$calculated     = $this->filterCalculatedFields();
+				$this->where .= ($calculated ? ' AND ' . $calculated : '');
+
+				$total = (int)$this->queryVar($this->buildQuery());
 			}
 
 			return array(
