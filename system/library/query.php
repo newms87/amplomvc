@@ -67,7 +67,7 @@ class Query extends Library
 			'alias'            => null,
 			'related_tables'   => array(),
 			'columns'          => array(),
-			'required_columns' => array(),
+			'require_columns' => array(),
 			'sort'             => array(),
 			'filter'           => array(),
 			'limit'            => 0,
@@ -85,7 +85,7 @@ class Query extends Library
 		$this->setTable($init['table'], $init['alias'], $init['pk']);
 		$this->setRelatedTables($init['related_tables']);
 		$this->setColumns($init['columns']);
-		$this->requireColumns($init['required_columns']);
+		$this->requireColumns($init['require_columns']);
 		$this->setSort($init['sort']);
 		$this->setFilter($init['filter']);
 		$this->setLimit($init['limit'], $init['page'], $init['start']);
@@ -197,14 +197,21 @@ class Query extends Library
 
 	public function setColumns(array $columns, $merge = true)
 	{
+		$this->columns = array();
+
 		//Convert all columns to column array format
 		foreach ($columns as $c => &$col) {
-			$this->addColumn(!empty($col['alias']) ? $col['alias'] : $c, $col);
+			$this->addColumn((is_array($col) && !empty($col['alias'])) ? $col['alias'] : $c, $col);
 		}
 		unset($col);
 
 		if ($merge) {
 			$this->mergeColumns();
+
+			//Set all the main table columns as selected
+			if (!$columns) {
+				$this->requireAllTableColumns($this->table);
+			}
 		}
 
 		$this->reset();
@@ -238,6 +245,15 @@ class Query extends Library
 		);
 
 		$this->columns[$name] = $column;
+	}
+
+	public function requireAllTableColumns($table)
+	{
+		foreach ($this->columns as $c => &$col) {
+			if ($col['table'] === $table) {
+				$this->requireColumn($c);
+			}
+		}
 	}
 
 	public function requireColumn($name)
