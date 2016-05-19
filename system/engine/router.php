@@ -158,6 +158,16 @@ class Router
 		$this->theme->setTheme(IS_ADMIN ? option('admin_theme') : option('site_theme'));
 
 		$this->site = $site;
+
+		//Reinstall settings if this is missing
+		if (empty($_options['site_email'])) {
+			if (!$this->Model_Settings->saveGeneral(App_Model_Settings::$general_settings)) {
+				message('error', $this->Model_Settings->fetchError());
+			}
+			if (!$this->Model_Settings->saveAdmin(App_Model_Settings::$admin_settings)) {
+				message('error', $this->Model_Settings->fetchError());
+			}
+		}
 	}
 
 	public function routeRequest()
@@ -197,6 +207,21 @@ class Router
 
 		//Resolve Layout ID
 		set_option('config_layout_id', $this->getLayoutForPath($this->path));
+
+		//Cron Called from system
+		if (option('cron_status', true)) {
+			if (defined("RUN_CRON")) {
+				echo $this->cron->run();
+				exit;
+			} //Cron Called from browser
+			elseif (isset($_GET['run_cron'])) {
+				echo nl2br($this->cron->run());
+				exit;
+			} //Check if poor man's cron should run
+			elseif (option('cron_check')) {
+				$this->cron->check();
+			}
+		}
 
 		//Verify Amplo Version & Settings
 		if (IS_ADMIN && $this->path !== 'admin/settings/restore_defaults') {

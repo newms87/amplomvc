@@ -1182,6 +1182,16 @@ section.page {
 		text-transform: uppercase;
 	}
 
+	h3 {
+		color: @color-dark;
+		text-transform: uppercase;
+		font-weight: bold;
+	}
+
+	.heading {
+		margin-bottom: 1.2em;
+	}
+
 	.forms {
 		text-align: left;
 
@@ -1190,6 +1200,19 @@ section.page {
 			padding: 2em;
 			border-top: 2px solid @color-light;
 			transition: all .5s;
+		}
+
+		.input {
+			& + .input {
+				margin-top: .5em;
+			}
+		}
+
+		.buttons {
+			button {
+				width: 100%;
+				font-size: .9em;
+			}
 		}
 	}
 }

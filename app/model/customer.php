@@ -63,7 +63,7 @@ class App_Model_Customer extends App_Model_Table
 		if (isset($customer['password'])) {
 			if ($customer_id && option('verify_password_on_change', true)) {
 				if (empty($customer['current_password']) || !$this->verifyPassword($customer_id, $customer['current_password'])) {
-					$this->error['current_password'] = _l("Current password was invalid. Email change was not saved.");
+					$this->error['current_password'] = _l("Current password was invalid. Password change was not saved.");
 				}
 			}
 

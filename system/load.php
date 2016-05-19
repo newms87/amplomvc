@@ -85,21 +85,6 @@ if (!defined("AC_CUSTOMER_OVERRIDE")) {
 	define("AC_CUSTOMER_OVERRIDE", substr(str_shuffle(md5(microtime())), 0, (int)rand(15, 20)));
 }
 
-//Cron Called from system
-if (option('cron_status', true)) {
-	if (defined("RUN_CRON")) {
-		echo $registry->get('cron')->run();
-		exit;
-	} //Cron Called from browser
-	elseif (isset($_GET['run_cron'])) {
-		echo nl2br($registry->get('cron')->run());
-		exit;
-	} //Check if poor man's cron should run
-	elseif (option('cron_check')) {
-		$registry->get('cron')->check();
-	}
-}
-
 if (AMPLO_PROFILE) {
 	_profile('Route request');
 }

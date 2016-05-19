@@ -14,12 +14,6 @@
  */
 class App_Controller_Admin_Settings_Admin extends Controller
 {
-	static $icon_sizes = array(
-		152,
-		120,
-		76,
-	);
-
 	public function index()
 	{
 		//Page Head
@@ -62,7 +56,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 			'ico'  => '',
 		);
 
-		foreach (self::$icon_sizes as $size) {
+		foreach (App_Model_Settings::$icon_sizes as $size) {
 			$key = $size . 'x' . $size;
 
 			if (!isset($settings['admin_icon'][$key])) {
@@ -78,7 +72,7 @@ class App_Controller_Admin_Settings_Admin extends Controller
 		}
 		unset($icon);
 
-		$settings['data_icon_sizes'] = self::$icon_sizes;
+		$settings['data_icon_sizes'] = App_Model_Settings::$icon_sizes;
 
 		//Render
 		output($this->render('settings/admin', $settings));
