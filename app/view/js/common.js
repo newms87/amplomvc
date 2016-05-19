@@ -43,7 +43,8 @@ $(document)
 			if ($onClick.is('[data-amp-toggle]:not(.amp-toggle)')) {
 				$onClick.ampToggle({
 					content:       $onClick.attr('data-amp-toggle') || $onClick,
-					focusOnActive: $onClick.find('.amp-toggle-focus')
+					focusOnActive: $onClick.find('.amp-toggle-focus'),
+					start:         'active'
 				})
 				$n.click();
 			} else {
@@ -531,14 +532,17 @@ $.ampExtend($.ampFormat = function() {}, {
 $.ampExtend($.ampDelay = function() {}, {
 	init: function(o) {
 		o = $.extend({}, {
-			delay:    1000,
-			callback: null,
-			on:       null
+			delay:          1000,
+			callback:       null,
+			on:             null,
+			delayAfterCall: false,
+			lastCall:       0,
+			class:          'amp-delay-default',
 		}, o);
 
-		if (!this.is('.amp-delay-init')) {
+		if (!this.is(o.class)) {
 			o.count = 0;
-			this.setOptions(o).addClass('amp-delay-init');
+			this.setOptions(o).addClass(o.class);
 
 			if (o.on) {
 				this.on(o.on, function() {
@@ -558,13 +562,22 @@ $.ampExtend($.ampDelay = function() {}, {
 		var $this = this;
 		var o = $this.getOptions()
 
-		o.count++;
+		if (o.delayAfterCall) {
+			var currentTime = Date.now();
 
-		setTimeout(function() {
-			if (--o.count <= 0) {
+			if ((o.lastCall + o.delay) <= currentTime) {
 				o.callback.call($this);
+				o.lastCall = currentTime;
 			}
-		}, o.delay)
+		} else {
+			o.count++;
+
+			setTimeout(function() {
+				if (--o.count <= 0) {
+					o.callback.call($this);
+				}
+			}, o.delay)
+		}
 	},
 })
 
@@ -796,7 +809,7 @@ $.ampExtend($.ampToggle = function() {}, {
 			document.addEventListener('click', $.ampToggle._blur, true);
 		}, 100);
 
-		if (o.focusOnActive) {
+		if (o.focusOnActive && !o.focusOnActive.is(':focus')) {
 			o.focusOnActive.focus();
 		}
 

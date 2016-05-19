@@ -107,6 +107,10 @@ $.ampExtend($.ampSelect = function() {}, {
 				$(document).one('scroll', function() {
 					$ampSelect.ampSelect('close')
 				})
+				$input.one('blur change', function() {
+					$(this).closest('.amp-select').ampSelect('close')
+				})
+
 				break;
 
 			default:
@@ -500,7 +504,7 @@ $.ampExtend($.ampSelect = function() {}, {
 
 	initInline: function() {
 		var $ampSelect = this;
-		var o = $ampSelect.getOptions(), $field = $ampSelect.find('.amp-select-field');
+		var $field = $ampSelect.find('.amp-select-field');
 
 		var $box = $('<div/>').addClass('amp-select-box amp-select-inline'),
 			$input = $field.is('input') ? $field : $('<input/>').attr('type', 'text'),
@@ -513,14 +517,13 @@ $.ampExtend($.ampSelect = function() {}, {
 
 		$input.data('textValue', $input.val());
 
-		$input.on('focus click', function() {
-			$(this).closest('.amp-select').ampSelect('open')
-		})
-
-		$input.blur(function(e) {
-			var $ampSelect = $(this).closest('.amp-select');
-			//XXX: use timeout to allow change events to fire first!
-			setTimeout(function() {$ampSelect.ampSelect('close')}, 100);
+		$input.ampDelay({
+			callback:       function() {
+				$(this).closest('.amp-select').ampSelect('open')
+			},
+			delay:          100,
+			on:             'focus',
+			delayAfterCall: true
 		})
 
 		$input.keydown(function(e) {
