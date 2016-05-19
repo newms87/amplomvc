@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYING.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Customer extends App_Model_Table
 {
 	protected $table = 'customer', $primary_key = 'customer_id';
@@ -26,19 +26,27 @@ class App_Model_Customer extends App_Model_Table
 			}
 		}
 
+		if (isset($customer['username'])) {
+			if (empty($customer['username'])) {
+				$customer['username'] = $customer['email'];
+			}
+		} elseif (!$customer_id) {
+			if (empty($customer['email'])) {
+				$this->error['username'] = _l("Username is required.");
+			} else {
+				$customer['username'] = $customer['email'];
+			}
+		}
+
 		if (isset($customer['email'])) {
 			if (!validate('email', $customer['email'])) {
-				$this->error['email'] = $this->validation->fetchError();
-			} elseif (!$customer_id && $this->customer->emailRegistered($customer['email'])) {
-				$this->error['email'] = _l("E-Mail Address is already registered!");
-			}
-
-			if (isset($customer['username'])) {
-				if (empty($customer['username'])) {
-					$customer['username'] = $customer['email'];
+				$this->error['email'] = $this->validation->getError();
+			} elseif (isset($customer['confirm_email']) && $customer['confirm_email'] !== $customer['email']) {
+				$this->error['confirm_email'] = _l("Your Email and Confirm Email did not match.");
+			} elseif ($customer_id && option('verify_password_on_change_email', true)) {
+				if (empty($customer['current_password']) || !$this->verifyPassword($customer_id, $customer['current_password'])) {
+					$this->error['current_password'] = _l("Current password was invalid. Email change was not saved.");
 				}
-			} elseif (!$customer_id) {
-				$customer['username'] = $customer['email'];
 			}
 		} elseif (!$customer_id) {
 			$this->error['email'] = _l("Your email address is required.");
@@ -54,10 +62,8 @@ class App_Model_Customer extends App_Model_Table
 
 		if (isset($customer['password'])) {
 			if ($customer_id && option('verify_password_on_change', true)) {
-				if (empty($customer['current_password'])) {
-					$this->error['current_password'] = _l("Please enter your current password to change the password on your account.");
-				} else {
-					//TODO: Handle password verification check here
+				if (empty($customer['current_password']) || !$this->verifyPassword($customer_id, $customer['current_password'])) {
+					$this->error['current_password'] = _l("Current password was invalid. Email change was not saved.");
 				}
 			}
 
@@ -77,15 +83,21 @@ class App_Model_Customer extends App_Model_Table
 			return false;
 		}
 
-		$customer['role_id']    = option('default_customer_role_id', 0);
-		$customer['date_added'] = $this->date->now();
-		$customer['status']     = 1;
+		$new_customer = !$customer_id;
 
-		if (!isset($customer['newsletter'])) {
-			$customer['newsletter'] = option('config_customer_newsletter', 0);
+		if ($customer_id) {
+
+		} else {
+			$customer['role_id']    = option('default_customer_role_id', 0);
+			$customer['date_added'] = $this->date->now();
+			$customer['status']     = 1;
+
+			if (!isset($customer['newsletter'])) {
+				$customer['newsletter'] = option('config_customer_newsletter', 0);
+			}
+
+			$customer['approved'] = option('config_customer_approval') ? 1 : 0;
 		}
-
-		$customer['approved'] = option('config_customer_approval') ? 1 : 0;
 
 		$customer_id = parent::save($customer_id, $customer);
 
@@ -95,7 +107,9 @@ class App_Model_Customer extends App_Model_Table
 
 			$customer['customer_id'] = $customer_id;
 
-			call('mail/new_customer', $customer);
+			if ($new_customer) {
+				call('mail/new_customer', $customer);
+			}
 		}
 
 		return $customer_id;
@@ -264,5 +278,12 @@ class App_Model_Customer extends App_Model_Table
 	public function getTotalAddresses($customer_id, $filter = array())
 	{
 		return $this->getAddresses($customer_id, null, $filter, 'COUNT(*)');
+	}
+
+	public function verifyPassword($customer_id, $password)
+	{
+		$customer_password = $this->getField($customer_id, 'password');
+
+		return password_verify($password, $customer_password);
 	}
 }

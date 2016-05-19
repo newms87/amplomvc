@@ -60,7 +60,7 @@ class Customer extends Library
 		if ($customer) {
 			//AC_CUSTOMER_OVERRIDE allows for alternative login methods to function
 			if ($password !== AC_CUSTOMER_OVERRIDE) {
-				if (!password_verify($password, $customer['password'])) {
+				if (!$this->Model_Customer->verifyPassword($customer['customer_id'], $password)) {
 					$this->error['password'] = _l("Login failed. Invalid username and / or password.");
 
 					return false;
