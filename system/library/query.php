@@ -11,8 +11,6 @@
  */
 class Query extends Library
 {
-	private $clauses, $clauses_pos;
-
 	protected
 		$table = null,
 		$alias = null,
