@@ -14,11 +14,7 @@
  */
 class App_Controller_Admin_Settings_General extends Controller
 {
-	static $icon_sizes = array(
-		152,
-		120,
-		76,
-	);
+
 
 	public function index()
 	{
@@ -65,7 +61,7 @@ class App_Controller_Admin_Settings_General extends Controller
 			'ico'  => '',
 		);
 
-		foreach (self::$icon_sizes as $size) {
+		foreach (App_Model_Settings::$icon_sizes as $size) {
 			$key = $size . 'x' . $size;
 
 			if (!isset($settings['site_icon'][$key])) {
@@ -81,7 +77,7 @@ class App_Controller_Admin_Settings_General extends Controller
 		}
 		unset($icon);
 
-		$data['icon_sizes'] = self::$icon_sizes;
+		$data['icon_sizes'] = App_Model_Settings::$icon_sizes;
 
 		$settings['data'] = $data;
 
@@ -127,24 +123,7 @@ class App_Controller_Admin_Settings_General extends Controller
 	public function generate_icons()
 	{
 		if (!empty($_POST['icon'])) {
-			$icon_files = array();
-
-			foreach (self::$icon_sizes as $size) {
-				$url = image_save($_POST['icon'], null, $size, $size);
-
-				$icon_files[$size . 'x' . $size] = array(
-					'url'     => $url,
-					'relpath' => str_replace(URL_IMAGE, '', $url),
-				);
-			}
-
-			$url = $this->image->ico($_POST['icon']);
-
-			$icon_files['ico'] = array(
-				'relpath' => str_replace(URL_IMAGE, '', $url),
-				'url'     => $url,
-			);
-
+			$icon_files = $this->App_Model_Settings->generateIconFiles($_POST['icon']);
 			output(json_encode($icon_files));
 		}
 	}

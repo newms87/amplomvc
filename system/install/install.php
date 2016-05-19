@@ -119,9 +119,7 @@ function amplo_mvc_install()
 	$error = $db->fetchError();
 
 	if (!$error) {
-		$db_sql = DIR_SITE . 'system/install/db.sql';
-
-		$contents = file_get_contents($db_sql);
+		$contents = file_get_contents(DIR_SITE . 'system/install/db.sql');
 
 		if (!$db->multiquery($contents)) {
 			$error = $db->fetchError();

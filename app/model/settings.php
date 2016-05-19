@@ -11,13 +11,21 @@
  */
 class App_Model_Settings extends Model
 {
+	static $icon_sizes = array(
+		152,
+		120,
+		76,
+	);
+
 	static $admin_settings = array(
 		'admin_title'                => 'Amplo MVC | Developer Friendly All Purpose Web Platform',
-		'admin_icon'                 => null,
+		'admin_icon'                 => array(
+			'orig' => 'A-icon.png',
+		),
 		'admin_path'                 => 'admin',
 		'admin_bar'                  => 1,
-		'admin_logo'                 => '',
-		'admin_logo_srcset'          => '',
+		'admin_logo'                 => 'amplo-logo.png',
+		'admin_logo_srcset'          => 3,
 		'admin_show_breadcrumbs'     => 1,
 		'admin_breadcrumb_separator' => ' / ',
 		'admin_language'             => 1,
@@ -25,7 +33,7 @@ class App_Model_Settings extends Model
 		'admin_thumb_width'          => 120,
 		'admin_thumb_height'         => 120,
 		'admin_logo_width'           => 0,
-		'admin_logo_height'          => 0,
+		'admin_logo_height'          => 80,
 		'admin_list_image_width'     => 60,
 		'admin_list_image_height'    => 60,
 	);
@@ -34,9 +42,9 @@ class App_Model_Settings extends Model
 		'site_name'                               => 'Amplo MVC',
 		'site_owner'                              => '',
 		'site_address'                            => '',
-		'site_email'                              => '',
-		'site_email_support'                      => '',
-		'site_email_error'                        => '',
+		'site_email'                              => 'hello@amploweb.com',
+		'site_email_support'                      => 'help@amploweb.com',
+		'site_email_error'                        => 'error@amploweb.com',
 		'site_phone'                              => '',
 		'config_fax'                              => '',
 		'homepage_path'                           => 'index',
@@ -72,11 +80,13 @@ class App_Model_Settings extends Model
 		'config_upload_allowed'                   => 1,
 		'config_upload_images_allowed'            => '',
 		'config_upload_images_mime_types_allowed' => '',
-		'site_icon'                               => null,
-		'site_logo'                               => '',
-		'site_logo_srcset'                        => 1,
+		'site_icon'                               => array(
+			'orig' => 'A-icon.png',
+		),
+		'site_logo'                               => 'amplo-logo.png',
+		'site_logo_srcset'                        => 3,
 		'site_logo_width'                         => 0,
-		'site_logo_height'                        => 0,
+		'site_logo_height'                        => 80,
 		'site_email_logo_width'                   => 300,
 		'site_email_logo_height'                  => 0,
 		'config_image_category_width'             => 120,
@@ -147,6 +157,16 @@ class App_Model_Settings extends Model
 			$settings['site_title'] = $settings['site_name'];
 		}
 
+		if (!empty($settings['site_icon']['orig']) && empty($settings['site_icon']['ico'])) {
+			$icon_files = $this->generateIconFiles($settings['site_icon']['orig']);
+
+			foreach ($icon_files as $icon => $icon_file) {
+				if (empty($settings['site_icon'][$icon])) {
+					$settings['site_icon'][$icon] = $icon_file['relpath'];
+				}
+			}
+		}
+
 		//Load defaults
 		$settings += self::$general_settings;
 
@@ -170,6 +190,16 @@ class App_Model_Settings extends Model
 		$settings += self::$admin_settings;
 
 		$settings['admin_list_limit'] = max(0, (int)$settings['admin_list_limit']);
+
+		if (!empty($settings['admin_icon']['orig']) && empty($settings['admin_icon']['ico'])) {
+			$icon_files = $this->generateIconFiles($settings['admin_icon']['orig']);
+
+			foreach ($icon_files as $icon => $icon_file) {
+				if (empty($settings['admin_icon'][$icon])) {
+					$settings['admin_icon'][$icon] = $icon_file['relpath'];
+				}
+			}
+		}
 
 		$result = $this->config->saveGroup('admin', $settings);
 
@@ -229,5 +259,28 @@ class App_Model_Settings extends Model
 	{
 		$this->config->saveGroup('admin', self::$admin_settings);
 		$this->config->saveGroup('general', self::$general_settings);
+	}
+
+	public function generateIconFiles($icon)
+	{
+		$icon_files = array();
+
+		foreach (self::$icon_sizes as $size) {
+			$url = image_save($icon, null, $size, $size);
+
+			$icon_files[$size . 'x' . $size] = array(
+				'url'     => $url,
+				'relpath' => str_replace(URL_IMAGE, '', $url),
+			);
+		}
+
+		$url = $this->image->ico($icon);
+
+		$icon_files['ico'] = array(
+			'relpath' => str_replace(URL_IMAGE, '', $url),
+			'url'     => $url,
+		);
+
+		return $icon_files;
 	}
 }
