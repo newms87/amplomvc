@@ -57,9 +57,11 @@ class App_Controller_Admin_History extends App_Controller_Table
 
 	public function batch_action($options = array())
 	{
-		$options['callback'] = function($batch, $action, $value){
+		$instance = $this->instance;
+
+		$options['callback'] = function($batch, $action, $value) use ($instance) {
 			if ($action === 'restore') {
-				$this->Model_History->restore($batch);
+				$instance->restore($batch);
 			}
 		};
 
