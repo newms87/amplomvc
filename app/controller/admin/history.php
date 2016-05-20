@@ -24,7 +24,13 @@ class App_Controller_Admin_History extends App_Controller_Table
 
 	public function index($options = array())
 	{
-		$options['batch_action'] = array();
+		$options['batch_action'] = array(
+			'actions' => array(
+				'restore' => array(
+					'label' => _l("Restore"),
+				),
+			),
+		);
 
 		return parent::index($options);
 	}
@@ -51,6 +57,12 @@ class App_Controller_Admin_History extends App_Controller_Table
 
 	public function batch_action($options = array())
 	{
-		trigger_error(_l("Attempt to apply a batch action on the history table! This is not a valid action."));
+		$options['callback'] = function($batch, $action, $value){
+			if ($action === 'restore') {
+				$this->Model_History->restore($batch);
+			}
+		};
+
+		return parent::batch_action($options);
 	}
 }

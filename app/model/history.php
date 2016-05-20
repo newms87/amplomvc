@@ -13,6 +13,29 @@ class App_Model_History extends App_Model_Table
 {
 	protected $table = 'history', $primary_key = 'history_id';
 
+	public function restore($history_ids)
+	{
+		$updates = array();
+
+		$records = $this->getRecords(array('history_id' => 'DESC'), array('history_id' => $history_ids));
+
+		foreach ($records as $record) {
+			if (empty($updates[$record['table']][$record['record_id']])) {
+				$updates[$record['table']][$record['record_id']] = array();
+			}
+
+			$updates[$record['table']][$record['record_id']] += json_decode($record['data'], true);
+		}
+
+		foreach ($updates as $table => $table_records) {
+			foreach ($table_records as $record_id => $update) {
+				$this->update($table, $update, $record_id);
+			}
+		}
+
+		return true;
+	}
+
 	public function getColumns($filter = array(), $merge = array())
 	{
 		$user_columns = array(

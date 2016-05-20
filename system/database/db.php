@@ -181,12 +181,20 @@ class DB
 
 	public function addHistoryTable($table)
 	{
+		$table = $this->t[$table];
 		$this->history->tables[$table] = $table;
 	}
 
 	public function setHistoryTables(array $tables)
 	{
-		$this->history->tables = $tables ? array_combine($tables, $tables) : array();
+		$this->history->tables = array();
+
+		if ($tables) {
+			foreach ($tables as $table) {
+				$table = $this->t[$table];
+				$this->history->tables[$table] = $table;
+			}
+		}
 	}
 
 	public function getHistoryTables()
