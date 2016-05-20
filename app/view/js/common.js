@@ -46,7 +46,6 @@ $(document)
 					focusOnActive: $onClick.find('.amp-toggle-focus'),
 					start:         'active'
 				})
-				$n.click();
 			} else {
 				$onClick.toggleClass('is-active');
 
