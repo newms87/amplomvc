@@ -609,7 +609,7 @@ abstract class Model
 		foreach ($columns as $c => $col) {
 			if (!empty($col['show'])) {
 				if (strpos($c, '#') === 0) {
-					$str = !empty($col['field']) ? $col['field'] : $c;
+					$str = !empty($col['field']) ? $col['field'] : "`$c`";
 				} elseif (!empty($col['field'])) {
 					$str = "{$col['field']} as `$c`";
 				} elseif (!empty($col['table_alias'])) {
