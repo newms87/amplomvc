@@ -517,7 +517,6 @@ abstract class Model
 
 	protected function extractColumns($table, $options)
 	{
-
 		$table_list = !empty($options['join']) ? $options['join'] : array();
 		$columns    = array();
 
@@ -610,7 +609,7 @@ abstract class Model
 		foreach ($columns as $c => $col) {
 			if (!empty($col['show'])) {
 				if (strpos($c, '#') === 0) {
-					$str = $col['field'];
+					$str = !empty($col['field']) ? $col['field'] : $c;
 				} elseif (!empty($col['field'])) {
 					$str = "{$col['field']} as `$c`";
 				} elseif (!empty($col['table_alias'])) {

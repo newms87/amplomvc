@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYING.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Model_Log extends App_Model_Table
 {
 	protected $table = 'log', $primary_key = 'log_id';
@@ -20,6 +20,8 @@ class App_Model_Log extends App_Model_Table
 		);
 
 		$this->mapAliasToKey($aliases, $sort, $filter, $options);
+
+		$options['sql_calc_found_rows'] = true;
 
 		return parent::getRecords($sort, $filter, $options, $total);
 	}
