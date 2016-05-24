@@ -31,23 +31,6 @@ class Cron extends Library
 		shell_exec('crontab ' . $crontab);
 	}
 
-	public function check()
-	{
-		//TODO: Re-enable Cron when convenient
-		return;
-
-		if (empty($this->settings['cron_last_run'])) {
-			$this->run();
-		} else {
-			$diff = $this->date->diff($this->settings['cron_last_run']);
-
-			//Run Cron every minute (will check task times before executing them)
-			if (($diff->days + $diff->h + $diff->i) > 0) {
-				$this->run();
-			}
-		}
-	}
-
 	public function run()
 	{
 		//Maximum execution time is 5 minutes
@@ -111,7 +94,7 @@ class Cron extends Library
 			$msg .= _l("There are no tasks to run.\r\n");
 		}
 
-		$this->settings['cron_last_run'] = $this->date->now();
+		save_option('cron_last_run', microtime(true));
 
 		$this->config->saveGroup('cron', $this->settings, false);
 

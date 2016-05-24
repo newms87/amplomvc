@@ -299,6 +299,20 @@ function amplo_routing_hook($router)
 {
 	global $registry;
 
+	//Cron Called from system
+	if (option('cron_status', true)) {
+		if (defined('RUN_CRON')) {
+			die($registry->get('cron')->run());
+		} elseif (isset($_GET['run_cron'])) {
+			die(nl2br($registry->get('cron')->run()));
+		} elseif (option('cron_check')) {
+			//Run the cron every 60 seconds (Poor man's cron)
+			if (microtime(true) - (int)option('cron_last_run') > 60) {
+				$registry->get('cron')->run();
+			}
+		}
+	}
+
 	$nodes = $router->getNode();
 
 	if (IS_ADMIN) {
