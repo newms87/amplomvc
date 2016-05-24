@@ -38,11 +38,6 @@ if (preg_match('/[\\s~!@#$%\\^&\\*()_+=\'";:\\/\\\\\\[\\]]/', DOMAIN)) {
 	exit;
 }
 
-if ($_SERVER['REQUEST_URI'] === SITE_BASE . 'favicon.ico') {
-	header('HTTP/1.1 404 No Favicon');
-	exit;
-}
-
 //Cookie Prefix prevents cookie conflicts across top level domain to sub domain (ex: .example.com and .sub.example.com)
 // and for different sites on same domain with different in different directories (ex: example.com/site-a and example.com/site-b)
 defined('COOKIE_PREFIX') || define('COOKIE_PREFIX', preg_replace("/[^a-z0-9_]/", '', str_replace('/', '_', DOMAIN . SITE_BASE)));
@@ -90,10 +85,16 @@ defined('AMPLO_PRODUCTION') || define('AMPLO_PRODUCTION', true);
 //Default server values in case they are not set.
 $_SERVER += array(
 	'HTTP_HOST'      => DOMAIN,
+	'REQUEST_URI'    => '',
 	'REQUEST_METHOD' => 'GET',
 	'REMOTE_ADDR'    => '::1',
 	'QUERY_STRING'   => '',
 );
+
+if ($_SERVER['REQUEST_URI'] === SITE_BASE . 'favicon.ico') {
+	header('HTTP/1.1 404 No Favicon');
+	exit;
+}
 
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
 	$_SERVER['HTTPS'] = 'on';

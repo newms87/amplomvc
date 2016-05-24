@@ -782,7 +782,7 @@ $.ampExtend($.ampToggle = function() {}, {
 	_blur: function(e) {
 		var $t = $(e.target), o = $.ampToggle.active.getOptions();
 
-		if (!o.dormantOnBlur) {
+		if (!o || !o.dormantOnBlur) {
 			return;
 		}
 
