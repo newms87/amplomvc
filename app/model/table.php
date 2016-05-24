@@ -101,8 +101,12 @@ abstract class App_Model_Table extends Model
 		return $this->delete($this->table, $filter);
 	}
 
-	public function getField($record_id, $field)
+	public function getField($record_id, $field, $allow_cache = true)
 	{
+		if ($allow_cache && isset(self::$records[$this->table][$record_id])) {
+			return isset(self::$records[$this->table][$record_id][$field]) ? self::$records[$this->table][$record_id][$field] : null;
+		}
+
 		return $this->queryVar("SELECT $field FROM `{$this->t[$this->table]}` WHERE `$this->primary_key` = " . (int)$record_id);
 	}
 
