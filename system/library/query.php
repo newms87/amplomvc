@@ -311,14 +311,14 @@ class Query extends Library
 
 	public function setSort($sort)
 	{
-		$this->sort = $sort;
+		$this->sort = (array)$sort;
 
 		$this->order_by = null;
 	}
 
 	public function setFilter($filter)
 	{
-		$this->filter = $filter;
+		$this->filter = (array)$filter;
 
 		$this->where = $this->having = null;
 	}
