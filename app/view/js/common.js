@@ -138,11 +138,14 @@ $(document)
 		content_loaded(true);
 	});
 
-Function.prototype.loop = function(time, count) {
+Function.prototype.loop = function(delay, count) {
 	var fn = this;
-	setTimeout(function() {
-		(fn(count = (+count || 0) - 1) === false || !count) ? 0 : fn.loop(time, count)
-	}, time);
+	fn.count || (fn.count = +count);
+	fn.delay || (fn.delay = +delay);
+
+	if (fn() !== false && (!fn.count || fn.count-- > 1)) {
+		setTimeout(function(){fn.loop()}, fn.delay);
+	}
 }
 
 String.prototype.toSlug = function(sep) {
@@ -1495,6 +1498,7 @@ $.fn.show_msg = function(type, msg, o) {
 	}
 
 	o = $.extend({
+		id:          false,
 		style:       'stacked',
 		inline:      !!$ac.show_msg_inline,
 		append:      true,
@@ -1532,7 +1536,7 @@ $.fn.show_msg = function(type, msg, o) {
 		var $box = $e.find('.messages.' + type);
 
 		if (!$box.length) {
-			$box = $('<div />').addClass('messages ' + type + ' ' + o.style);
+			$box = $('<div />').addClass('messages ' + type + ' ' + o.style).attr('id', o.id);
 
 			if (o.close) {
 				$box.append($('<div />').addClass('close').append('<b class="fa fa-close"></b>').click(function() {
