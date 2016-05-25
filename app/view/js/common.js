@@ -138,11 +138,14 @@ $(document)
 		content_loaded(true);
 	});
 
-Function.prototype.loop = function(time, count) {
+Function.prototype.loop = function(delay, count) {
 	var fn = this;
-	setTimeout(function() {
-		(fn(count = (+count || 0) - 1) === false || !count) ? 0 : fn.loop(time, count)
-	}, time);
+	fn.count || (fn.count = +count);
+	fn.delay || (fn.delay = +delay);
+
+	if (fn() !== false && (!fn.count || fn.count-- > 1)) {
+		setTimeout(function() {fn.loop()}, fn.delay);
+	}
 }
 
 String.prototype.toSlug = function(sep) {
@@ -1206,6 +1209,17 @@ $.ampAlert = $.fn.ampAlert = function(o) {
 }
 
 $.ampConfirm = $.fn.ampConfirm = function(o) {
+	if (typeof o === 'string') {
+		var url = this.attr('href');
+
+		o = {
+			text:      o,
+			onConfirm: function() {
+				window.location = url
+			}
+		}
+	}
+
 	o = $.extend({}, {
 		title:       'Are you sure?',
 		class:       'amp-modal-confirm',
@@ -1495,6 +1509,7 @@ $.fn.show_msg = function(type, msg, o) {
 	}
 
 	o = $.extend({
+		id:          false,
 		style:       'stacked',
 		inline:      !!$ac.show_msg_inline,
 		append:      true,
@@ -1502,7 +1517,11 @@ $.fn.show_msg = function(type, msg, o) {
 		delay:       false,
 		close:       true,
 		clear:       true,
-		flagErrors:  true
+		flagErrors:  true,
+		onClose:     function() {
+			$(this).closest('.messages').find('.message').hide_msg();
+		},
+		onOpen:      null
 	}, o);
 
 	if (o.clear) {
@@ -1532,11 +1551,11 @@ $.fn.show_msg = function(type, msg, o) {
 		var $box = $e.find('.messages.' + type);
 
 		if (!$box.length) {
-			$box = $('<div />').addClass('messages ' + type + ' ' + o.style);
+			$box = $('<div />').addClass('messages ' + type + ' ' + o.style).attr('id', o.id);
 
 			if (o.close) {
 				$box.append($('<div />').addClass('close').append('<b class="fa fa-close"></b>').click(function() {
-					$(this).closest('.messages').find('.message').hide_msg();
+					o.onClose.call($(this).closest('.messages'))
 				}));
 			}
 
@@ -1563,6 +1582,10 @@ $.fn.show_msg = function(type, msg, o) {
 
 		$box.removeClass('hidden');
 		$('body').trigger('amp-show-msg', $msg);
+
+		if (o.onOpen) {
+			o.onOpen.call($box, $msg);
+		}
 	});
 }
 

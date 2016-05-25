@@ -683,11 +683,50 @@ form {
 }
 
 #user-alert {
-	.messages {
-		position: relative;
-		-moz-animation: none;
-		-webkit-animation: none;
-		animation: none;
+	position: fixed;
+	bottom: 0;
+	right: 2em;
+	width: 30em;
+	height: 7em;
+	z-index: 100000;
+	box-shadow: 0 0 8px rgba(0,0,0,.6);
+	overflow: auto;
+	padding-right: 2em;
+	-moz-animation: none;
+	-webkit-animation: none;
+	animation: none;
+
+	.message {
+		& + .message {
+			margin-top: 1em;
+		}
+	}
+
+	.msg-count {
+		font-size: 1em;
+		font-weight: bold;
+		color: @color-main;
+		padding: .5em 1em;
+		cursor: pointer;
+		display: none;
+	}
+
+	&.is-minimized {
+		width: auto;
+		height: auto;
+		padding: 0em;
+
+		.close {
+			display: none;
+		}
+
+		.message {
+			display: none;
+		}
+
+		.msg-count {
+			display: block;
+		}
 	}
 }
 
