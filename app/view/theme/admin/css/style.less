@@ -701,6 +701,33 @@ form {
 			margin-top: 1em;
 		}
 	}
+
+	.msg-count {
+		font-size: 1em;
+		font-weight: bold;
+		color: @color-main;
+		padding: .5em 1em;
+		cursor: pointer;
+		display: none;
+	}
+
+	&.is-minimized {
+		width: auto;
+		height: auto;
+		padding: 0em;
+
+		.close {
+			display: none;
+		}
+
+		.message {
+			display: none;
+		}
+
+		.msg-count {
+			display: block;
+		}
+	}
 }
 
 @keyframes messageIn {

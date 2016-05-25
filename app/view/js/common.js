@@ -144,7 +144,7 @@ Function.prototype.loop = function(delay, count) {
 	fn.delay || (fn.delay = +delay);
 
 	if (fn() !== false && (!fn.count || fn.count-- > 1)) {
-		setTimeout(function(){fn.loop()}, fn.delay);
+		setTimeout(function() {fn.loop()}, fn.delay);
 	}
 }
 
@@ -1209,6 +1209,17 @@ $.ampAlert = $.fn.ampAlert = function(o) {
 }
 
 $.ampConfirm = $.fn.ampConfirm = function(o) {
+	if (typeof o === 'string') {
+		var url = this.attr('href');
+
+		o = {
+			text:      o,
+			onConfirm: function() {
+				window.location = url
+			}
+		}
+	}
+
 	o = $.extend({}, {
 		title:       'Are you sure?',
 		class:       'amp-modal-confirm',
@@ -1506,7 +1517,11 @@ $.fn.show_msg = function(type, msg, o) {
 		delay:       false,
 		close:       true,
 		clear:       true,
-		flagErrors:  true
+		flagErrors:  true,
+		onClose:     function() {
+			$(this).closest('.messages').find('.message').hide_msg();
+		},
+		onOpen:      null
 	}, o);
 
 	if (o.clear) {
@@ -1540,7 +1555,7 @@ $.fn.show_msg = function(type, msg, o) {
 
 			if (o.close) {
 				$box.append($('<div />').addClass('close').append('<b class="fa fa-close"></b>').click(function() {
-					$(this).closest('.messages').find('.message').hide_msg();
+					o.onClose.call($(this).closest('.messages'))
 				}));
 			}
 
@@ -1567,6 +1582,10 @@ $.fn.show_msg = function(type, msg, o) {
 
 		$box.removeClass('hidden');
 		$('body').trigger('amp-show-msg', $msg);
+
+		if (o.onOpen) {
+			o.onOpen.call($box, $msg);
+		}
 	});
 }
 
