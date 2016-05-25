@@ -54,7 +54,7 @@ class App_Model_Plugin extends App_Model_Table
 		return $this->queryVar("SELECT plugin_id FROM {$this->t['plugin']} WHERE `name` = '" . $this->escape($name) . "'");
 	}
 
-	public function getField($name, $field)
+	public function getField($name, $field, $allow_cache = true)
 	{
 		$id = preg_match("/[^\\d]/", $name) ? false : (int)$name;
 
