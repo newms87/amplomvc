@@ -22,6 +22,7 @@ $.ampExtend($.ampFileManager = function() {}, {
 				thumb_height:    $ac.fm_thumb_height || '12em',
 				category:        '',
 				accept:          $input.attr('accept') || [],
+				convertTo:       null,
 				selectable:      true,
 				selectMultiple:  true,
 				selectFile:      true,
@@ -80,9 +81,7 @@ $.ampExtend($.ampFileManager = function() {}, {
 		$.post(o.listingUrl, listing, function(response) {
 			if (response.files) {
 				for (var f in response.files) {
-					var file = response.files[f];
-					file.value = file.url + '#file_id=' + file.file_id;
-					$afm.ampFileManager('newFile', file)
+					$afm.ampFileManager('newFile', response.files[f])
 				}
 			}
 
@@ -218,6 +217,7 @@ $.ampExtend($.ampFileManager = function() {}, {
 
 		if (file.url) {
 			$afm.ampFileManager('setThumbnail', $file, $('<img />').attr('src', file.url));
+			file.value = file.url + '#file_id=' + file.file_id;
 		}
 
 		$file.attr('data-file-name', file.name);
@@ -340,6 +340,10 @@ $.ampExtend($.ampFileManager = function() {}, {
 
 		if (o.accept) {
 			fd.append('accept', o.accept);
+		}
+
+		if (o.convertTo) {
+			fd.append('convert_to', o.convertTo);
 		}
 
 		if (o.category) {

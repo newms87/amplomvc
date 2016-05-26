@@ -220,6 +220,65 @@ class Image extends Library
 		return $success;
 	}
 
+	public function convert($file, $type, $output_file = null, $quality = null, $force = false)
+	{
+		$type = strtolower($type);
+
+		if ($type === 'jpeg') {
+			$type = 'jpg';
+		}
+
+		//Check if already the correct file type
+		if (!$force && strtolower(pathinfo($file, PATHINFO_EXTENSION)) === $type) {
+			return $file;
+		}
+
+		if (!$output_file) {
+			$pathinfo = pathinfo($file);
+
+			$output_file = $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '.' . $type;
+		}
+
+		if (!is_file($file)) {
+			$this->error['file'] = _l("Unable to locate file %s", $file);
+
+			return false;
+		}
+
+		$image = imagecreatefromstring(file_get_contents($file));
+
+		if (!$image) {
+			$this->error['image'] = _l("Failed to create image from file %s", $file);
+
+			return false;
+		}
+
+		switch ($type) {
+			case 'png':
+				if (!imagepng($image, $output_file, $quality)) {
+					$this->error['imagepng'] = _l("Failed while converting image to PNG");
+
+					return false;
+				}
+				break;
+
+			case 'jpg':
+				if (!imagejpeg($image, $output_file, $quality)) {
+					$this->error['imagejpeg'] = _l("Failed while converting image to JPEG");
+
+					return false;
+				}
+				break;
+
+			default:
+				$this->error['type'] = _l("Unknown Conversion Type: %s", $type);
+
+				return false;
+		}
+
+		return $output_file;
+	}
+
 	public function setMaxSize($width, $height, $keep_ratio = true)
 	{
 		if (!$this->image) {
