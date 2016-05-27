@@ -657,6 +657,51 @@ table.list {
 	}
 }
 
+.view-listing-filter {
+	padding: 1em;
+
+	textarea {
+		width: 100%;
+		box-sizing: border-box;
+		max-width: 100%;
+		min-height: 4em;
+	}
+}
+
+.amp-filter {
+	&.amp-filter-date {
+
+	}
+
+	.amp-filter-option {
+		display: none;
+
+		&.is-active {
+			display: block;
+		}
+
+		&.amp-filter-expression {
+			textarea {
+				width: 100%;
+				min-height: 4em;
+				max-width: 100%;
+				box-sizing: border-box;
+			}
+		}
+	}
+
+	.amp-filter-toggle {
+		font-size: .8em;
+		cursor: pointer;
+		color: @color-main;
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+
 /* Pagination */
 .pagination {
 	.pager {

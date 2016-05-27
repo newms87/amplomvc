@@ -259,12 +259,17 @@ class Table extends Library
 					case 'date':
 					case 'time':
 					case 'datetime':
-						if (is_string($column['filter_value'])) {
+						if (!is_array($column['filter_value'])) {
 							$column['filter_value'] = array(
 								'gte' => $column['filter_value'],
-								'lte' => $column['filter_value'],
 							);
 						}
+
+						$column['filter_value'] += array(
+							'gte' => null,
+							'lte' => null,
+							'eq'  => null
+						);
 						break;
 
 				}

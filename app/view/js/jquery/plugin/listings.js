@@ -35,6 +35,11 @@ $.ampExtend('ampListing', {
 		var $view_config = $listing.find('.view-config');
 
 		$view_config.find('.view-tabs a').ampTabs({pushState: false});
+		$view_config.find('.save-view-filter').click(function() {
+			listview_apply_filter.call(this);
+			update_list_widget.call(this);
+			return false;
+		});
 		$view_config.find('.save-view-cols').click(update_list_widget);
 		$view_config.find('.save-settings').click(save_list_widget_settings);
 
@@ -126,6 +131,21 @@ $.fn.listview = function() {
 		}
 
 		$listview.find('.action-buttons').overflown('y', 5);
+
+		$listview.find('.amp-filter-toggle').click(function() {
+			var $filter = $(this).closest('.amp-filter'), $next;
+			var $option = $filter.find('.amp-filter-option.is-active').removeClass('is-active');
+
+			if ($option.next().length) {
+				$next = $option.next();
+			} else {
+				$next = $filter.find('.amp-filter-option:first-child');
+			}
+
+			$(this).html($next.addClass('is-active').attr('data-filter-name') || 'Change');
+
+			return false;
+		})
 	})
 }
 
@@ -357,9 +377,9 @@ function listview_toggle_filter_type() {
 }
 
 function listview_apply_filter() {
-	var $this = $(this);
-	$filter = $this.closest('.filter-list');
-	$this.attr('href', $filter.apply_filter($this.closest('.list-view').attr('data-filter-url')));
+	var $ampListing = $(this).closest('.amp-listing');
+	$filter = $ampListing.find('.filter-list, .view-listing-filter');
+	$(this).attr('href', $filter.apply_filter($ampListing.find('[data-filter-url]').attr('data-filter-url')));
 }
 
 function listview_edit_field(e) {
@@ -509,10 +529,13 @@ function zoom_hover_change() {
 	var $value = $zoom.find('.value');
 
 	if ($zoom.is('.daterange')) {
-		var start = $zoom.find('.date_start').val();
-		var end = $zoom.find('.date_end').val();
+		var start = $zoom.find('.date_start').val(),
+			end = $zoom.find('.date_end').val(),
+			equals = $zoom.find('.date_equals').val();
 
-		if (end || start) {
+		if (equals) {
+			$value.html(equals);
+		} else if (end || start) {
 			$value.html(start + ' - ' + end);
 		} else {
 			$value.html($value.attr('data-default') || 'Modify');

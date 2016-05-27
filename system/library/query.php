@@ -472,32 +472,36 @@ class Query extends Library
 				case 'timestamp':
 				case 'time':
 					if (is_array($value)) {
-						$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
-						$end   = !empty($value['lte']) ? format('date', $value['lte']) : false;
-
-						if (!$start && !$end) {
-							if (isset($value['gte']) || isset($value['lte'])) {
-								break;
-							}
-
-							array_walk($value, function (&$a) use ($type) {
-								$a = format('date', $a);
-							});
-
-							$expression .= "$tc " . ($not ? 'NOT' : '') . " IN('" . implode("', '", $value) . "')";
+						if (!empty($value['eq'])) {
+							$expression .= "DATE($tc) " . ($not ? '!=' : '=') . " '{$value['eq']}'";
 						} else {
-							if ($start && $end) {
-								if (date_compare($start, '>', $end)) {
-									$temp  = $end;
-									$end   = $start;
-									$start = $temp;
+							$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
+							$end   = !empty($value['lte']) ? format('date', $value['lte']) : false;
+
+							if (!$start && !$end) {
+								if (isset($value['gte']) || isset($value['lte'])) {
+									break;
 								}
 
-								$expression .= "$tc BETWEEN '$start' AND '$end'";
-							} elseif ($start) {
-								$expression .= "$tc >= '$start'";
+								array_walk($value, function (&$a) use ($type) {
+									$a = format('date', $a);
+								});
+
+								$expression .= "$tc " . ($not ? 'NOT' : '') . " IN('" . implode("', '", $value) . "')";
 							} else {
-								$expression .= "$tc <= '$end'";
+								if ($start && $end) {
+									if (date_compare($start, '>', $end)) {
+										$temp  = $end;
+										$end   = $start;
+										$start = $temp;
+									}
+
+									$expression .= "$tc BETWEEN '$start' AND '$end'";
+								} elseif ($start) {
+									$expression .= "$tc >= '$start'";
+								} else {
+									$expression .= "$tc <= '$end'";
+								}
 							}
 						}
 					} elseif ($value) {
