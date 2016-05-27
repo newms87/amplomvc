@@ -472,7 +472,7 @@ class Query extends Library
 				case 'timestamp':
 				case 'time':
 					if (is_array($value)) {
-						if ($value['eq']) {
+						if (!empty($value['eq'])) {
 							$expression .= "DATE($tc) " . ($not ? '!=' : '=') . " '{$value['eq']}'";
 						} else {
 							$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
