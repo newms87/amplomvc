@@ -266,9 +266,9 @@ class Table extends Library
 						}
 
 						$column['filter_value'] += array(
-							'gte'        => null,
-							'lte'        => null,
-							'expression' => null
+							'gte' => null,
+							'lte' => null,
+							'eq'  => null
 						);
 						break;
 

@@ -472,8 +472,8 @@ class Query extends Library
 				case 'timestamp':
 				case 'time':
 					if (is_array($value)) {
-						if (!empty($value['expression'])) {
-							$expression .= str_replace("{date}", $tc, $value['expression']);
+						if ($value['eq']) {
+							$expression .= "DATE($tc) " . ($not ? '!=' : '=') . " '{$value['eq']}'";
 						} else {
 							$start = !empty($value['gte']) ? format('date', $value['gte']) : false;
 							$end   = !empty($value['lte']) ? format('date', $value['lte']) : false;

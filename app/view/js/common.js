@@ -1326,12 +1326,14 @@ $.fn.apply_filter = function(url) {
 			var $filter = $e.closest('.column-filter');
 			var $type = $filter.find('.filter-type');
 
-			if ($type.hasClass('not')) {
-				$e.attr('name', $e.attr('name').replace(/^filter\[!?/, 'filter[!'));
-			}
+			if ($type.length) {
+				if ($type.hasClass('not')) {
+					$e.attr('name', $e.attr('name').replace(/^filter\[!?/, 'filter[!'));
+				}
 
-			if (!$type.hasClass('not') && !$type.hasClass('equals')) {
-				delete filter_list[i];
+				if (!$type.hasClass('not') && !$type.hasClass('equals')) {
+					delete filter_list[i];
+				}
 			}
 		});
 

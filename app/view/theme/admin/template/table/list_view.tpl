@@ -32,7 +32,7 @@
 			<? foreach ($columns as $slug => $column) { ?>
 				<td class="column-title <?= $column['align'] . ' ' . $slug; ?>">
 					<? if ($column['sort']) { ?>
-						<a href="<?= site_url($listing_path, array('sort' => $column['sort']) + _get_exclude('sort', 'page')); ?>" class="sortable <?= $column['sort_class']; ?>"><?= $column['label']; ?></a>
+						<a href="<?= site_url($listing_path, array('sort' => $column['sort']) + _get_exclude('sort', 'page')); ?>" class="sortable <?= $column['sort_class']; ?>" title="<?= $slug; ?>"><?= $column['label']; ?></a>
 					<? } else { ?>
 						<span><?= $column['label']; ?></span>
 					<? } ?>
@@ -129,12 +129,12 @@
 									<div class="amp-filter amp-filter-date zoom-hover daterange">
 										<div class="input">
 											<div class="amp-filter-options">
-												<div class="amp-filter-option amp-filter-date-range <?= $f['expression'] ? '' : 'is-active'; ?>" data-filter-name="{{Range}}">
+												<div class="amp-filter-option amp-filter-date-range <?= $f['eq'] ? '' : 'is-active'; ?>" data-filter-name="{{Range}}">
 													<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $f['gte']; ?>"/>
 													<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][lte]" value="<?= $f['lte']; ?>"/>
 												</div>
-												<div class="amp-filter-option amp-filter-expression on-dormant <?= $f['expression'] ? 'is-active' : ''; ?>" data-filter-name="{{Expression}}">
-													<textarea placeholder="{{eg: {date} > DATE_SUB(CURDATE(), INTERVAL 7 DAY)}}" class="date_expression" name="filter[<?= $column['filter_key']; ?>][expression]"><?= $f['expression']; ?></textarea>
+												<div class="amp-filter-option amp-filter-equals on-dormant <?= $f['eq'] ? 'is-active' : ''; ?>" data-filter-name="{{Equals}}">
+													<input placeholder="{{Enter Date}}" class="date_equals datepicker" type="text" name="filter[<?= $column['filter_key']; ?>][eq]" value="<?= $f['eq']; ?>"/>
 												</div>
 											</div>
 
@@ -150,8 +150,8 @@
 											</div>
 										</div>
 										<div class="value row" data-default="{{Date Range}}">
-											<? if ($f['expression']) {
-												echo "{{Expression...}}";
+											<? if ($f['eq']) {
+												echo $f['eq'];
 											} else if ($f['gte'] !== null || $f['lte'] !== null) {
 												echo $f['gte'] . ' - ' . $f['lte'];
 											} else { ?>

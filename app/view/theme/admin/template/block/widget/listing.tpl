@@ -14,7 +14,7 @@
 			<a class="refresh-listing" href="<?= site_url($listing_path, $_GET); ?>">
 				<b class="sprite refresh small"></b>
 			</a>
-			
+
 			<a href="<?= site_url($listing_path, $_GET + array('export' => '')); ?>" class="button export-view small">
 				<b class="sprite export small"></b>
 			</a>
@@ -31,6 +31,17 @@
 					<? if (user_can('w', 'admin/views')) { ?>
 						<a href=".view-listing-tab">{{Settings}}</a>
 					<? } ?>
+					<a href=".view-listing-filter">{{Filter}}</a>
+				</div>
+
+				<div class="view-listing-filter tab-content row">
+					<div class="row">
+						<textarea name="filter[#expression]"><?= !empty($_REQUEST['filter']['#expression']) ? $_REQUEST['filter']['#expression'] : ''; ?></textarea>
+					</div>
+
+					<div class="buttons row">
+						<a class="save-view-filter button" data-loading="{{Applying...}}" href="<?= site_url($listing_path, _get_exclude('columns')); ?>">{{Apply}}</a>
+					</div>
 				</div>
 
 				<? if (!empty($extra_cols)) { ?>
