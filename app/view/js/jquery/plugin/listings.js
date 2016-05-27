@@ -126,6 +126,21 @@ $.fn.listview = function() {
 		}
 
 		$listview.find('.action-buttons').overflown('y', 5);
+
+		$listview.find('.amp-filter-toggle').click(function() {
+			var $filter = $(this).closest('.amp-filter'), $next;
+			var $option = $filter.find('.amp-filter-option.is-active').removeClass('is-active');
+
+			if ($option.next().length) {
+				$next = $option.next();
+			} else {
+				$next = $filter.find('.amp-filter-option:first-child');
+			}
+
+			$(this).html($next.addClass('is-active').attr('data-filter-name') || 'Change');
+
+			return false;
+		})
 	})
 }
 

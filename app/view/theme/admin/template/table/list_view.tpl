@@ -123,25 +123,38 @@
 								case 'date':
 								case 'time':
 								case 'datetime':
-									?>
-									<? if (!isset($column['filter_value']['gte'])) {
-									$column['filter_value']['gte'] = null;
-								}
-									if (!isset($column['filter_value']['lte'])) {
-										$column['filter_value']['lte'] = null;
-									}
+									$f = $column['filter_value'];
 									?>
 
-									<div class="zoom-hover daterange">
+									<div class="amp-filter amp-filter-date zoom-hover daterange">
 										<div class="input">
-											<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $column['filter_value']['gte']; ?>"/>
-											<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][lte]" value="<?= $column['filter_value']['lte']; ?>"/>
-											<span class="clear">clear</span>
+											<div class="amp-filter-options">
+												<div class="amp-filter-option amp-filter-date-range <?= $f['expression'] ? '' : 'is-active'; ?>" data-filter-name="{{Range}}">
+													<input placeholder="{{Start}}" class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key']; ?>][gte]" value="<?= $f['gte']; ?>"/>
+													<input placeholder="{{End}}" class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $column['filter_key'] ?>][lte]" value="<?= $f['lte']; ?>"/>
+												</div>
+												<div class="amp-filter-option amp-filter-expression on-dormant <?= $f['expression'] ? 'is-active' : ''; ?>" data-filter-name="{{Expression}}">
+													<textarea placeholder="{{eg: {date} > DATE_SUB(CURDATE(), INTERVAL 7 DAY)}}" class="date_expression" name="filter[<?= $column['filter_key']; ?>][expression]"><?= $f['expression']; ?></textarea>
+												</div>
+											</div>
+
+											<div class="row amp-filter-buttons">
+												<div class="col xs-6 left">
+													<a class="clear">{{clear}}</a>
+												</div>
+												<? if (user_is('Top Administrator')) { ?>
+													<div class="col xs-6 right">
+														<a class="amp-filter-toggle">{{Range}}</a>
+													</div>
+												<? } ?>
+											</div>
 										</div>
-										<div class="value" data-default="{{Date Range}}">
-											<? if ($column['filter_value']['gte'] !== null || $column['filter_value']['lte'] !== null) { ?>
-												<?= $column['filter_value']['gte'] . ' - ' . $column['filter_value']['lte']; ?>
-											<? } else { ?>
+										<div class="value row" data-default="{{Date Range}}">
+											<? if ($f['expression']) {
+												echo "{{Expression...}}";
+											} else if ($f['gte'] !== null || $f['lte'] !== null) {
+												echo $f['gte'] . ' - ' . $f['lte'];
+											} else { ?>
 												<b class="fa fa-calendar"></b>
 											<? } ?>
 										</div>
