@@ -121,12 +121,13 @@ class App_Model_File extends App_Model_Table
 	public function upload($file, $options = array())
 	{
 		$options += array(
-			'title'     => '',
-			'name'      => '',
-			'category'  => '',
-			'accept'    => '',
-			'path'      => null,
-			'folder_id' => null,
+			'title'      => '',
+			'name'       => '',
+			'category'   => '',
+			'accept'     => '',
+			'convert_to' => '',
+			'path'       => null,
+			'folder_id'  => null,
 		);
 
 		if (!empty($options['name'])) {
@@ -217,7 +218,54 @@ class App_Model_File extends App_Model_Table
 			'title'     => $options['title'] ? $options['title'] : pathinfo($path, PATHINFO_FILENAME),
 		);
 
-		return $this->save(null, $data);
+		$file_id = $this->save(null, $data);
+
+		if ($file_id) {
+			if ($options['convert_to']) {
+				$this->convert($file_id, $options['convert_to']);
+			}
+		}
+
+		return $file_id;
+	}
+
+	public function convert($file_id, $file_type, $overwrite = true)
+	{
+		$file = $this->getRecord($file_id);
+
+		if (!$file) {
+			$this->error['file_id'] = _l("Unable to locate file to convert");
+
+			return false;
+
+		}
+		if (!$file['type'] === 'image') {
+			$this->error['type'] = _l("The file %s was type %s. Can only convert image files.", $file['name'], $file['type']);
+
+			return false;
+		}
+
+		$converted_file = $this->image->convert($file['path'], $file_type);
+
+		if (!$converted_file) {
+			$this->error = $this->image->fetchError();
+
+			return false;
+		}
+
+		$update = array(
+			'path'      => $converted_file,
+			'url'       => str_replace(DIR_DOWNLOAD, URL_DOWNLOAD, $converted_file),
+			'mime_type' => 'image/' . $file_type,
+		);
+
+		if ($overwrite) {
+			return $this->save($file_id, $update);
+		}
+
+		unset($file['file_id']);
+
+		return $this->save(null, $update + $file);
 	}
 
 	public function zip($files, $options = array())
