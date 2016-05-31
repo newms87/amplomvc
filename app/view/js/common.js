@@ -201,6 +201,20 @@ Number.prototype.roundFloat = function(p) {
 	return '' + Math.round(this * k) / k;
 }
 
+$.ampMsgText = function(a, d) {
+	if (typeof a === 'object') {
+		var msg = '';
+
+		for (var i in a) {
+			msg += (msg ? d || '<br>' : '') + $.ampMsgText(a[i], d);
+		}
+
+		return msg;
+	}
+
+	return a;
+}
+
 $.fn.use_once = function(label) {
 	label = label || 'activated';
 	return this.not('.' + label).addClass(label);
@@ -1058,7 +1072,7 @@ $.ampExtend($.ampModal = function() {}, {
 			o.context = $('body');
 		}
 
-		return $(o.content).use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
+		return $(o.content).removeClass('hidden').use_once('amp-modal-enabled').setOptions(o).each(function(i, e) {
 			var $e = $(e),
 				$modal = $('<div />').addClass('amp-modal').addClass(o.class).setOptions(o),
 				$contentBox = $('<div />').addClass('amp-modal-content-box'),
