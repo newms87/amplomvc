@@ -70,11 +70,17 @@ abstract class App_Model_Table extends Model
 		return $record_id;
 	}
 
-	public function copy($record_id)
+	public function copy($record_id, $data = array())
 	{
 		$record = $this->getRecord($record_id);
 
-		return $this->save(null, $record);
+		if (!$record) {
+			$this->error['record_id'] = _l("The Record does not exist");
+
+			return false;
+		}
+
+		return $this->save(null, $data + $record);
 
 	}
 
