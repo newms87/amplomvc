@@ -110,27 +110,24 @@ class Image extends Library
 	{
 		$file = $this->get($image, true);
 
-		if (!is_file($file)) {
-			$this->file = null;
+		$this->file = is_file($file) ? $file : null;
 
+		if (!$this->file) {
 			return false;
 		}
 
-		$this->file = $file;
+		$pathinfo        = pathinfo($this->file);
+		$this->extension = isset($pathinfo['extension']) ? $pathinfo['extension'] : 'png';
+		$this->filename  = $pathinfo['filename'];
+		$this->dirname   = $pathinfo['dirname'];
+		$this->basename  = $pathinfo['basename'];
 
-		$info     = getimagesize($this->file);
-		$pathinfo = pathinfo($this->file);
-
+		$info           = getimagesize($this->file);
 		$this->width    = $info[0];
 		$this->height   = $info[1];
 		$this->bits     = $info['bits'];
 		$this->mime     = $info['mime'];
 		$this->filesize = filesize($this->file);
-
-		$this->extension = isset($pathinfo['extension']) ? $pathinfo['extension'] : 'png';
-		$this->filename  = $pathinfo['filename'];
-		$this->dirname   = $pathinfo['dirname'];
-		$this->basename  = $pathinfo['basename'];
 
 		if ($create_image) {
 			$this->create();
