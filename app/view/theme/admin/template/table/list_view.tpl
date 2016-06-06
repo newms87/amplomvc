@@ -63,7 +63,7 @@
 				<? } ?>
 				<? foreach ($columns as $slug => $column) { ?>
 					<? if ($column['filter']) { ?>
-						<td class="column-filter <?= $column['align'] . ' ' . $slug; ?>">
+						<td class="column-filter <?= $column['align'] . ' col-' . $slug; ?>">
 							<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
 							<? switch ($column['filter']) {
 								case 'text':
