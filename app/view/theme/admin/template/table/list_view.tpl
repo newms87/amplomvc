@@ -30,7 +30,7 @@
 				</td>
 			<? } ?>
 			<? foreach ($columns as $slug => $column) { ?>
-				<td class="column-title <?= $column['align'] . ' ' . $slug; ?>">
+				<td class="column-title <?= $column['align'] . ' col-' . $slug; ?>">
 					<? if ($column['sort']) { ?>
 						<a href="<?= site_url($listing_path, array('sort' => $column['sort']) + _get_exclude('sort', 'page')); ?>" class="sortable <?= $column['sort_class']; ?>" title="<?= $slug; ?>"><?= $column['label']; ?></a>
 					<? } else { ?>
@@ -63,7 +63,7 @@
 				<? } ?>
 				<? foreach ($columns as $slug => $column) { ?>
 					<? if ($column['filter']) { ?>
-						<td class="column-filter <?= $column['align'] . ' ' . $slug; ?>">
+						<td class="column-filter <?= $column['align'] . ' col-' . $slug; ?>">
 							<div class="filter-type <?= !empty($column['filter_type']) ? $column['filter_type'] : ''; ?>"></div>
 							<? switch ($column['filter']) {
 								case 'text':

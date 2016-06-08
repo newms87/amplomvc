@@ -102,7 +102,7 @@ class Table extends Library
 			);
 
 			//Set Class
-			$column['#class'] = (isset($column['#class']) ? $column['#class'] . ' ' : '') . $slug . ' ' . $column['align'];
+			$column['#class'] = (isset($column['#class']) ? $column['#class'] . ' ' : '') . 'col-' . $slug . ' ' . $column['align'];
 
 			if ($column['sort']) {
 				$sort_class = '';
