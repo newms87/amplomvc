@@ -36,8 +36,8 @@ class Message extends Library
 		if ($type === 'data') {
 			$this->messages['data'] = $message;
 		} elseif (is_array($message)) {
-			foreach ($message as $key => $m) {
-				$this->add($type, $m, $key);
+			foreach ($message as $k => $m) {
+				$this->add($type, $m, ($key ? $key . '-' : '') . $k);
 			}
 		} else {
 			if ($key) {

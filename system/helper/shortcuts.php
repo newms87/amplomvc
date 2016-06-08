@@ -1211,6 +1211,18 @@ function output_json($data, $headers = array())
 	$registry->get('response')->setOutput(json_encode($data), $headers);
 }
 
+function output_xml($data, $headers = array())
+{
+	global $registry;
+
+	if (!isset($headers['Content-Type'])) {
+		$headers['Content-Type'] = 'application/xml';
+	}
+
+	//TODO: implement an XML output
+	//$registry->get('response')->setOutput(json_encode($data), $headers);
+}
+
 function output_api($status, $message = null, $data = null, $code = 200, $http_code = null)
 {
 	if (!$http_code) {
@@ -1234,6 +1246,23 @@ function output_api($status, $message = null, $data = null, $code = 200, $http_c
 	}
 
 	output_json($response);
+}
+
+function output_restful($code, $message, $data = array(), $request_type = null)
+{
+	global $registry;
+
+	header("HTTP/1.1 $code $message");
+
+	if (_is_object($data)) {
+		if (!$request_type) {
+			$request_type = $registry->get('router')->getRequestType();
+		}
+
+		$request_type === 'xml' ? output_xml($data) : output_json($data);
+	} else {
+		echo $data;
+	}
 }
 
 function output_file($file, $type = null, $filename = null)

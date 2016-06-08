@@ -177,7 +177,7 @@ class App_Controller_Admin_Plugin extends Controller
 
 	public function uninstall()
 	{
-		if ($this->plugin->uninstall(_get('name'), _get('keep_data', true))) {
+		if ($this->plugin->uninstall(_get('name'), _get('keep_data', false))) {
 			message('success', _l("Plugin %s has been uninstalled.", _get('name')));
 		} else {
 			message('error', $this->plugin->fetchError());

@@ -50,6 +50,11 @@ abstract class App_Model_Table extends Model
 		$this->primary_key = $this->orig['primary_key'];
 	}
 
+	public function hasRecord($record_id)
+	{
+		return (bool)$this->queryVar("SELECT COUNT(*) FROM {$this->t[$this->table]} WHERE `$this->primary_key` = " . (int)$record_id);
+	}
+
 	public function save($record_id, $data)
 	{
 		if ($record_id) {
@@ -107,6 +112,11 @@ abstract class App_Model_Table extends Model
 		return $this->delete($this->table, $filter);
 	}
 
+	public function clearAllRecords()
+	{
+		return $this->query("TRUNCATE {$this->t[$this->table]}");
+	}
+
 	public function getField($record_id, $field, $allow_cache = true)
 	{
 		if ($allow_cache && isset(self::$records[$this->table][$record_id])) {
@@ -138,7 +148,7 @@ abstract class App_Model_Table extends Model
 		$fields = $select ? $this->extractSelect($this->table, $select) : $this->primary_key;
 		$where  = $this->extractWhere($this->table, $filter);
 
-		$sql = "SELECT $fields FROM `{$this->t[$this->table]}` WHERE $where";
+		$sql = "SELECT $fields FROM `{$this->t[$this->table]}` WHERE $where LIMIT 1";
 
 		return $select ? $this->queryRow($sql) : $this->queryVar($sql);
 	}

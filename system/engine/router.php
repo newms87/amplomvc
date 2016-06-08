@@ -99,6 +99,16 @@ class Router
 		return $this->action->getMethod();
 	}
 
+	public function getParameters()
+	{
+		return $this->action->getParameters();
+	}
+
+	public function getRequestType()
+	{
+		return $this->action->getRequestType();
+	}
+
 	public function getArgs()
 	{
 		return $this->args;

@@ -1,19 +1,21 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYING.txt and LICENSE.txt files in the root directory.
  */
-
 class App_Controller_Api extends Controller
 {
 	public function __construct()
 	{
-		$this->api->authenticate();
+		if (!defined('API_REQUIRE_AUTH') || API_REQUIRE_AUTH) {
+			$this->api->authenticate();
+		}
 
 		parent::__construct();
 	}

@@ -1596,6 +1596,8 @@ $.fn.show_msg = function(type, msg, o) {
 			}, o.delay);
 		}
 
+		$box.toggleClass('no-auto-hide', !o.delay);
+
 		$box.removeClass('hidden');
 		$('body').trigger('amp-show-msg', $msg);
 

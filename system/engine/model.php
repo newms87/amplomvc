@@ -112,7 +112,7 @@ abstract class Model
 		return $error;
 	}
 
-	public function clearErrors($type)
+	public function clearErrors($type = null)
 	{
 		if ($type) {
 			unset($this->error[$type]);

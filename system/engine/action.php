@@ -1,14 +1,14 @@
 <?php
+
 /**
- * @author Daniel Newman
- * @date 3/20/2013
+ * @author  Daniel Newman
+ * @date    3/20/2013
  * @package Amplo MVC
- * @link http://amplomvc.com/
+ * @link    http://amplomvc.com/
  *
  * All Amplo MVC code is released under the GNU General Public License.
  * See COPYING.txt and LICENSE.txt files in the root directory.
  */
-
 final class Action
 {
 	protected
@@ -19,6 +19,7 @@ final class Action
 		$classpath,
 		$controller,
 		$method,
+		$request_type,
 		$parameters = array(),
 		$is_valid,
 		$output;
@@ -26,6 +27,11 @@ final class Action
 	public function __construct($path, $parameters = array())
 	{
 		$dir = DIR_SITE . 'app/controller/';
+
+		if ($file_type = pathinfo($path, PATHINFO_EXTENSION)) {
+			$this->request_type = $file_type;
+			$path               = str_replace('.' . $file_type, '', $path);
+		}
 
 		$parts = explode('/', str_replace('-', '_', $path));
 
@@ -80,12 +86,21 @@ final class Action
 			$class .= '_ext';
 		}
 
-		$callable = array(
+		$this->is_valid = @is_callable(array(
 			$class,
 			$method
-		);
+		));
 
-		if ($this->is_valid = @is_callable($callable)) {
+		if (!$this->is_valid) {
+			array_unshift($parameters, $method);
+			$method         = 'index';
+			$this->is_valid = @is_callable(array(
+				$class,
+				$method
+			));
+		}
+
+		if ($this->is_valid) {
 			$this->dir        = $dir;
 			$this->file       = $file;
 			$this->path       = $path;
@@ -109,6 +124,11 @@ final class Action
 	public function getFile()
 	{
 		return $this->file;
+	}
+
+	public function getRequestType()
+	{
+		return $this->request_type;
 	}
 
 	public function getPath()
